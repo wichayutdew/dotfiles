@@ -1,0 +1,77 @@
+set scrolloff=5
+set incsearch
+set relativenumber
+set idearefactormore=keep
+set ignorecase = true
+set smartcase = true
+
+" ui to show key mapping
+set which-key
+set notimeout
+
+" --- Enable IdeaVim plugins https://jb.gg/ideavim-plugins
+" Highlight copied text
+Plug 'machakann/vim-highlightedyank'
+" Sneak (search by 2 letters)
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-commentary'
+Plug 'preservim/nerdtree'
+set mini-ai
+
+
+" set <leader> to <space>
+let mapleader = " "
+
+imap jk <Esc>
+
+nnoremap Y "+y
+vnoremap Y "+y
+map <C-d> <C-d>zz
+map <C-u> <C-u>zz
+map j jzz
+map k kzz
+map n nzzzv
+map N Nzzzv
+nmap <leader>ww :bd<CR>
+vnoremap p "_dP
+
+
+nmap <leader>e :NERDTreeToggle<CR>
+" -- Map IDE actions to IdeaVim -- https://jb.gg/abva4t
+nmap <leader>cf <Action>(ReformatCode)
+nmap <leader>ci <Action>(OptimizeImports)
+nmap <leader>ca <Action>(ShowIntentionActions)
+
+nmap rn <Action>(RenameElement)
+nmap rR <Action>(Refactorings.QuickListPopupAction)
+
+nmap ge <Action>(ShowErrorDescription)
+nmap gi <Action>(GotoImplementation)
+nmap gd <Action>(GotoDeclaration)
+nmap K <Action>(ShowHoverInfo)
+nmap <leader>ca <Action>(ShowIntentionActions)
+
+nmap gT <Action>(GotoTest)
+
+nmap <leader>s <Action>(ToggleBookmark)
+nmap <leader>S <Action>(ShowBookmarks)
+
+nmap <leader>dd <Action>(ChooseDebugConfiguration)
+nmap <leader>dD <Action>(Stop)
+nmap <leader>b <Action>(ToggleLineBreakpoint)
+nmap <leader>bc <Action>(Debugger.RemoveAllBreakpoints)
+nmap <leader>B <Action>(ViewBreakpoints)
+nmap <leader>br <Action>(Resume)
+
+nmap <leader>ff <Action>(GotoFile)
+nmap <leader>fs <Action>(FindInPath)
+nmap <leader>fb <Action>(RecentFiles)
+nmap fd <Action>(CollapseRegion)
+nmap fD <Action>(CollapseAllRegions)
+
+nmap <leader>ws <Action>(SplitHorizontally)
+nmap <leader>wv <Action>(SplitVertically)
+map <leader>zz <Action>(Vcs.RollbackChangedLines)
+
+nnoremap <leader>re :action IdeaVim.ReloadVimRc.reload<CR>
+

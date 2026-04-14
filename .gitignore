@@ -1,0 +1,31 @@
+# ignore everything
+/*
+
+# except these directories
+!/.config
+/.config/github-copilot
+/.config/raycast
+/.config/jgit
+/.config/karabiner
+!/notes
+!/.1password
+
+# except these files
+!.asdfrc
+!.zshrc
+!.gitignore
+!.gitconfig
+!.ideavimrc
+!README.md
+!Brewfile
+
+# ignore RUST specific files
+.config/cargo/*
+!.config/cargo/config.toml
+!.config/cargo/.gitignore
+
+# ignore GitHub CLI authentication files
+.config/gh/hosts.yml
+
+# ignore fish environment file
+.config/fish/conf.d/environment.fish

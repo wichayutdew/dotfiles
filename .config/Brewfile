@@ -1,0 +1,58 @@
+# Usage, run: $ brew bundle --file ~/.config/Brewfile #
+
+# Screen customisation
+tap 'FelixKratz/formulae'
+brew 'borders'
+tap 'nikitabobko/tap'
+cask 'aerospace'
+brew 'betterdisplay'
+
+# Keyboard Remapper
+tap 'yqrashawn/goku'
+brew 'yqrashawn/goku/goku'
+cask 'karabiner-elements'
+
+# Library Management
+brew 'asdf'
+
+# CLI Essentials
+brew 'fzf'
+brew 'ripgrep'
+brew 'jq'
+brew 'poppler'
+brew 'starship'
+brew 'zoxide'
+brew 'eza'
+brew 'yazi'
+brew 'tmux'
+brew 'tpm'
+brew 'lazygit'
+brew 'lazydocker'
+
+# shell
+brew 'fish'
+
+# Development
+cask 'postman'
+cask 'ghostty'
+cask 'orbstack'
+cask 'font-jetbrains-mono'
+
+# AI
+cask 'opencode'
+brew 'PeonPing/tap/peon-ping'
+
+# Agoda essentials
+brew 'metalbear-co/mirrord/mirrord'
+
+# Productivity
+cask 'logi-options+'
+cask 'monitorcontrol'
+cask 'raycast'
+cask 'shottr'
+cask 'lookaway'
+cask 'hiddenbar'
+cask 'spotify'
+cask 'appcleaner'
+cask 'raindropio'
+cask 'zen'

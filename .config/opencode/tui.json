@@ -1,0 +1,13 @@
+{
+  "$schema": "https://opencode.ai/tui.json",
+	"theme": "gruvbox",
+  "keybinds": {
+    "session_interrupt": "ctrl+c",
+    "input_newline": "return",
+		"input_submit": "alt+return",
+		"session_child_first": "<leader>j",
+		"session_child_cycle": "l",
+		"session_child_cycle_reverse": "h",
+		"session_parent": "k"
+  }
+}

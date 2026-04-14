@@ -1,0 +1,140 @@
+// Zed keymap
+//
+// For information on binding keys, see the Zed
+// documentation: https://zed.dev/docs/key-bindings
+//
+// To see the default key bindings run `zed: open default keymap`
+// from the command palette.
+[
+  // ============================================================================
+  // GLOBAL BINDINGS (Works everywhere including empty pages)
+  // ============================================================================
+  {
+    "context": "EmptyPane || (VimControl && !VimWaiting && vim_mode == normal)",
+    "bindings": {
+      // Fuzzy finding (Telescope equivalents)
+      "space f b": "tab_switcher::Toggle",
+      "space f f": "file_finder::Toggle",
+      "space f s": "workspace::NewSearch",
+      // Panel toggles
+      "space e": "workspace::ToggleRightDock",
+      "space r": "workspace::ToggleLeftDock"
+    }
+  },
+  // ============================================================================
+  // VIM MODE BINDINGS (Normal Mode)
+  // ============================================================================
+  // Buffer management, window splits, and fuzzy finding
+  {
+    "context": "VimControl && !VimWaiting && vim_mode == normal",
+    "bindings": {
+      // Buffer management
+      "space w w": "pane::CloseActiveItem",
+      // Git
+      "space z z": "git::Restore",
+      // Window/Pane splits
+      "space w v": "pane::SplitRight",
+      "space w h": "pane::SplitDown"
+    }
+  },
+  // ============================================================================
+  // EDITOR BINDINGS
+  // ============================================================================
+  // Insert mode - exit with jk
+  {
+    "context": "Editor && vim_mode == insert",
+    "bindings": {
+      "j k": "vim::NormalBefore"
+    }
+  },
+  // Normal and Visual modes - clipboard operations
+  {
+    "context": "Editor && (vim_mode == normal || vim_mode == visual)",
+    "bindings": {
+      "shift-y": "editor::Copy",
+      "space a a": "agent::AddSelectionToThread"
+    }
+  },
+  // Normal mode - LSP actions and code operations
+  {
+    "context": "Editor && vim_mode == normal",
+    "bindings": {
+      // Code formatting and organization
+      "space c f": "editor::Format",
+      "space c i": "editor::OrganizeImports",
+      "space c a": "editor::ToggleCodeActions",
+      "space b b": "editor::ToggleBreakpoint",
+      "space b c": "debugger::ClearAllBreakpoints",
+      "space B": "workspace::ToggleBottomDock",
+      // Git operations
+      "space g x": "editor::CopyPermalinkToLine",
+      // Refactoring
+      "r n": "editor::Rename"
+    }
+  },
+  // Code actions and completions menu navigation
+  {
+    "context": "Editor && (showing_code_actions || showing_completions)",
+    "bindings": {
+      "tab": "editor::ContextMenuNext",
+      "shift-tab": "editor::ContextMenuPrevious"
+    }
+  },
+  // ============================================================================
+  // VIM TEXT OBJECTS
+  // ============================================================================
+  // Custom text objects for quotes and brackets
+  {
+    "context": "vim_operator == a || vim_operator == i || vim_operator == cs",
+    "bindings": {
+      // Traditional Vim behavior
+      "q": "vim::AnyQuotes",
+      "b": "vim::AnyBrackets",
+      // mini.ai plugin behavior
+      "Q": "vim::MiniQuotes",
+      "B": "vim::MiniBrackets"
+    }
+  },
+  // ============================================================================
+  // PANEL NAVIGATION
+  // ============================================================================
+  // Dock navigation - pane switching with ctrl-w
+  {
+    "context": "Dock",
+    "bindings": {
+      "ctrl-w h": "workspace::ActivatePaneLeft",
+      "ctrl-w l": "workspace::ActivatePaneRight",
+      "ctrl-w k": "workspace::ActivatePaneUp",
+      "ctrl-w j": "workspace::ActivatePaneDown"
+    }
+  },
+  // Agent panel - toggle left dock
+  {
+    "context": "AgentPanel && not_editing",
+    "bindings": {
+      "space r": "workspace::ToggleLeftDock"
+    }
+  },
+  // Project panel - file operations and navigation
+  {
+    "context": "ProjectPanel && not_editing",
+    "bindings": {
+      // File operations
+      "a": "project_panel::NewFile",
+      "A": "project_panel::NewDirectory",
+      "r": "project_panel::Rename",
+      "d": "project_panel::Delete",
+      // Clipboard operations
+      "x": "project_panel::Cut",
+      "c": "project_panel::Copy",
+      "p": "project_panel::Paste",
+      // Panel toggles
+      "space e": "workspace::ToggleRightDock",
+      // Navigate between panes
+      "ctrl-h": "workspace::ActivatePaneLeft",
+      "ctrl-l": "workspace::ActivatePaneRight",
+      "ctrl-k": "workspace::ActivatePaneUp",
+      "ctrl-j": "workspace::ActivatePaneDown"
+    }
+  }
+]

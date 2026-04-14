@@ -1,0 +1,130 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "plugin": [
+    "@plannotator/opencode@latest"
+  ],
+  "enabled_providers": [
+    "anthropic-gateway",
+    "openai-gateway"
+  ],
+  "provider": {
+    "anthropic-gateway": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Anthropic Gateway",
+      "options": {
+        "baseURL": "{env:AI_GATEWAY_URL}",
+        "apiKey": "{env:GENAI_API_KEY}"
+      },
+      "models": {
+        "claude-sonnet-4-6": {
+          "name": "claude-sonnet-4-6",
+          "limit": {
+            "context": 200000,
+            "output": 200000
+          }
+        },
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6",
+          "limit": {
+            "context": 200000,
+            "output": 200000
+          }
+        }
+      }
+    },
+    "openai-gateway": {
+      "npm": "@ai-sdk/openai",
+      "name": "OpenAI Gateway",
+      "options": {
+        "baseURL": "{env:AI_GATEWAY_URL}",
+        "apiKey": "{env:GENAI_API_KEY}"
+      },
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4",
+          "limit": {
+            "context": 200000,
+            "output": 200000
+          }
+        },
+        "gpt-5.3-codex": {
+          "name": "gpt-5.3-codex",
+          "limit": {
+            "context": 200000,
+            "output": 200000
+          }
+        }
+      }
+    }
+  },
+  "model": "anthropic-gateway/claude-sonnet-4-6",
+  "small_model": "openai-gateway/gpt-5.4",
+  "default_agent": "plan",
+  "mcp": {
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp",
+      "enabled": true,
+      "headers": {
+        "CONTEXT7_API_KEY": "{env:CONTEXT7_API_KEY}"
+      }
+    },
+    "atlassian": {
+      "type": "remote",
+      "url": "https://mcp.atlassian.com/v1/mcp",
+      "enabled": true,
+      "oauth": {}
+    },
+    "gitlab": {
+      "type": "remote",
+      "url": "{env:GITLAB_MCP}",
+      "enabled": true,
+      "oauth": {}
+    },
+    "figma": {
+      "type": "remote",
+      "url": "https://mcp.figma.com/mcp",
+      "enabled": true,
+      "oauth": {
+        "clientId": "{env:FIGMA_CLIENT_ID}",
+        "clientSecret": "{env:FIGMA_CLIENT_SECRET}"
+      }
+    },
+    "agoda_skills": {
+      "type": "remote",
+      "url": "{env:AGODA_SKILLS_MCP}",
+      "enabled": true,
+      "headers": {
+        "X-Agoda-Skills-Version": "20260224.0.0"
+      }
+    },
+    "glean": {
+      "type": "remote",
+      "url": "{env:GLEAN_MCP}",
+      "enabled": true,
+      "oauth": {}
+    },
+    "sourcegraph": {
+      "type": "remote",
+      "url": "{env:SOURCEGRAPH_MCP}",
+      "enabled": true,
+      "headers": {
+        "Authorization": "token {env:SOURCEGRAPH_TOKEN}"
+      }
+    }
+  },
+  "permission": {
+    "skill": {
+      "*": "ask"
+    }
+  },
+  "watcher": {
+    "ignore": [
+      "node_modules/**",
+      ".git/**",
+      "dist/**",
+      ".next/**",
+      "build/**"
+    ]
+  }
+}
