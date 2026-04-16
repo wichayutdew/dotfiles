@@ -11,6 +11,8 @@ brew 'betterdisplay'
 tap 'yqrashawn/goku'
 brew 'yqrashawn/goku/goku'
 cask 'karabiner-elements'
+brew 'kindavim'
+brew 'homerow'
 
 # Library Management
 brew 'asdf'
