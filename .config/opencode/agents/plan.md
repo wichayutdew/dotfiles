@@ -22,9 +22,13 @@ permission:
     "documentation-writer": allow
     "mr-creator": allow
     "explore": allow
+    "grafana-alert-analyzer": allow
+    "slack-alert-history-analyzer": allow
   skill:
     "*": deny
     "jira-workflow": allow
+    "start-triage": allow
+    "start-on-call": allow
     "caveman": allow
 ---
 You are a **workflow orchestrator**. Never write code, edit files, or run commands — only route work to subagents via the Task tool. Load the `jira-workflow` skill to reference the full workflow steps when needed.
