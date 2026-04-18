@@ -1,15 +1,15 @@
 ---
 name: jira-ticket
-description: Create or update Jira tickets, stories, and tasks in the ACT project. Trigger when the user asks to create a ticket, write a story, refine a Jira issue, update ticket content, or prepare a ticket for development (e.g. "create a ticket for X", "refine ACT-1234", "write up a story for Y", "update the description of ACT-5678").
+description: Create or update Jira tickets, stories, and tasks. Trigger when the user asks to create a ticket, write a story, refine a Jira issue, update ticket content, or prepare a ticket for development (e.g. "create a ticket for X", "refine PROJ-1234", "write up a story for Y", "update the description of PROJ-5678").
 license: MIT
 compatibility: opencode
 user-invocable: true
 ---
 
 
-# Jira Ticket (ACT Project)
+# Jira Ticket
 
-Create and update Jira stories and tasks for the ACT project.
+Create and update Jira stories and tasks.
 
 ## Critical: Description Format
 
@@ -23,11 +23,11 @@ Do NOT use:
 
 | Action | Tool | Required fields |
 |--------|------|-----------------|
-| Read ticket | `mcp__plugin_agoda-skills_at__getJiraIssue` | `cloudId`, `issueIdOrKey` |
-| Create ticket | `mcp__plugin_agoda-skills_at__createJiraIssue` | `cloudId`, `fields.project.key`, `fields.summary`, `fields.description`, `fields.issuetype.name` |
-| Update ticket | `mcp__plugin_agoda-skills_at__editJiraIssue` | `cloudId`, `issueIdOrKey`, `fields.description` |
+| Read ticket | `atlassian_getJiraIssue` | `cloudId`, `issueIdOrKey` |
+| Create ticket | `atlassian_createJiraIssue` | `cloudId`, `projectKey`, `issueTypeName`, `summary`, `description` |
+| Update ticket | `atlassian_editJiraIssue` | `cloudId`, `issueIdOrKey`, `fields.description` |
 
-Always use `cloudId: "agoda.atlassian.net"` and `fields.project.key: "ACT"` for new tickets.
+To get `cloudId`: call `atlassian_getAccessibleAtlassianResources`. Confirm project key from context — do not assume.
 
 ## Title Format
 
@@ -43,20 +43,14 @@ Always use `cloudId: "agoda.atlassian.net"` and `fields.project.key: "ACT"` for 
 | `[DOCS]` | Documentation only |
 | `[INVESTIGATE]` | Spike or investigation with no predetermined output |
 
-**Components:**
-| Tag | Use for |
-|-----|---------|
-| `[UI]` | Frontend (React/TypeScript) |
-| `[BFF]` | Backend-for-Frontend (.NET) |
-| `[INFRA]` | CI/CD, scripts, deployment |
-| `[UI][BFF]` | Both frontend and backend |
+**Components:** adapt to your project's layer names (e.g. `[UI]`, `[API]`, `[INFRA]`, `[DB]`).
 
 **Examples:**
 - `[FIX][UI] Category suggestion items show wrong icon in text search`
 - `[FEAT][UI] Navigate to scoped search on category suggestion click`
-- `[FEAT][BFF] Return category and subcategory documents from NPC suggestions`
+- `[FEAT][API] Return category and subcategory documents from suggestions`
 - `[INVESTIGATE][UI] Why category filter resets on back navigation`
-- `[REFACTOR][UI] Centralise URL building for text search in getTextSearchLocation`
+- `[REFACTOR][UI] Centralise URL building for text search`
 
 ## Standard Description Template
 
@@ -100,61 +94,57 @@ Always use `cloudId: "agoda.atlassian.net"` and `fields.project.key: "ACT"` for 
 
 ### 1. Read the ticket (if updating)
 
-Call `mcp__plugin_agoda-skills_at__getJiraIssue` to read current content before making changes.
+Call `atlassian_getJiraIssue` to read current content before making changes.
 Request these fields explicitly: `["summary", "description", "issuetype", "parent", "components", "status"]`.
 
 ### 2. Ground the ticket in the codebase
 
-Use Glob/Grep/Read to find affected files. Reference exact file paths in "What Needs to Happen" - this makes the ticket immediately actionable without the developer needing to hunt.
+Use Glob/Grep/Read to find affected files. Reference exact file paths in "What Needs to Happen" — this makes the ticket immediately actionable without the developer needing to hunt.
 
 ### 3. Write the description
 
-Fill the template sections. Replace the `[bracketed guidance]` with actual content - do NOT include the brackets or guidance text in the final description.
+Fill the template sections. Replace the `[bracketed guidance]` with actual content — do NOT include the brackets or guidance text in the final description.
 
 - **Context**: Predecessor ticket + user/business motivation. 2-3 sentences max.
 - **What Needs to Happen**: Numbered concrete changes with exact file paths and function/component names.
 - **Acceptance Criteria**: Given/When/Then format. At least one happy path + one edge case.
-- **Technical Notes**: CMS IDs, feature flags, affected services, dependencies with status.
+- **Technical Notes**: Feature flags, affected services, dependencies with status.
 - **Out of Scope**: Explicitly name what this ticket does NOT cover to prevent scope creep.
 - **Links**: Related tickets, designs, discussions.
 
-### 4. Lint before push
+### 4. Review before pushing
 
-Before calling `createJiraIssue` or `editJiraIssue`, write the draft fields to a temp file
-`/tmp/jira-lint-<ticket>.json` and run:
+Before calling `atlassian_createJiraIssue` or `atlassian_editJiraIssue`, verify:
+- All required fields present (summary, description, project key, issue type)
+- Top-level sections use `##` (h2) — not `###` (h3)
+- Acceptance criteria are testable (not vague like "the feature works")
 
-```bash
-python3 ${SKILL_ROOT}/scripts/lint_jira_ticket.py /tmp/jira-lint-<ticket>.json
-```
-
-If exit code is non-zero, surface the errors to DJ and **stop** - do not push until all errors are resolved.
+Surface any issues to the user and stop — do not push until resolved.
 
 ### 5. Push to Jira
 
-Pass the description as a plain Markdown string to `editJiraIssue` or `createJiraIssue`.
+Pass the description as a plain Markdown string to `atlassian_editJiraIssue` or `atlassian_createJiraIssue`.
 
 ## Anti-Patterns
 
-- **Wiki markup**: `h3.`, `{{code}}`, `*bold*` store as raw text - always use Markdown
+- **Wiki markup**: `h3.`, `{{code}}`, `*bold*` store as raw text — always use Markdown
 - **ADF JSON**: Never pass a JSON object as the description field
-- **Vague ACs**: "The feature works correctly" is not testable - name the URL, param, or component state
-- **Missing file paths**: "Update the search component" is incomplete - name the exact file
-- **Skipping Out of Scope**: Without it, tickets grow during review - always define the boundary
-- **Following the global jira-ticket skill**: It targets a different project (Prowler) and uses wiki markup - ignore it for ACT tickets
-- **Hardcoding project key**: Always confirm the project key from context; default is `ACT` but don't assume for tickets outside Activities
-- **Using ### for top-level sections**: Top-level description sections must use `##` (h2) - using `###` (h3) is a heading structure violation caught by the lint step
-- **Pushing without linting**: Always run `lint_jira_ticket.py` before calling `createJiraIssue` or `editJiraIssue` - skipping this step risks pushing tickets with missing parent, components, or malformed headings
+- **Vague ACs**: "The feature works correctly" is not testable — name the URL, param, or component state
+- **Missing file paths**: "Update the search component" is incomplete — name the exact file
+- **Skipping Out of Scope**: Without it, tickets grow during review — always define the boundary
+- **Using ### for top-level sections**: Top-level description sections must use `##` (h2)
+- **Pushing without review**: Always verify required fields and heading structure before calling create/edit
 
 ## Examples
 
-**Refine an existing ticket**: "Refine ACT-6422"
-1. Call `getJiraIssue` for ACT-6422
+**Refine an existing ticket**: "Refine PROJ-6422"
+1. Call `atlassian_getJiraIssue` for PROJ-6422
 2. Explore relevant source files to find exact file paths
-3. Rewrite description using the template with title `[FIX][UI] ...` or `[FEAT][UI] ...`
-4. Call `editJiraIssue` with the Markdown string
+3. Rewrite description using the template
+4. Call `atlassian_editJiraIssue` with the Markdown string
 
 **Create a new ticket**: "Create a ticket for fixing the search icon bug"
 1. Explore the codebase to identify the affected component
 2. Draft summary as `[FIX][UI] Category suggestion items show wrong icon in text search`
 3. Draft description using the template
-4. Call `createJiraIssue` with `project.key: "ACT"` and `issuetype.name: "Story"` or `"Task"`
+4. Call `atlassian_createJiraIssue` with the correct project key and issue type

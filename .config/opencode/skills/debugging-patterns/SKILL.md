@@ -5,6 +5,20 @@ description: Common bug patterns and language-specific debugging techniques. Loa
 
 # Debugging Patterns
 
+## Tool Routing
+
+| Need | Tool |
+|------|------|
+| Internal runbooks, architecture docs, wikis | `glean_search` / `glean_chat` |
+| Code search across repos | Sourcegraph MCP (see `search-code-sourcegraph` skill) |
+| Production logs | `grafana_query_loki_logs` (see `grafana-logs` skill) |
+| Metrics / time-series | `grafana_query_prometheus` or WhiteFalcon (see `whitefalcon-guide` skill) |
+| Public OSS usage patterns | `gh_grep_searchGitHub` |
+
+Use `glean_search` / `glean_chat` when Confluence and Sourcegraph don't have the answer — Glean indexes internal docs, Slack, wikis, and knowledge bases.
+
+---
+
 ## Investigation Steps
 
 1. **Read the stack trace** — bottom-up for cause, top-down for effect

@@ -81,3 +81,26 @@ gh pr create --title "..." --body "..."
 git pull --rebase origin main
 git push --force-with-lease
 ```
+
+## Terse Commit Rules
+
+Subject line:
+- Imperative mood: "add", "fix", "remove" — not "added/adds/adding"
+- ≤50 chars when possible, hard cap 72
+- No trailing period
+- `!` suffix for breaking changes: `feat(api)!: rename endpoint`
+
+Body (skip if subject is self-explanatory):
+- Add only for: non-obvious *why*, breaking changes, migration notes, linked issues
+- Bullets `-` not `*`; wrap at 72 chars
+- Reference issues at end: `Closes #42`, `Refs #17`
+
+Never include:
+- "This commit does X" / "I" / "we" / "now" — the diff says what
+- AI attribution ("Generated with Claude Code", etc.)
+- Emoji (unless project convention requires)
+- Restating the file name when scope already covers it
+
+Always include body for: breaking changes, security fixes, data migrations, reverts — future debuggers need the context.
+
+Output commit message as a code block ready to paste. Do not run `git commit`, stage files, or amend.

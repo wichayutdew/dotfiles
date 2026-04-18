@@ -1,89 +1,109 @@
 ---
 name: start-on-call
-description: Execute on-call runbook procedures for Activities alerts - fetch alert details, read runbook, investigate logs, query databases, and complete triage.
+description: Execute on-call runbook procedures for production alerts - fetch alert details, read runbook, investigate logs, query databases, and complete triage.
 license: MIT
 compatibility: opencode
-user-invocable: true
 ---
 
 
 # Start On-Call Triage
 
-Automated on-call workflow for Activities production alerts. Reads alert from Slack, fetches Grafana panel details, executes runbook procedures, investigates logs, and provides root cause analysis.
+Automated on-call workflow for production alerts. Reads alert from Slack, fetches Grafana panel details, executes runbook procedures, investigates logs, and provides root cause analysis.
 
-**⚠️ ORCHESTRATION REQUIRED**: You will coordinate multiple specialized agents. Do NOT delegate the entire workflow to one agent
+**⚠️ ORCHESTRATION REQUIRED**: Coordinate multiple steps. Do NOT delegate the entire workflow to one agent.
 
 **CRITICAL**:
 
- - Create intial todo list with Step titles, put [Step #] in the todo as well.
- - Wait for subagents to finish before abruptly stopping them or starting fresh ones. Each subagent executes critical steps.
+ - Create initial todo list with Step titles, put [Step #] in the todo as well.
+ - Wait for subagents to finish before starting fresh ones. Each subagent executes critical steps.
  - Step 2 and 3 should be executed in parallel.
- - For other steps than Step 2 and 3, execute all actions under each step in a subagent.
- - After each step or Tool call, present some summary to user.
+ - For other steps, execute all actions under each step in a subagent.
+ - After each step or tool call, present a summary to user.
  - Use time parameters mindfully.
 
 ## Step 1: Parse Slack Thread
 
-Use subagent to perform the actions mentioned in this step.
+Use subagent to perform the actions in this step.
 
 ### Extract channel ID and timestamp from $ARGUMENTS
 
-**Slack URL Format:** `https://agoda.slack.com/archives/{CHANNEL_ID}/p{TIMESTAMP}`
+**Slack URL Format:** `https://<your-workspace>.slack.com/archives/{CHANNEL_ID}/p{TIMESTAMP}`
 
-Example: `https://agoda.slack.com/archives/C04SM1C4BNH/p1768045822766569`
+Example: `https://example.slack.com/archives/C04SM1C4BNH/p1768045822766569`
 
 - Channel ID: `C04SM1C4BNH`
 - Timestamp: `1768045822766569` → `1768045822.766569` (insert decimal before last 6 digits)
 
-### Call Slack mcp to fetch thread information
+### Fetch thread via Slack MCP
 
 ```
-MCP: slack
-Tool: slack_get_thread_replies
+Tool: slack_slack_get_thread_replies
 {
-  "channelId": "C04SM1C4BNH",
-  "threadTs": "1768309844.972789"
+  "channelId": "<CHANNEL_ID>",
+  "threadTs": "<THREAD_TS>"
 }
 ```
 
 ### Parse information
 
 - **Alert Name**: Panel title from alert message
-- **Primary Panel URL**: First Grafana dashboard link (format: `https://grafana.agodadev.io/d/{UID}/...?viewPanel={PANEL_ID}`)
-- **Additional Grafana Links**: Extract ALL Grafana URLs found anywhere in thread messages (engineers often share investigation links):
-  - Links matching `https://grafana.agodadev.io/goto/*` (Explore queries)
-  - Links matching `https://grafana.agodadev.io/d/*` (Additional dashboards)
-  - Links matching `https://grafana.agodadev.io/explore*` (Direct explore URLs)
+- **Primary Panel URL**: First Grafana dashboard link — format: `https://<grafana-host>/d/{UID}/...?viewPanel={PANEL_ID}`
+- **Additional Grafana Links**: Extract ALL Grafana URLs found anywhere in thread (engineers often share investigation links):
+  - Explore queries: `https://<grafana-host>/goto/*`
+  - Additional dashboards: `https://<grafana-host>/d/*`
+  - Direct explore: `https://<grafana-host>/explore*`
 - **Timeline**: When alert triggered, when resolved
 - **Initial Assessment**: What the on-call engineer reported
-- **Escalation Details**: Who was contacted, result.
+- **Escalation Details**: Who was contacted, result
 
 ## Step 2: Get Grafana Panel Configuration
 
-Use the **grafana-alert-analyzer** agent to extract panel configuration and analyze the alert.
+Extract UID and panelId from the primary panel URL parsed in Step 1.
 
-Provide the agent with:
-- **Primary Panel URL** from Step 1
-- **Alert trigger time** from Slack thread
+Use Grafana MCP tools to fetch panel configuration:
 
-The agent will extract panel configuration including thresholds, runbook links, datasource details, alert owner, and impact summary.
+```
+Tool: grafana_get_dashboard_by_uid
+{ "uid": "<DASHBOARD_UID>" }
+```
 
-## Step 3: Analyze Past events
+Then extract the specific panel by panelId. Look for:
+- Panel title and description
+- Alert thresholds / configured limits
+- Runbook URL (often in panel description or annotations)
+- Alert owner, severity, on-call Slack channel
+- Datasource type (Loki / Prometheus / WhiteFalcon)
 
-Use the slack-alert-history-analyzer agent to fetch the history of this alert and get summary that how was this alert handled in past. Provide channel id, panel title and original slack link to this agent.
+```
+Tool: grafana_get_dashboard_panel_queries
+{ "uid": "<DASHBOARD_UID>" }
+```
 
-## Step 4: Create TODOs from Runbook found from Step 2
+Use `grafana_get_annotations` to find alert annotations near the trigger time.
 
-- Read the runbook from Step 2.
+## Step 3: Analyze Past Events
+
+Search the alerts Slack channel for the panel title to find past occurrences:
+
+```
+Tool: slack_slack_search_messages
+{ "query": "<ALERT_NAME> in:<alerts-channel>" }
+```
+
+Summarize: how often this alert fires, common resolutions, last occurrence.
+
+## Step 4: Create TODOs from Runbook found in Step 2
+
+- Read the runbook URL found in Step 2.
 - **CRITICAL**: Create Todo items using TodoWrite tool and execute them before reaching next steps.
-- Each step in runbook should be a todo, each todo from this step should have added to title, [RUNBOOK Action #n].
-- Each todo originating from step 4 should execute in sub agent to preserve context.
-- If Runbook mentions any SQL query, execute them using superset mcp.
+- Each step in runbook should be a todo; each todo from this step should have `[RUNBOOK Action #n]` in the title.
+- Each todo originating from step 4 should execute in a subagent to preserve context.
+- If runbook mentions any SQL query, execute them using superset MCP.
 
-## Step 5: Read Log Kestrel Links found from Step 2
+## Step 5: Read Log / Explore Links found in Step 2
 
-- Read the other Grafana/Log Kestrel links found from Step 2. To investigate each link, use TodoWrite tool and create new todos.
-- Each todo originating from step 5 should execute in sub agent to preserve context.
+- Read the other Grafana/Log links found in Step 2. To investigate each link, use TodoWrite and create new todos.
+- Each todo originating from step 5 should execute in a subagent to preserve context.
 
 ## Step 6: Generate On-Call Report
 
@@ -96,7 +116,7 @@ From Step 1 (Slack Thread):
 - Initial assessment (reporter, diagnosis, action taken)
 - Slack thread URL and additional investigation links
 
-From Step 2 (Grafana Alert Analyzer):
+From Step 2 (Grafana Panel):
 - **Threshold Analysis** (violation statement, configured threshold, peak value, deviation)
 - Alert owner, severity, Slack channel
 - Runbook URL and on-call actions
@@ -116,8 +136,8 @@ Ensure the Threshold Analysis section clearly states which metric crossed which 
 
 ## Step 7: Generate Slack Message
 
-Generate slack message as if you are the on-call and who is going to reply the slack link shared
-**CRITICAL**: Your job is to only generate message and not actually send it.
+Generate a Slack message as if you are the on-call engineer replying to the original thread.
+**CRITICAL**: Only generate the message — do NOT send it.
  - Message should be short.
- - It should highlight the issue.
- - It should highlight the next actions.
+ - Highlight the issue.
+ - Highlight the next actions.

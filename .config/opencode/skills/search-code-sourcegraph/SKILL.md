@@ -1,7 +1,7 @@
 ---
 name: search-code-sourcegraph
 description: |
-  Search code across all Agoda repositories using Sourcegraph MCP tools. Use for cross-repo
+  Search code across repositories using Sourcegraph MCP tools. Use for cross-repo
   code search, symbol tracing, commit history, diff analysis, or when overlay/ docs have
   sg:lookup annotations to resolve. Trigger this skill whenever the user wants to search
   code across repos, find symbol definitions or usages, trace code changes, or resolve
@@ -15,7 +15,9 @@ user-invocable: true
 
 # Code Search with Sourcegraph
 
-Search code across all Agoda repositories using Sourcegraph MCP tools. No local tooling required.
+Search code across repositories using Sourcegraph MCP tools. No local tooling required.
+
+**For public open-source patterns** (e.g. "how does library X implement Y?"): use `gh_grep_searchGitHub` — searches millions of public GitHub repos by code pattern.
 
 ---
 
@@ -35,6 +37,7 @@ Search code across all Agoda repositories using Sourcegraph MCP tools. No local 
 | Who worked on what | `get_contributor_repos` | Find repos by contributor name/email |
 | Deep research | `deepsearch` | Complex multi-step questions, architecture analysis |
 | Read deep search | `deepsearch_read` | Re-open a previous deep search by URL/token |
+| Public OSS patterns | `gh_grep_searchGitHub` | Search millions of public GitHub repos by code pattern |
 
 ---
 
@@ -57,9 +60,9 @@ Use for exact keyword matching. Returns top chunks from up to 15 files.
 
 ```
 # Examples
-keyword_search query: "repo:^gitlab.agoda.io/myteam/myrepo$ RabbitMQ"
+keyword_search query: "repo:^gitlab.example.com/myteam/myrepo$ RabbitMQ"
 keyword_search query: "file:.*.scala activityDetailSeo"
-keyword_search query: "(repo:seo-backoffice OR repo:SEOGPTContent) workflow trigger"
+keyword_search query: "(repo:service-a OR repo:service-b) workflow trigger"
 ```
 
 ### `nls_search` — Semantic / Conceptual Search
@@ -73,7 +76,7 @@ Use when you don't know exact terms, or for broader conceptual matching. Uses st
 
 ```
 # Examples
-nls_search query: "repo:activity-content-api gRPC content merge supplier"
+nls_search query: "repo:my-api gRPC content merge supplier"
 nls_search query: "file:.*.cs GPT prompt template generation"
 ```
 
@@ -158,26 +161,25 @@ In YAML files (where HTML comments aren't valid), annotations use `#` comments:
 
 ### Repo Filters
 
-When no nearby `sg:lookup` annotation exists, derive exact `repo:` filters from
-`repos.conf` instead of relying on a static table.
+When no nearby `sg:lookup` annotation exists, derive exact `repo:` filters from your repo list or `repos.conf`.
 
-Conversion rules:
+Conversion rules (for GitLab repos):
 
-- `git@gitlab.agodadev.io:Group/project.git`
-  → `repo:^gitlab.agodadev.io/Group/project$`
-- `https://gitlab.agodadev.io/Group/project.git`
-  → `repo:^gitlab.agodadev.io/Group/project$`
+- `git@<gitlab-host>:Group/project.git`
+  → `repo:^<gitlab-host>/Group/project$`
+- `https://<gitlab-host>/Group/project.git`
+  → `repo:^<gitlab-host>/Group/project$`
 - Strip the `.git` suffix and anchor with `^` and `$`
 
 Examples:
 
-- `git@gitlab.agodadev.io:Activities/activity-content-api.git`
-  → `repo:^gitlab.agodadev.io/Activities/activity-content-api$`
-- `git@gitlab.agodadev.io:full-stack/Agoda-SEO/SEOGPTContent.git`
-  → `repo:^gitlab.agodadev.io/full-stack/Agoda-SEO/SEOGPTContent$`
+- `git@gitlab.example.com:MyTeam/my-api.git`
+  → `repo:^gitlab.example.com/MyTeam/my-api$`
+- `git@gitlab.example.com:OtherTeam/other-service.git`
+  → `repo:^gitlab.example.com/OtherTeam/other-service$`
 
 Combine multiple repos with OR:
-`(repo:^gitlab.agodadev.io/Activities/activity-content-api$ OR repo:^gitlab.agodadev.io/Activities/activity-marketing$) searchTerm`
+`(repo:^gitlab.example.com/TeamA/service-a$ OR repo:^gitlab.example.com/TeamB/service-b$) searchTerm`
 
 ---
 

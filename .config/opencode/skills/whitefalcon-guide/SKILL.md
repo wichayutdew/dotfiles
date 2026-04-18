@@ -10,14 +10,14 @@ compatibility: opencode
 
 Query time-series metrics from WhiteFalcon for troubleshooting, analysis, and monitoring.
 
-**Base URL:** `https://whitefalcon.agoda.is`
+**Base URL:** `<your-whitefalcon-base-url>` — check with your platform team or Consul config.
 
 ## Instructions
 
 Use `curl` to query WhiteFalcon API directly. All endpoints require:
 
 - `Content-Type: application/json`
-- `x-agoda-ssot-name: activities-claude-marketplace`
+- `x-agoda-ssot-name: <your-ssot-name>` — check with your platform team
 - ISO 8601 UTC timestamps (e.g., `2026-01-13T10:00:00+00:00`)
 
 ### 1. Discover Metrics
@@ -103,11 +103,14 @@ Retrieve time-series data for a metric.
 **Example query without percentile:**
 
 ```bash
-curl -X POST https://whitefalcon.agoda.is/v2/rest/measurements/get \
+WF_BASE="<your-whitefalcon-base-url>"
+WF_SSOT="<your-ssot-name>"
+
+curl -X POST "$WF_BASE/v2/rest/measurements/get" \
   -H "Content-Type: application/json" \
-  -H "x-agoda-ssot-name: activities-claude-marketplace" \
+  -H "x-agoda-ssot-name: $WF_SSOT" \
   -d '{
-    "metric": "mpbe-workflow-agents.external.service.activity-supply",
+    "metric": "my-service.external.dependency.latency",
     "granularity": 60,
     "start": "2026-01-13T10:00:00+00:00",
     "end": "2026-01-13T11:00:00+00:00",
@@ -122,12 +125,14 @@ curl -X POST https://whitefalcon.agoda.is/v2/rest/measurements/get \
 **Example using date command for last hour:**
 
 ```bash
+WF_BASE="<your-whitefalcon-base-url>"
+WF_SSOT="<your-ssot-name>"
 START=$(date -u -v-1H +"%Y-%m-%dT%H:%M:%S+00:00")
 END=$(date -u +"%Y-%m-%dT%H:%M:%S+00:00")
 
-curl -X POST https://whitefalcon.agoda.is/v2/rest/measurements/get \
+curl -X POST "$WF_BASE/v2/rest/measurements/get" \
   -H "Content-Type: application/json" \
-  -H "x-agoda-ssot-name: activities-claude-marketplace" \
+  -H "x-agoda-ssot-name: $WF_SSOT" \
   -d "{
     \"metric\": \"api.latency\",
     \"granularity\": 60,
@@ -140,21 +145,27 @@ curl -X POST https://whitefalcon.agoda.is/v2/rest/measurements/get \
 
 ## Examples
 
+Set these variables first:
+```bash
+WF_BASE="<your-whitefalcon-base-url>"
+WF_SSOT="<your-ssot-name>"
+```
+
 **User:** "Find metrics related to workflow agents"
 
 ```bash
-curl -X POST https://whitefalcon.agoda.is/v2/rest/discovery/metrics \
+curl -X POST "$WF_BASE/v2/rest/discovery/metrics" \
   -H "Content-Type: application/json" \
-  -H "x-agoda-ssot-name: activities-claude-marketplace" \
+  -H "x-agoda-ssot-name: $WF_SSOT" \
   -d '{"query": "*workflow*agents*", "from": "2026-01-13T10:00:00+00:00", "to": "2026-01-13T11:00:00+00:00", "limit": 50}'
 ```
 
 **User:** "What datacenters are reporting for api.booking.latency?"
 
 ```bash
-curl -X POST https://whitefalcon.agoda.is/v2/rest/discovery/tagvalues \
+curl -X POST "$WF_BASE/v2/rest/discovery/tagvalues" \
   -H "Content-Type: application/json" \
-  -H "x-agoda-ssot-name: activities-claude-marketplace" \
+  -H "x-agoda-ssot-name: $WF_SSOT" \
   -d '{"query": "*", "from": "2026-01-13T10:00:00+00:00", "to": "2026-01-13T11:00:00+00:00", "metric": "api.booking.latency", "tag": "dc", "limit": 100}'
 ```
 
@@ -164,9 +175,9 @@ curl -X POST https://whitefalcon.agoda.is/v2/rest/discovery/tagvalues \
 START=$(date -u -v-1H +"%Y-%m-%dT%H:%M:%S+00:00")
 END=$(date -u +"%Y-%m-%dT%H:%M:%S+00:00")
 
-curl -X POST https://whitefalcon.agoda.is/v2/rest/measurements/get \
+curl -X POST "$WF_BASE/v2/rest/measurements/get" \
   -H "Content-Type: application/json" \
-  -H "x-agoda-ssot-name: activities-claude-marketplace" \
+  -H "x-agoda-ssot-name: $WF_SSOT" \
   -d "{\"metric\": \"api.booking.latency\", \"granularity\": 300, \"start\": \"$START\", \"end\": \"$END\", \"tags\": {}, \"groupby\": [\"dc\"]}" \
   | jq '.datasets[] | {dc: .group.dc, avg: ([.datapoints[].sum]|add)/([.datapoints[].count]|add)}'
 ```

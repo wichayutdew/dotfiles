@@ -3,7 +3,6 @@ name: start-triage
 description: Triage a production issue from a Slack thread - read, analyze, investigate, and find root cause
 license: MIT
 compatibility: opencode
-user-invocable: true
 ---
 
 
@@ -15,9 +14,9 @@ Comprehensive production issue triage workflow. Reads Slack conversation, analyz
 
 Extract channel ID and timestamp from $ARGUMENTS.
 
-**Slack URL Format:** `https://agoda.slack.com/archives/{CHANNEL_ID}/p{TIMESTAMP}`
+**Slack URL Format:** `https://<your-workspace>.slack.com/archives/{CHANNEL_ID}/p{TIMESTAMP}`
 
-Example: `https://agoda.slack.com/archives/C04SM1C4BNH/p1767954655025769`
+Example: `https://example.slack.com/archives/C04SM1C4BNH/p1767954655025769`
 - Channel ID: `C04SM1C4BNH`
 - Timestamp: `1767954655025769` → `1767954655.025769` (insert decimal before last 6 digits)
 
@@ -55,7 +54,7 @@ From the Slack conversation, extract:
 - What are the leading theories?
 - Any workarounds mentioned?
 
-**CRITICAL**: Present facts EXACTLY as stated. Do NOT infer team names from subteam IDs like `<!subteam^S078K2LL0PL>`.
+**CRITICAL**: Present facts EXACTLY as stated. Do NOT infer team names from raw subteam mention IDs (e.g. `<!subteam^XXXXXXXX>` — leave as-is, do not guess the team name).
 
 ## Step 3: Identify Investigation Targets
 

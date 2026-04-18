@@ -1,6 +1,6 @@
 ---
 name: create-merge-request
-description: Create and update GitLab merge requests using glab CLI. Use when raising an MR or updating an MR description.
+description: Create and update GitLab merge requests. Use GitLab MCP for MR creation; bash for branch push and template fetch. Use when raising an MR or updating an MR description.
 license: MIT
 compatibility: opencode
 ---
@@ -55,39 +55,48 @@ Leave for the author: screenshots, detailed test scenarios.
 If no `ai-only` markers exist, keep all `{{placeholders}}` and `{variables}` intact - only fill in free-text sections.
 
 ### Step 4 - Create the MR
-```bash
-glab mr create \
-  --title "your title" \
-  --source-branch <branch> \
-  --target-branch master \
-  --description "$(cat /tmp/mr_description.txt)" \
-  --squash-before-merge \
-  --remove-source-branch \
-  --yes
+
+Use the GitLab MCP tool:
+
+```
+Tool: gitlab_create_merge_request
+{
+  "id": "<project-id-or-path>",
+  "title": "<your title>",
+  "source_branch": "<branch>",
+  "target_branch": "master",
+  "description": "<contents of /tmp/mr_description.txt>",
+  "squash": true,
+  "should_remove_source_branch": true
+}
 ```
 
-`--yes` skips interactive prompts. Always pass `--source-branch` and `--target-branch` explicitly when running from a worktree.
-
-Always include `--squash-before-merge` and `--remove-source-branch`.
+Always set `squash: true` and `should_remove_source_branch: true`.
 
 ---
 
 ## Updating an MR Description
 
+```
+Tool: gitlab_get_merge_request  (read current MR first)
+{ "id": "<project-id-or-path>", "merge_request_iid": <MR_IID> }
+```
+
+Then update via GitLab MCP — use `gitlab_create_merge_request` with the same IID is not available for updates; use the GitLab REST API via bash if the MCP doesn't expose an update endpoint:
+
 ```bash
-glab api projects/:id/merge_requests/<mr-iid> \
-  -X PUT \
-  -f "description=$(cat /tmp/mr_description.txt)"
+curl -X PUT "<gitlab-host>/api/v4/projects/<project-id>/merge_requests/<mr-iid>" \
+  -H "Authorization: Bearer $GITLAB_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d "{\"description\": $(cat /tmp/mr_description.txt | python3 -c 'import sys,json; print(json.dumps(sys.stdin.read()))')}"
 ```
 
 ---
 
 ## What to Avoid
 
-- **Don't use `grep -o | cut | sed` to extract the template** - silently truncates long values. Always use `python3 json.load`.
-- **Don't use `--fill`** - auto-fills description from commit messages, discarding the project template entirely.
-- **Don't modify anything outside `ai-only` markers** - `{{placeholders}}`, URLs, FAQ, and `/assign me` are boilerplate for the author; leave them exactly as-is.
-- **Don't replace `{{sourceBranch}}` or other `{{placeholders}}`** outside the `ai-only` section - they are intentional template variables, not literal values to substitute.
-- **Don't omit `--squash-before-merge` and `--remove-source-branch`** - always set these on every MR.
-- **Don't create the MR before pushing** - `glab mr create` will fail or target the wrong commit if the branch isn't on remote yet.
-- **Don't omit `--source-branch` and `--target-branch`** when running from a worktree - `glab` may resolve the wrong branch from the detached worktree context.
+- **Don't use `grep -o | cut | sed` to extract the template** — silently truncates long values. Always use `python3 json.load`.
+- **Don't modify anything outside `ai-only` markers** — `{{placeholders}}`, URLs, FAQ, and `/assign me` are boilerplate for the author; leave them exactly as-is.
+- **Don't replace `{{sourceBranch}}` or other `{{placeholders}}`** outside the `ai-only` section — they are intentional template variables, not literal values to substitute.
+- **Don't omit `squash: true` and `should_remove_source_branch: true`** — always set these on every MR.
+- **Don't create the MR before pushing** — MR creation will fail or target the wrong commit if the branch isn't on remote yet.
