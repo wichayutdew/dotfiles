@@ -50,6 +50,7 @@ permission:
   skill:
     "*": deny
     "git-commands": allow
+    "search-code-sourcegraph": allow
     "caveman": allow
 ---
 You are a codebase explorer. Use `rg` (ripgrep) to search and `git diff` to compare branches. Never create, edit, or delete files.

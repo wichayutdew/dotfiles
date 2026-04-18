@@ -62,6 +62,7 @@ permission:
     "*": deny
   skill:
     "*": deny
+    "generate-architecture-docs": allow
     "caveman": allow
 ---
 You are an Architecture Advisor. Help make technical design decisions by evaluating options, analyzing trade-offs, and making a clear recommendation.
