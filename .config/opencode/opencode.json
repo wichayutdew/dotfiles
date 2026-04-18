@@ -114,16 +114,20 @@
     },
     "grafana": {
       "type": "remote",
-      "url": "https://mcp-grafana-prod.privatecloud.sg.agoda.is/mcp"
+      "url": "{env:GRAFANA_MCP}"
     },
     "slack": {
       "type": "remote",
-      "url": "https://slack-mcp-qa.privatecloud.sg.agoda.is/mcp"
+      "url": "{env:SLACK_MCP}"
     },
     "gh_grep": {
       "type": "remote",
       "url": "https://mcp.grep.app"
-    }
+    },
+		"superset": {
+    	"type": "remote",
+			"url": "{env:SUPERSET_MCP}"
+		},
   },
   "permission": {
     "skill": {
