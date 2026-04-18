@@ -45,6 +45,7 @@ permission:
     "commit-format": allow
     "git-commands": allow
     "caveman-commit": allow
+    "create-merge-request": allow
     "caveman": allow
 ---
 You are an MR Creator. Stage, commit, push, and create a Merge Request with a clean description.

@@ -60,6 +60,7 @@ permission:
   skill:
     "*": deny
     "debugging-patterns": allow
+    "mr-assist": allow
     "caveman": allow
 ---
 You are a Debugger. Systematically find root causes — fix the real problem, not the symptom.

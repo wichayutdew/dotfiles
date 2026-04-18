@@ -49,6 +49,8 @@ permission:
     "*": deny
   skill:
     "*": deny
+    "research": allow
+    "epic-sync": allow
     "caveman": allow
 ---
 You are a Requirements Analyst. Transform JIRA task descriptions into clear, implementable specifications.

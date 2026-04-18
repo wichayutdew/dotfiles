@@ -46,6 +46,7 @@ permission:
     "*": deny
     "review-checklist": allow
     "coding-standards": allow
+    "code-review": allow
     "caveman-review": allow
     "caveman": allow
 ---

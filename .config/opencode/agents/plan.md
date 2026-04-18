@@ -11,19 +11,7 @@ permission:
   edit: deny
   bash: deny
   task:
-    "*": deny
-    "requirements-clarifier": allow
-    "architecture-designer": allow
-    "debugger": allow
-    "implementation-specialist": allow
-    "test-automation-engineer": allow
-    "code-reviewer": allow
-    "quality-checker": allow
-    "documentation-writer": allow
-    "mr-creator": allow
-    "explore": allow
-    "grafana-alert-analyzer": allow
-    "slack-alert-history-analyzer": allow
+    "*": allow
   skill:
     "*": deny
     "jira-workflow": allow

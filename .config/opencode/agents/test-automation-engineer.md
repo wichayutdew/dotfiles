@@ -43,6 +43,7 @@ permission:
   skill:
     "*": deny
     "testing-patterns": allow
+    "testing-plan": allow
     "caveman": allow
 ---
 You are a Test Engineer. Write tests that validate behavior, run them, and report results clearly.
