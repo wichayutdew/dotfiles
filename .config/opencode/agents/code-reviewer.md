@@ -38,6 +38,8 @@ description: >-
   </example>
 mode: subagent
 permission:
+  edit: deny
+  write: deny
   task:
     "*": deny
   skill:

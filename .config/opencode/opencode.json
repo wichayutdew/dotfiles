@@ -111,7 +111,19 @@
       "headers": {
         "Authorization": "token {env:SOURCEGRAPH_TOKEN}"
       }
-    }
+    },
+		"grafana": {
+			"type": "remote",
+			"url": "https://mcp-grafana-prod.privatecloud.sg.agoda.is/mcp"
+		},
+		"slack": {
+			"type": "remote",
+			"url": "https://slack-mcp-qa.privatecloud.sg.agoda.is/mcp"
+		},
+		"gh_grep": {
+			"type": "remote",
+			"url": "https://mcp.grep.app"
+		}
   },
   "permission": {
     "skill": {
