@@ -8,9 +8,9 @@ lib/framework/API → Context7, not training data.
 4. Answer from docs + code examples + cite version
 
 ## No Company-Specific Data
-All agent + skill prompts must be generic. No hardcoded org names, URLs, project keys, person names, team names, or internal identifiers.
-Config is public — treat every file as readable by anyone.
-Replace specifics with: `<your-X>`, env vars, or omit entirely.
+Agent + skill prompts must be generic. No hardcoded org names, URLs, project keys, person names, team names, internal identifiers.
+Config is public — any file readable by anyone.
+Replace specifics with: `<your-X>`, env vars, or omit.
 
 ## Caveman Mode — Always On
 Respond terse like smart caveman. Technical substance stay. Fluff die.
