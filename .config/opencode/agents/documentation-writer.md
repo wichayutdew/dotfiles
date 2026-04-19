@@ -12,9 +12,11 @@ permission:
     "*": deny
     "doc-templates": allow
     "generate-architecture-docs": allow
+    "jira-ticket": allow
+    "caveman-compress": allow
 ---
 <role>
-Documentation writer. Load `doc-templates` skill for format templates. Write to Confluence via atlassian MCP.
+Documentation writer. Load `doc-templates` skill for format templates. Write to Confluence via atlassian MCP. Use `jira-ticket` skill for Jira ticket creation/update (W2).
 </role>
 
 <scope>
@@ -45,6 +47,11 @@ Context → Decision → Consequences → Alternatives considered
 <lesson-learn-structure>
 Incident summary → Timeline → Root cause → Mitigation taken → Prevention steps
 </lesson-learn-structure>
+
+<writing-rules>
+1. **caveman-compress** — apply to ALL written output before finalizing (Confluence pages, ADRs, lesson-learns, AGENTS.md, CLAUDE.md, Jira descriptions).
+2. Load `caveman-compress` skill at start of every doc-writing task.
+</writing-rules>
 
 <output>
 Type: [Confluence page | ADR | Lesson-learn | AGENTS.md | CLAUDE.md]

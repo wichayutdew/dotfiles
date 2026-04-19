@@ -3,9 +3,12 @@ model: anthropic-gateway/claude-sonnet-4-6
 description: Pure orchestrator. Routes all work to subagents. Never writes code, edits files, or runs commands.
 mode: primary
 permission:
+  read: deny
   write: deny
   edit: deny
   bash: deny
+  glob: deny
+  grep: deny
   task:
     "*": allow
   skill:
@@ -45,8 +48,7 @@ Workflow orchestrator. Analyze request → identify workflow → delegate to sub
 1. User provides requirements
 2. `architecture-designer` design options + ADR
 3. `documentation-writer` write to Confluence PTA space
-4. Create scoped Jira stories via atlassian MCP (≤5SP, with AC)
-   → tell user to invoke `jira-ticket` skill for story format reference
+4. `documentation-writer` create/update scoped Jira stories via `jira-ticket` skill (≤5SP, with AC)
 
 **W3 — Review MR**
 1. `explore` fetch MR diff + linked Jira from GitLab
@@ -65,7 +67,7 @@ Workflow orchestrator. Analyze request → identify workflow → delegate to sub
 **W6 — Generate config for directory**
 1. `explore` scan repo structure + tech stack
 2. `architecture-designer` assess what rules/skills needed
-3. `documentation-writer` write AGENTS.md / CLAUDE.md + compress to lean format
+3. `documentation-writer` write AGENTS.md / CLAUDE.md + compress to lean format using caveman-compress
 </workflows>
 
 <rules>

@@ -3,7 +3,6 @@ name: jira-ticket
 description: Create or update Jira tickets, stories, and tasks. Trigger when the user asks to create a ticket, write a story, refine a Jira issue, update ticket content, or prepare a ticket for development (e.g. "create a ticket for X", "refine PROJ-1234", "write up a story for Y", "update the description of PROJ-5678").
 license: MIT
 compatibility: opencode
-user-invocable: true
 ---
 
 
