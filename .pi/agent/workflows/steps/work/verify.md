@@ -5,7 +5,13 @@ subagent.
 Original request:
 {{workflow.input}}
 
-Implementation handoff:
+Immutable approved plan:
+{{reviewed.artifact}}
+
+Approval feedback:
+{{reviewed.feedback}}
+
+Implementation ledger:
 {{last.summary}}
 
 The approved plan is final authority. Do not call `contact_supervisor`,
@@ -36,10 +42,10 @@ Invocation-only repair is allowed when it preserves the exact check, target,
 flags, and side-effect scope; never turn a failing check into a different or
 weaker check. If a transient or context-bound failure has another safe attempt,
 use outcome `retry` with the exact call, error, attempts, current state, next
-alternative, and exact approved fenced `json` contract unchanged. Use `replan`
-when the reviewed command or authority itself is materially invalid. Use
-`blocked` only after safe alternatives are exhausted and neither retry nor
-replanning can resolve the missing access or environmental constraint.
+alternative, and exact approved fenced `json` contract unchanged. Materially
+invalid scope is deferred to a new workflow. Use `blocked` only after safe
+alternatives are exhausted and neither retry nor the approved plan can resolve
+the missing access or environmental constraint.
 
 Call `structured_output` alone with outcome `passed` only when every
 criterion and required command passes with no actionable finding. The summary

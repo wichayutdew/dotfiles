@@ -4,7 +4,7 @@ id: ticket
 command: ticket
 description: Read a Jira ticket, plan, implement, and independently verify it
 start: plan
-maxStepVisits: 8
+maxStepVisits: 20
 summaryMaxChars: 30000
 steps:
   plan:
@@ -110,13 +110,13 @@ steps:
             argsPrefixes:
               [[status], [diff], [grep], [log], [ls-files], [rev-parse], [show]]
         approvedSources: [verification-worker]
+        handoffSources: [verification-worker, verification-reviewer]
     requires:
       tools: [read, ls, bash, edit, write, mcp]
       skills: *ticket-implement-skills
     transitions:
       ready: verify
       retry: implement
-      replan: plan
       blocked: $pause
   verify:
     title: Independently verify Jira work
@@ -148,6 +148,7 @@ steps:
         mode: allow-list
         allow: *ticket-inspection-bash
         approvedSources: [verification-reviewer]
+        handoffSources: [verification-worker, verification-reviewer]
     requires:
       tools: [read, ls, bash, mcp]
       skills: *ticket-verify-skills
@@ -155,5 +156,4 @@ steps:
       passed: $done
       failed: implement
       retry: verify
-      replan: plan
       blocked: $pause

@@ -4,7 +4,13 @@ are already a fresh delegated child; do not launch another subagent.
 Original request:
 {{workflow.input}}
 
-Approved plan handoff, or the latest reviewer handoff on a retry:
+Immutable approved plan:
+{{reviewed.artifact}}
+
+Approval feedback:
+{{reviewed.feedback}}
+
+Latest implementation ledger:
 {{last.summary}}
 
 The approved handoff is final implementation authority. Do not call
@@ -47,10 +53,9 @@ dependency version, or add an external effect to make recovery pass.
 If a plausible safe recovery needs more fresh context, call `structured_output`
 with outcome `retry`. Its summary must include the exact failed call and error,
 alternatives attempted, current observed state, the next safe alternative, and
-the exact approved fenced `json` contract unchanged. If recovery requires a
-material change to approved intent or authority, use `replan` with the same
-evidence and proposed contract correction. Use `blocked` only after safe
-alternatives are exhausted and neither a fresh retry nor replanning can resolve
+the exact approved fenced `json` contract unchanged. Material new scope is
+deferred to a new workflow. Use `blocked` only after safe alternatives are
+exhausted and neither a fresh retry nor the approved plan can resolve
 the missing access or environmental constraint.
 
 Call `structured_output` alone with outcome `ready` only after all worker

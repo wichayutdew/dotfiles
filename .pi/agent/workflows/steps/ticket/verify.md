@@ -5,7 +5,13 @@ and do not launch another subagent.
 Ticket input:
 {{workflow.input}}
 
-Implementation handoff:
+Immutable approved Jira plan:
+{{reviewed.artifact}}
+
+Approval feedback:
+{{reviewed.feedback}}
+
+Implementation ledger:
 {{last.summary}}
 
 The approved plan is final authority. Do not call `contact_supervisor`,
@@ -35,9 +41,9 @@ Invocation-only repair must preserve the exact check, target, flags, and
 side-effect scope; never turn a failing check into a different or weaker check.
 Use `retry` for a transient or context-bound failure with the exact call, error,
 attempts, current state, next alternative, and unchanged approved contract. Use
-`replan` when the reviewed command or authority is materially invalid. Use
-`blocked` only after safe alternatives are exhausted and neither retry nor
-replanning can resolve the environmental or access constraint.
+defer materially invalid reviewed command or authority to a new workflow. Use
+`blocked` only after safe alternatives are exhausted and neither retry nor the
+approved plan can resolve the environmental or access constraint.
 
 Call `structured_output` alone with outcome `passed` only when all ticket
 and user criteria pass with no actionable finding. Repeat the full criteria and

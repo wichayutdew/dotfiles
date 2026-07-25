@@ -2,7 +2,7 @@
 version: 1
 id: mr-review
 command: mr-review
-description: Plan and perform a hosted merge-request or pull-request review
+description: Plan and perform a hosted review, creating author-private drafts only
 start: plan
 maxStepVisits: 10
 summaryMaxChars: 30000
@@ -120,44 +120,12 @@ steps:
       skills: *review-skills
     transitions:
       clean: $done
-      comments: confirm
+      drafts: create-drafts
       retry: review
-      replan: plan
+      superseded: $done
       blocked: $pause
-  confirm:
-    title: Confirm exact review comments
-    prompt:
-      file: steps/mr-review/confirm.md
-    subagent:
-      agent: reviewer
-      context: fresh
-      timeoutMs: 900000
-      turnBudget:
-        maxTurns: 15
-        graceTurns: 2
-      toolBudget:
-        soft: 10
-        hard: 20
-        block: "*"
-    permissions:
-      skills: [caveman, caveman-review]
-    requires:
-      skills: [caveman, caveman-review]
-    gate:
-      provider: plannotator
-      submitOutcome: submit
-      approvedOutcome: approved
-      rejectedOutcome: changes-requested
-      timeoutMs: 10000
-    transitions:
-      approved: publish
-      changes-requested: plan
-      no-actions: $done
-      retry: confirm
-      replan: plan
-      blocked: $pause
-  publish:
-    title: Post confirmed review comments
+  create-drafts:
+    title: Create author-private review drafts
     prompt:
       file: steps/shared/publish-remote.md
     subagent:
@@ -182,12 +150,12 @@ steps:
             argsPrefixes: [[pr, view], [api]]
           - executable: glab
             argsPrefixes: [[mr, view], [api]]
-        approvedSources: [remote-actions]
+        approvedSources: [remote-drafts]
     requires:
       tools: [bash]
       skills: [caveman, caveman-review]
     transitions:
-      published: $done
-      retry: publish
-      replan: plan
+      drafted: $done
+      retry: create-drafts
+      superseded: $done
       blocked: $pause

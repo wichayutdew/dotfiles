@@ -5,7 +5,13 @@ and do not launch another subagent.
 Hosted review input:
 {{workflow.input}}
 
-Implementation handoff:
+Immutable approved plan:
+{{reviewed.artifact}}
+
+Approval feedback:
+{{reviewed.feedback}}
+
+Verification ledger:
 {{last.summary}}
 
 The approved plan is final authority. Do not call `contact_supervisor`,
@@ -33,16 +39,16 @@ Do not stop at the first failed evidence call. Inspect the exact error and
 current state, then try safe semantically equivalent read-only alternatives.
 Use `retry` for a transient or context-bound failure with the exact call, error,
 attempts, observed state, next alternative, and both approved contracts
-unchanged. Use `replan` when the reviewed head, scope, command, anchor, or
-authority is materially stale. Use `blocked` only after safe alternatives are
-exhausted and neither retry nor replanning can proceed.
+unchanged. A stale head, scope, command, anchor, or authority is deferred to a
+new workflow. Use `blocked` only after safe alternatives are exhausted and
+neither retry nor the approved plan can proceed.
 
 Call `structured_output` alone:
 
 - Use `ready` when all criteria pass and one or more push/reply actions remain
   in the first-gate-approved contract. Repeat the complete criteria, evidence,
   and exact fenced Verification and Remote action JSON contracts in the
-  summary for the second Plannotator confirmation.
+  summary for the private-draft delivery step.
 - Use `no-actions` when all criteria pass and the remote action array is empty.
   Include complete verification evidence and both exact JSON contracts.
 - Use `failed` for an actionable code, test, reply, or contract finding. Repeat

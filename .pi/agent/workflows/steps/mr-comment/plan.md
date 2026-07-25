@@ -74,9 +74,9 @@ not end with a terminal question. Put every material uncertainty under Open
 questions as a decision record with options, evidence, a recommendation, and
 the exact default the plan adopts. Plannotator feedback may change those
 defaults; first-gate approval resolves the fix plan and proposed Remote action
-contract, but does not authorize publication. Independent verification must
-pass before a second Plannotator confirmation approves the exact remaining
-actions. Use an empty action array when publication should not occur.
+contract, but does not authorize publication. Independent verification passes
+directly to private-draft delivery; no second Plannotator confirmation is
+permitted. Use an empty action array when no delivery should occur.
 
 Call `structured_output` alone with outcome `submit`. Put the full plan in
 `artifact`. Put a self-contained handoff in `summary`, including URL, host,

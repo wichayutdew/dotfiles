@@ -4,7 +4,7 @@ id: work
 command: work
 description: Plan, implement, and independently verify local work
 start: plan
-maxStepVisits: 8
+maxStepVisits: 20
 summaryMaxChars: 30000
 steps:
   plan:
@@ -99,13 +99,13 @@ steps:
             argsPrefixes:
               [[status], [diff], [grep], [log], [ls-files], [rev-parse], [show]]
         approvedSources: [verification-worker]
+        handoffSources: [verification-worker, verification-reviewer]
     requires:
       tools: [read, ls, bash, edit, write]
       skills: *work-implement-skills
     transitions:
       ready: verify
       retry: implement
-      replan: plan
       blocked: $pause
   verify:
     title: Independently verify local work
@@ -136,6 +136,7 @@ steps:
         mode: allow-list
         allow: *work-inspection-bash
         approvedSources: [verification-reviewer]
+        handoffSources: [verification-worker, verification-reviewer]
     requires:
       tools: [read, ls, bash]
       skills: *work-verify-skills
@@ -143,5 +144,4 @@ steps:
       passed: $done
       failed: implement
       retry: verify
-      replan: plan
       blocked: $pause

@@ -2,7 +2,7 @@
 version: 1
 id: mr-comment
 command: mr-comment
-description: Triage unresolved GitLab MR comments, implement fixes, verify, and optionally publish
+description: Triage unresolved GitLab MR comments, implement fixes, verify, and create private drafts
 start: plan
 maxStepVisits: 10
 summaryMaxChars: 30000
@@ -115,13 +115,13 @@ steps:
         mode: allow-list
         allow: *comment-inspection-bash
         approvedSources: [verification-worker]
+        handoffSources: [verification-worker, verification-reviewer]
     requires:
       tools: [read, ls, bash, edit, write]
       skills: *comment-implement-skills
     transitions:
       ready: verify
       retry: implement
-      replan: plan
       blocked: $pause
   verify:
     title: Independently verify review-comment handling
@@ -155,50 +155,18 @@ steps:
         mode: allow-list
         allow: *comment-inspection-bash
         approvedSources: [verification-reviewer]
+        handoffSources: [verification-worker, verification-reviewer]
     requires:
       tools: [read, ls, bash]
       skills: *comment-verify-skills
     transitions:
-      ready: confirm
+      ready: deliver
       no-actions: $done
       failed: implement
       retry: verify
-      replan: plan
       blocked: $pause
-  confirm:
-    title: Confirm exact push and reply actions
-    prompt:
-      file: steps/mr-comment/confirm.md
-    subagent:
-      agent: reviewer
-      context: fresh
-      timeoutMs: 900000
-      turnBudget:
-        maxTurns: 15
-        graceTurns: 2
-      toolBudget:
-        soft: 10
-        hard: 20
-        block: "*"
-    permissions:
-      skills: [caveman, receiving-code-review]
-    requires:
-      skills: [caveman, receiving-code-review]
-    gate:
-      provider: plannotator
-      submitOutcome: submit
-      approvedOutcome: approved
-      rejectedOutcome: changes-requested
-      timeoutMs: 10000
-    transitions:
-      approved: publish
-      changes-requested: plan
-      no-actions: $done
-      retry: confirm
-      replan: plan
-      blocked: $pause
-  publish:
-    title: Run confirmed push and reply actions
+  deliver:
+    title: Push the verified commit and create private draft replies
     prompt:
       file: steps/shared/publish-remote.md
     subagent:
@@ -223,12 +191,12 @@ steps:
             argsPrefixes: [[status], [rev-parse], [show], [ls-remote]]
           - executable: glab
             argsPrefixes: [[mr, view], [api]]
-        approvedSources: [remote-actions]
+        approvedSources: [remote-push, remote-drafts]
     requires:
       tools: [bash]
       skills: [caveman, receiving-code-review]
     transitions:
-      published: $done
-      retry: publish
-      replan: plan
+      drafted: $done
+      retry: deliver
+      superseded: $done
       blocked: $pause
