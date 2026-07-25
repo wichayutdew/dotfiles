@@ -6,35 +6,14 @@
   "packages": [
     "npm:@bitcraft-apps/pi-web-tools",
     "npm:pi-mcp-adapter",
-    {
-      "source": "npm:@plannotator/pi-extension",
-      "skills": []
-    },
+    "npm:@plannotator/pi-extension",
     "npm:pi-subagents",
-    "/Users/wphongphanpa/repositories/personal/pi-workflows",
-    {
-      "source": "git:github.com/obra/superpowers",
-      "extensions": [],
-      "skills": [
-        "brainstorming",
-        "executing-plans",
-        "requesting-code-review",
-        "using-git-worktrees",
-        "writing-plans",
-        "systematic-debugging",
-        "test-driven-development",
-        "verification-before-completion",
-        "receiving-code-review",
-        "requesting-code-review"
-      ]
-    },
     "npm:pi-hermes-memory",
     "npm:context-mode",
     "npm:@llttlltt/poimandres-pi",
-    "npm:pi-zentui"
-  ],
-  "extensions": [
-    "-extensions/workflow-commands.ts"
+    "npm:pi-zentui",
+    "git:github.com/obra/superpowers",
+    "npm:@wichayutdew/pi-workflows"
   ],
   "theme": "poimandres white/poimandres storm",
   "terminal": {
