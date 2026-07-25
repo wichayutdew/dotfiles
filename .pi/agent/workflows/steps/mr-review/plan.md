@@ -8,6 +8,11 @@ Hosted review URL and optional context:
 Plannotator feedback from a previous submission:
 {{gate.feedback}}
 
+Use brainstorming only for internal option analysis. Do not ask a live
+question, open a visual companion, write or commit a plan file, or seek a
+separate approval. Record options and the adopted default in the artifact;
+Plannotator is the planning decision gate.
+
 Require one HTTPS MR or PR URL. Detect its host and never cross hosts. Fetch the
 description, source and target branches, current head SHA, commits, complete
 diff, checks or pipelines and jobs, existing discussions, and changed-file
@@ -52,14 +57,17 @@ Do not call `contact_supervisor`, `subagent_supervisor`, or `intercom`, and do
 not end with a terminal question. Put every material uncertainty under Open
 questions as a decision record with options, evidence, a recommendation, and
 the exact default the plan adopts. Plannotator feedback may change those
-defaults; approval resolves every decision by accepting the final artifact.
-That approval also authorizes only the exact Remote action contract for later
-publication; there is no downstream confirmation. Use an empty action array
-when publication should not occur.
+defaults; first-gate approval resolves the review plan and proposed Remote
+action contract, but does not authorize publication. After independent review,
+a second Plannotator confirmation must approve the exact remaining actions.
+Use an empty action array when publication should not occur.
 
 Call `structured_output` alone with outcome `submit`. Put the full plan in
 `artifact`. Put a self-contained handoff in `summary`, including URL, host,
 head SHA, all review criteria, evidence, planned comments and exact remote
 actions. Include the exact fenced `json` Remote action contract unchanged in
-the summary. Use `blocked` only when missing access or evidence prevents a safe
-reviewable plan.
+the summary. Use `retry` when a transient evidence or tool failure needs fresh
+context after safe alternatives were attempted; include the exact failed call,
+error, attempts, current state, and next alternative. Use `blocked` only when
+missing access or evidence prevents a safe reviewable plan and retry cannot
+resolve it.

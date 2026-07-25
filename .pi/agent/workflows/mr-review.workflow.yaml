@@ -24,8 +24,8 @@ steps:
         hard: 180
         block: "*"
     permissions:
-      tools: [ read, ls, bash, mcp ]
-      mcp:
+      tools: [read, ls, bash]
+      mcp: &review-mcp
         - gitlab/get_merge_request
         - gitlab/get_merge_request_commits
         - gitlab/get_merge_request_diffs
@@ -44,24 +44,35 @@ steps:
         - sourcegraph/nls_search
         - sourcegraph/read_file
         - gh_grep/searchGitHub
-      extensions: [ plannotator, pi-web-tools ]
-      skills: [ caveman, coding-standards, caveman-review, brainstorming, writing-plans ]
+      extensions: [pi-web-tools]
+      skills:
+        &review-plan-skills [
+          caveman,
+          coding-standards,
+          caveman-review,
+          brainstorming,
+        ]
       bash:
         mode: allow-list
-        allow:
-          - executable: rg
+        allow: &review-inspection-bash
+          - executable: grep
+          - executable: head
           - executable: ls
           - executable: pwd
+          - executable: rg
+          - executable: stat
+          - executable: tail
+          - executable: wc
           - executable: git
-            argsPrefixes: [ [ status ], [ diff ], [ log ], [ show ], [ rev-parse ], [ ls-files ], [ branch, --show-current ], [ worktree, list ], [ remote, -v ], [ blame ], [ show-ref ], [ cat-file ] ]
+            argsPrefixes:
+              [[status], [diff], [grep], [log], [ls-files], [rev-parse], [show]]
           - executable: gh
-            argsPrefixes: [ [ pr, view ], [ pr, diff ], [ pr, checks ], [ api ] ]
+            argsPrefixes: [[pr, view], [pr, diff], [pr, checks], [api]]
           - executable: glab
-            argsPrefixes: [ [ mr, view ], [ mr, diff ], [ api ] ]
+            argsPrefixes: [[mr, view], [mr, diff], [api]]
     requires:
-      tools: [ read, ls, bash, mcp ]
-      extensions: [ plannotator, pi-web-tools ]
-      skills: [ caveman, coding-standards, caveman-review, brainstorming, writing-plans ]
+      tools: [read, ls, bash]
+      skills: *review-plan-skills
     gate:
       provider: plannotator
       submitOutcome: submit
@@ -71,6 +82,7 @@ steps:
     transitions:
       approved: review
       changes-requested: plan
+      retry: plan
       blocked: $pause
   review:
     title: Perform independent hosted review
@@ -89,70 +101,93 @@ steps:
         hard: 180
         block: "*"
     permissions:
-      tools: [ read, ls, bash, mcp ]
-      mcp:
-        - gitlab/get_merge_request
-        - gitlab/get_merge_request_commits
-        - gitlab/get_merge_request_diffs
-        - gitlab/get_merge_request_pipelines
-        - gitlab/get_pipeline_jobs
-        - gitlab/get_merge_request_conflicts
-        - gitlab/search
-        - context7/resolve-library-id
-        - context7/query-docs
-        - sourcegraph/code_finder
-        - sourcegraph/commit_search
-        - sourcegraph/diff_search
-        - sourcegraph/keyword_search
-        - sourcegraph/list_files
-        - sourcegraph/list_repos
-        - sourcegraph/nls_search
-        - sourcegraph/read_file
-        - gh_grep/searchGitHub
-      extensions: [ pi-web-tools ]
-      skills: [ caveman, coding-standards, caveman-review, systematic-debugging, verification-before-completion, requesting-code-review ]
+      tools: [read, ls, bash]
+      mcp: *review-mcp
+      extensions: [pi-web-tools]
+      skills:
+        &review-skills [
+          caveman,
+          coding-standards,
+          caveman-review,
+          systematic-debugging,
+          verification-before-completion,
+        ]
       bash:
         mode: allow-list
-        allow:
-          - executable: rg
-          - executable: ls
-          - executable: pwd
-          - executable: git
-            argsPrefixes: [ [ status ], [ diff ], [ log ], [ show ], [ rev-parse ], [ ls-files ], [ branch, --show-current ], [ worktree, list ], [ remote, -v ], [ blame ], [ show-ref ], [ cat-file ] ]
-          - executable: gh
-            argsPrefixes: [ [ pr, view ], [ pr, diff ], [ pr, checks ], [ api ] ]
-          - executable: glab
-            argsPrefixes: [ [ mr, view ], [ mr, diff ], [ api ] ]
+        allow: *review-inspection-bash
     requires:
-      tools: [ read, ls, bash, mcp ]
-      extensions: [ pi-web-tools ]
-      skills: [ caveman, coding-standards, caveman-review, systematic-debugging, verification-before-completion, requesting-code-review ]
+      tools: [read, ls, bash]
+      skills: *review-skills
     transitions:
       clean: $done
-      comments: publish
+      comments: confirm
+      retry: review
+      replan: plan
+      blocked: $pause
+  confirm:
+    title: Confirm exact review comments
+    prompt:
+      file: steps/mr-review/confirm.md
+    subagent:
+      agent: reviewer
+      context: fresh
+      timeoutMs: 900000
+      turnBudget:
+        maxTurns: 15
+        graceTurns: 2
+      toolBudget:
+        soft: 10
+        hard: 20
+        block: "*"
+    permissions:
+      skills: [caveman, caveman-review]
+    requires:
+      skills: [caveman, caveman-review]
+    gate:
+      provider: plannotator
+      submitOutcome: submit
+      approvedOutcome: approved
+      rejectedOutcome: changes-requested
+      timeoutMs: 10000
+    transitions:
+      approved: publish
+      changes-requested: plan
+      no-actions: $done
+      retry: confirm
+      replan: plan
       blocked: $pause
   publish:
-    title: Post plan-approved review comments
+    title: Post confirmed review comments
     prompt:
       file: steps/shared/publish-remote.md
     subagent:
       agent: worker
       context: fresh
       timeoutMs: 900000
+      retryToolFailures: true
+      turnBudget:
+        maxTurns: 20
+        graceTurns: 2
+      toolBudget:
+        soft: 40
+        hard: 70
+        block: "*"
     permissions:
-      tools: [ bash ]
-      skills: [ caveman-review ]
+      tools: [bash]
+      skills: [caveman, caveman-review]
       bash:
         mode: allow-list
         allow:
           - executable: gh
-            argsPrefixes: [ [ pr, view ], [ api ] ]
+            argsPrefixes: [[pr, view], [api]]
           - executable: glab
-            argsPrefixes: [ [ mr, view ], [ api ] ]
-        approvedSources: [ remote-actions ]
+            argsPrefixes: [[mr, view], [api]]
+        approvedSources: [remote-actions]
     requires:
-      tools: [ bash ]
-      skills: [ caveman-review ]
+      tools: [bash]
+      skills: [caveman, caveman-review]
     transitions:
       published: $done
+      retry: publish
+      replan: plan
       blocked: $pause

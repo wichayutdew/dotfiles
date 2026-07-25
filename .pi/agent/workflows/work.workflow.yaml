@@ -24,8 +24,8 @@ steps:
         hard: 100
         block: "*"
     permissions:
-      tools: [ read, ls, bash, mcp ]
-      mcp:
+      tools: [read, ls, bash]
+      mcp: &work-mcp
         - context7/resolve-library-id
         - context7/query-docs
         - sourcegraph/code_finder
@@ -37,14 +37,13 @@ steps:
         - sourcegraph/nls_search
         - sourcegraph/read_file
         - gh_grep/searchGitHub
-      extensions: [ plannotator, pi-web-tools ]
-      skills: [ caveman, brainstorming, writing-plans, using-git-worktrees, coding-standards ]
+      extensions: [pi-web-tools]
+      skills: &work-plan-skills [caveman, brainstorming, coding-standards]
       bash:
-        mode: unrestricted
+        mode: read-only
     requires:
-      tools: [ read, ls, bash, mcp ]
-      extensions: [ plannotator, pi-web-tools ]
-      skills: [ caveman, brainstorming, writing-plans, using-git-worktrees, coding-standards ]
+      tools: [read, ls, bash]
+      skills: *work-plan-skills
     gate:
       provider: plannotator
       submitOutcome: submit
@@ -65,26 +64,44 @@ steps:
       context: fresh
       timeoutMs: 7200000
       artifacts: true
+      retryToolFailures: true
+      turnBudget:
+        maxTurns: 80
+        graceTurns: 5
+      toolBudget:
+        soft: 240
+        hard: 400
+        block: "*"
     permissions:
-      tools: [ read, ls, bash, edit, write, mcp ]
-      mcp:
-        - context7/resolve-library-id
-        - context7/query-docs
-        - sourcegraph/code_finder
-        - sourcegraph/commit_search
-        - sourcegraph/diff_search
-        - sourcegraph/keyword_search
-        - sourcegraph/list_files
-        - sourcegraph/list_repos
-        - sourcegraph/nls_search
-        - sourcegraph/read_file
-        - gh_grep/searchGitHub
-      skills: [ caveman, coding-standards, executing-plans, systematic-debugging, test-driven-development, verification-before-completion, receiving-code-review ]
+      tools: [read, ls, bash, edit, write]
+      mcp: *work-mcp
+      skills:
+        &work-implement-skills [
+          caveman,
+          coding-standards,
+          systematic-debugging,
+          test-driven-development,
+          verification-before-completion,
+          receiving-code-review,
+        ]
       bash:
-        mode: unrestricted
+        mode: allow-list
+        allow: &work-inspection-bash
+          - executable: grep
+          - executable: head
+          - executable: ls
+          - executable: pwd
+          - executable: rg
+          - executable: stat
+          - executable: tail
+          - executable: wc
+          - executable: git
+            argsPrefixes:
+              [[status], [diff], [grep], [log], [ls-files], [rev-parse], [show]]
+        approvedSources: [verification-worker]
     requires:
-      tools: [ read, ls, bash, edit, write, mcp ]
-      skills: [ coding-standards, executing-plans, systematic-debugging, test-driven-development, verification-before-completion, receiving-code-review ]
+      tools: [read, ls, bash, edit, write]
+      skills: *work-implement-skills
     transitions:
       ready: verify
       retry: implement
@@ -107,25 +124,21 @@ steps:
         hard: 200
         block: "*"
     permissions:
-      tools: [ read, ls, bash, mcp ]
-      mcp:
-        - context7/resolve-library-id
-        - context7/query-docs
-        - sourcegraph/code_finder
-        - sourcegraph/commit_search
-        - sourcegraph/diff_search
-        - sourcegraph/keyword_search
-        - sourcegraph/list_files
-        - sourcegraph/list_repos
-        - sourcegraph/nls_search
-        - sourcegraph/read_file
-        - gh_grep/searchGitHub
-      skills: [ caveman, coding-standards, verification-before-completion, requesting-code-review ]
+      tools: [read, ls, bash]
+      mcp: *work-mcp
+      skills:
+        &work-verify-skills [
+          caveman,
+          coding-standards,
+          verification-before-completion,
+        ]
       bash:
-        mode: unrestricted
+        mode: allow-list
+        allow: *work-inspection-bash
+        approvedSources: [verification-reviewer]
     requires:
-      tools: [ read, ls, bash, mcp ]
-      skills: [ coding-standards, verification-before-completion, requesting-code-review ]
+      tools: [read, ls, bash]
+      skills: *work-verify-skills
     transitions:
       passed: $done
       failed: implement

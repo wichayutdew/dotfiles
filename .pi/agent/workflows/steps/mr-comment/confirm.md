@@ -4,7 +4,7 @@ a fresh delegated child. Do not execute any remote action.
 Original workflow input:
 {{workflow.input}}
 
-Verified action handoff:
+Verified action handoff, or a retry handoff that repeats the exact contract:
 {{last.summary}}
 
 Require the same GitLab MR URL and head SHA. Validate exactly one fenced `json`
@@ -22,3 +22,11 @@ Markdown confirmation sheet in `artifact`, including the exact fenced `json`
 Remote action contract unchanged and every safety boundary. Repeat the exact
 contract in `summary`. Plannotator approval authorizes only those exact
 commands. Use `blocked` for an invalid or incomplete contract.
+
+If a transient, non-mutating failure needs fresh context after safe alternatives
+were attempted, use `retry` with the exact failure and next safe alternative.
+Use `replan` when the URL, head, scope, or proposed authority is materially
+stale so the full plan returns to the first Plannotator gate. Use `blocked` only
+when neither retry nor replanning can produce a safe contract. If Plannotator
+requests changes, the workflow returns to the planning stage so the verified
+contract cannot be lost or edited outside the first gate.

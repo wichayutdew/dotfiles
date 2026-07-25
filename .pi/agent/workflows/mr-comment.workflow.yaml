@@ -24,8 +24,8 @@ steps:
         hard: 200
         block: "*"
     permissions:
-      tools: [ read, ls, bash, mcp ]
-      mcp:
+      tools: [read, ls, bash]
+      mcp: &comment-mcp
         - gitlab/get_merge_request
         - gitlab/get_merge_request_commits
         - gitlab/get_merge_request_diffs
@@ -44,22 +44,33 @@ steps:
         - sourcegraph/nls_search
         - sourcegraph/read_file
         - gh_grep/searchGitHub
-      extensions: [ plannotator, pi-web-tools ]
-      skills: [ caveman, receiving-code-review, coding-standards, brainstorming, writing-plans ]
+      extensions: [pi-web-tools]
+      skills:
+        &comment-plan-skills [
+          caveman,
+          receiving-code-review,
+          coding-standards,
+          brainstorming,
+        ]
       bash:
         mode: allow-list
-        allow:
-          - executable: rg
+        allow: &comment-inspection-bash
+          - executable: grep
+          - executable: head
           - executable: ls
           - executable: pwd
+          - executable: rg
+          - executable: stat
+          - executable: tail
+          - executable: wc
           - executable: git
-            argsPrefixes: [ [ status ], [ diff ], [ log ], [ show ], [ rev-parse ], [ ls-files ], [ branch, --show-current ], [ worktree, list ], [ remote, -v ], [ blame ], [ show-ref ], [ cat-file ] ]
+            argsPrefixes:
+              [[status], [diff], [grep], [log], [ls-files], [rev-parse], [show]]
           - executable: glab
-            argsPrefixes: [ [ mr, view ], [ mr, diff ], [ api ] ]
+            argsPrefixes: [[mr, view], [mr, diff], [api]]
     requires:
-      tools: [ read, ls, bash, mcp ]
-      extensions: [ plannotator, pi-web-tools ]
-      skills: [ caveman, receiving-code-review, coding-standards, brainstorming, writing-plans ]
+      tools: [read, ls, bash]
+      skills: *comment-plan-skills
     gate:
       provider: plannotator
       submitOutcome: submit
@@ -69,6 +80,7 @@ steps:
     transitions:
       approved: implement
       changes-requested: plan
+      retry: plan
       blocked: $pause
   implement:
     title: Implement approved review-comment fixes
@@ -79,44 +91,37 @@ steps:
       context: fresh
       timeoutMs: 7200000
       artifacts: true
+      retryToolFailures: true
+      turnBudget:
+        maxTurns: 90
+        graceTurns: 5
+      toolBudget:
+        soft: 260
+        hard: 440
+        block: "*"
     permissions:
-      tools: [ read, ls, bash, edit, write, mcp ]
-      mcp:
-        - gitlab/get_merge_request
-        - gitlab/get_merge_request_commits
-        - gitlab/get_merge_request_diffs
-        - gitlab/get_merge_request_pipelines
-        - gitlab/get_pipeline_jobs
-        - gitlab/get_merge_request_conflicts
-        - gitlab/search
-        - context7/resolve-library-id
-        - context7/query-docs
-        - sourcegraph/code_finder
-        - sourcegraph/commit_search
-        - sourcegraph/diff_search
-        - sourcegraph/keyword_search
-        - sourcegraph/list_files
-        - sourcegraph/list_repos
-        - sourcegraph/nls_search
-        - sourcegraph/read_file
-        - gh_grep/searchGitHub
-      skills: [ caveman, receiving-code-review, coding-standards, executing-plans, systematic-debugging, test-driven-development, verification-before-completion ]
+      tools: [read, ls, bash, edit, write]
+      mcp: *comment-mcp
+      skills:
+        &comment-implement-skills [
+          caveman,
+          receiving-code-review,
+          coding-standards,
+          systematic-debugging,
+          test-driven-development,
+          verification-before-completion,
+        ]
       bash:
         mode: allow-list
-        allow:
-          - executable: rg
-          - executable: ls
-          - executable: pwd
-          - executable: git
-            argsPrefixes: [ [ status ], [ diff ], [ log ], [ show ], [ rev-parse ], [ ls-files ], [ branch, --show-current ], [ worktree, list ], [ remote, -v ], [ blame ], [ show-ref ], [ cat-file ] ]
-          - executable: glab
-            argsPrefix: [ api ]
-        approvedSources: [ verification-worker ]
+        allow: *comment-inspection-bash
+        approvedSources: [verification-worker]
     requires:
-      tools: [ read, ls, bash, edit, write, mcp ]
-      skills: [ receiving-code-review, coding-standards, executing-plans, systematic-debugging, test-driven-development, verification-before-completion ]
+      tools: [read, ls, bash, edit, write]
+      skills: *comment-implement-skills
     transitions:
       ready: verify
+      retry: implement
+      replan: plan
       blocked: $pause
   verify:
     title: Independently verify review-comment handling
@@ -135,68 +140,95 @@ steps:
         hard: 240
         block: "*"
     permissions:
-      tools: [ read, ls, bash, mcp ]
-      mcp:
-        - gitlab/get_merge_request
-        - gitlab/get_merge_request_commits
-        - gitlab/get_merge_request_diffs
-        - gitlab/get_merge_request_pipelines
-        - gitlab/get_pipeline_jobs
-        - gitlab/get_merge_request_conflicts
-        - gitlab/search
-        - context7/resolve-library-id
-        - context7/query-docs
-        - sourcegraph/code_finder
-        - sourcegraph/commit_search
-        - sourcegraph/diff_search
-        - sourcegraph/keyword_search
-        - sourcegraph/list_files
-        - sourcegraph/list_repos
-        - sourcegraph/nls_search
-        - sourcegraph/read_file
-        - gh_grep/searchGitHub
-      skills: [ caveman, receiving-code-review, coding-standards, caveman-review, systematic-debugging, verification-before-completion, requesting-code-review ]
+      tools: [read, ls, bash]
+      mcp: *comment-mcp
+      skills:
+        &comment-verify-skills [
+          caveman,
+          receiving-code-review,
+          coding-standards,
+          caveman-review,
+          systematic-debugging,
+          verification-before-completion,
+        ]
       bash:
         mode: allow-list
-        allow:
-          - executable: rg
-          - executable: ls
-          - executable: pwd
-          - executable: git
-            argsPrefixes: [ [ status ], [ diff ], [ log ], [ show ], [ rev-parse ], [ ls-files ], [ branch, --show-current ], [ worktree, list ], [ remote, -v ], [ blame ], [ show-ref ], [ cat-file ] ]
-          - executable: glab
-            argsPrefix: [ api ]
-        approvedSources: [ verification-reviewer ]
+        allow: *comment-inspection-bash
+        approvedSources: [verification-reviewer]
     requires:
-      tools: [ read, ls, bash, mcp ]
-      skills: [ receiving-code-review, coding-standards, caveman-review, systematic-debugging, verification-before-completion, requesting-code-review ]
+      tools: [read, ls, bash]
+      skills: *comment-verify-skills
     transitions:
-      ready: publish
+      ready: confirm
       no-actions: $done
       failed: implement
+      retry: verify
+      replan: plan
+      blocked: $pause
+  confirm:
+    title: Confirm exact push and reply actions
+    prompt:
+      file: steps/mr-comment/confirm.md
+    subagent:
+      agent: reviewer
+      context: fresh
+      timeoutMs: 900000
+      turnBudget:
+        maxTurns: 15
+        graceTurns: 2
+      toolBudget:
+        soft: 10
+        hard: 20
+        block: "*"
+    permissions:
+      skills: [caveman, receiving-code-review]
+    requires:
+      skills: [caveman, receiving-code-review]
+    gate:
+      provider: plannotator
+      submitOutcome: submit
+      approvedOutcome: approved
+      rejectedOutcome: changes-requested
+      timeoutMs: 10000
+    transitions:
+      approved: publish
+      changes-requested: plan
+      no-actions: $done
+      retry: confirm
+      replan: plan
       blocked: $pause
   publish:
-    title: Run plan-approved push and reply actions
+    title: Run confirmed push and reply actions
     prompt:
       file: steps/shared/publish-remote.md
     subagent:
       agent: worker
       context: fresh
       timeoutMs: 1800000
+      retryToolFailures: true
+      turnBudget:
+        maxTurns: 25
+        graceTurns: 2
+      toolBudget:
+        soft: 50
+        hard: 80
+        block: "*"
     permissions:
-      tools: [ bash ]
-      skills: [ receiving-code-review ]
+      tools: [bash]
+      skills: [caveman, receiving-code-review]
       bash:
         mode: allow-list
         allow:
           - executable: git
-            argsPrefixes: [ [ status ], [ rev-parse ] ]
+            argsPrefixes: [[status], [rev-parse], [show], [ls-remote]]
           - executable: glab
-            argsPrefixes: [ [ mr, view ], [ api ] ]
-        approvedSources: [ remote-actions ]
+            argsPrefixes: [[mr, view], [api]]
+        approvedSources: [remote-actions]
     requires:
-      tools: [ bash ]
-      skills: [ receiving-code-review ]
+      tools: [bash]
+      skills: [caveman, receiving-code-review]
     transitions:
       published: $done
+      retry: publish
+      replan: plan
       blocked: $pause

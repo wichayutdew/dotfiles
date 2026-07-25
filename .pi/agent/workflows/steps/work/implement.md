@@ -16,13 +16,12 @@ state before acting. Preserve unrelated user work. If the approved route is
 read-only, perform the investigation without changing files or creating a
 commit.
 
-For code work, create or reuse only the worktrees named by the approved
+For code work, create or reuse only the worktree named by the approved
 contract. A reused worktree must share the approved source repository's Git
-common directory. Handle every contracted repository, using one repository at
-a time in this child. Treat each `repositories[].cwd` as the root for every
-read, edit, and write. If that worktree does not exist when the child starts,
-run its exact approved setup command first and then use absolute paths rooted
-at `cwd`; never edit or write in `sourceCwd`. Bash inspection commands allowed
+common directory. Treat `repositories[0].cwd` as the root for every read, edit,
+and write. If that worktree does not exist when the child starts, run its exact
+approved setup command first and then use absolute paths rooted at `cwd`; never
+edit or write in `sourceCwd`. Bash inspection commands allowed
 by the static policy may be used as needed. Run only non-read-only Bash
 commands listed exactly under `repositories[].worker[].command` in the
 reviewed contract, except for an invocation-only recovery described below. Use test-driven

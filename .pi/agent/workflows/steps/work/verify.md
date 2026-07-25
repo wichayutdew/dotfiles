@@ -13,9 +13,9 @@ The approved plan is final authority. Do not call `contact_supervisor`,
 verification cannot follow the approved contract, diagnose and recover as
 described below; do not request a live decision.
 
-Re-read repository instructions and inspect every contracted repository,
+Re-read repository instructions and inspect the contracted repository, every
 approved criterion, diff, commit, caller, test, and current status. Run the
-exact standalone commands under `repositories[].reviewer[].command`, including
+exact standalone commands under `repositories[0].reviewer[].command`, including
 the complete repository test suite plus non-fixing format and lint checks.
 Static Bash permissions are inspection-only; do not invent or broaden a
 command. Confirm exact commit titles, clean worktrees, unchanged post-review
