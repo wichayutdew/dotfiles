@@ -21,24 +21,6 @@
 !README.md
 !Brewfile
 
-# pi coding agent config
-!/.pi
-
-# pi secrets
-/.pi/agent/auth.json
-
-# pi runtime / cache / memory
-/.pi/agent/sessions/
-/.pi/agent/logs/
-/.pi/logs/
-/.pi/agent/bin/
-/.pi/agent/**/*.jsonl
-/.pi/agent/**/node_modules/
-/.pi/agent/**/.cache/
-/.pi/agent/**/mcp-cache.json
-/.pi/agent/**/mcp-oauth
-/.pi/agent/git/github.com/obra/superpowers/
-
 # opencode runtime / cache
 /.config/opencode/**/.cache/
 /.config/opencode/**/mcp-cache.json
