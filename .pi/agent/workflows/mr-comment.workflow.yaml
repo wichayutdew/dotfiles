@@ -169,42 +169,12 @@ steps:
       tools: [ read, ls, bash, mcp ]
       skills: [ receiving-code-review, coding-standards, caveman-review, systematic-debugging, verification-before-completion, requesting-code-review ]
     transitions:
-      ready: confirm
+      ready: publish
       no-actions: $done
       failed: implement
       blocked: $pause
-  confirm:
-    title: Confirm exact push and reply actions
-    prompt:
-      file: steps/mr-comment/confirm.md
-    subagent:
-      agent: reviewer
-      context: fresh
-      timeoutMs: 300000
-      turnBudget:
-        maxTurns: 6
-        graceTurns: 1
-      toolBudget:
-        soft: 4
-        hard: 8
-        block: "*"
-    permissions:
-      extensions: [ plannotator ]
-    requires:
-      extensions: [ plannotator ]
-    gate:
-      provider: plannotator
-      submitOutcome: submit
-      approvedOutcome: publish-approved
-      rejectedOutcome: skip-publishing
-      timeoutMs: 10000
-    transitions:
-      publish-approved: publish
-      skip-publishing: $done
-      no-actions: $done
-      blocked: $pause
   publish:
-    title: Run explicitly approved push and reply actions
+    title: Run plan-approved push and reply actions
     prompt:
       file: steps/shared/publish-remote.md
     subagent:

@@ -48,8 +48,18 @@ substitutions, redirection, glob expansion, environment assignment, or wrapper
 shells. Never propose approval, merge, resolution, closure, deletion,
 force-push, or another remote mutation.
 
-Call `workflow_complete_step` alone with outcome `submit`. Put the full plan in
+Do not call `contact_supervisor`, `subagent_supervisor`, or `intercom`, and do
+not end with a terminal question. Put every material uncertainty under Open
+questions as a decision record with options, evidence, a recommendation, and
+the exact default the plan adopts. Plannotator feedback may change those
+defaults; approval resolves every decision by accepting the final artifact.
+That approval also authorizes only the exact Remote action contract for later
+publication; there is no downstream confirmation. Use an empty action array
+when publication should not occur.
+
+Call `structured_output` alone with outcome `submit`. Put the full plan in
 `artifact`. Put a self-contained handoff in `summary`, including URL, host,
 head SHA, all review criteria, evidence, planned comments and exact remote
 actions. Include the exact fenced `json` Remote action contract unchanged in
-the summary. Use `blocked` when authoritative review evidence is unavailable.
+the summary. Use `blocked` only when missing access or evidence prevents a safe
+reviewable plan.

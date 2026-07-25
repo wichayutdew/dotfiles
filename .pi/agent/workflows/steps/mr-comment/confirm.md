@@ -16,7 +16,7 @@ resolution, closure, deletion, credentials, placeholders, cross-host targets,
 shell operators, substitutions, redirection, glob expansion, wrapper shells,
 or unrelated mutation.
 
-If `actions` is empty, call `workflow_complete_step` alone with outcome
+If `actions` is empty, call `structured_output` alone with outcome
 `no-actions`. Otherwise call it alone with outcome `submit`. Put a clear
 Markdown confirmation sheet in `artifact`, including the exact fenced `json`
 Remote action contract unchanged and every safety boundary. Repeat the exact

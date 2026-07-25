@@ -47,14 +47,43 @@ in `command` plus its purpose. Include every non-read-only Bash command needed
 for worktree setup, focused RED/GREEN checks, generation, staging, commit, full
 tests, and non-fixing format or lint. Commands must be standalone: no shell
 operators, substitutions, redirection, glob expansion, environment assignment,
-or wrapper shell. A read-only plan uses exactly
+or wrapper shell. Pi Bash has no separate working-directory argument, so every
+command must encode its repository explicitly: use `git -C <sourceCwd>` for
+worktree creation, `git -C <cwd>` for later Git commands, or the exact cwd
+syntax documented by the executable and subcommand. Do not assume one generic
+option order works for every subcommand. In particular, dependency installation
+is `bun install --cwd <cwd> --frozen-lockfile`; never write
+`bun --cwd <cwd> install ...`, which makes Bun look for a package script named
+`install`. A bare cwd-dependent command is an invalid plan and must be
+corrected before Plannotator review.
+
+Before submission, validate every unfamiliar command's executable, subcommand,
+flag ordering, and cwd handling with installed `--help`, repository scripts, or
+authoritative documentation. This validation must be read-only. The execution
+contract authorizes its declared purpose and side-effect scope. During
+execution, an agent may repair an invocation-only defect when the executable
+intent, target repository, mutation scope, dependency versions, lockfile
+constraint, and external effects remain identical. It may not skip a check,
+drop a safety flag, broaden a target, add an external action, or change the
+planned result under the label of recovery.
+
+A read-only plan uses exactly
 `Not applicable - read-only plan.`.
 
-When ready, call `workflow_complete_step` alone with outcome `submit`. Put the
+Do not call `contact_supervisor`, `subagent_supervisor`, or `intercom`, and do
+not end with a terminal question. Put every material uncertainty under Open
+questions as a decision record with options, evidence, a recommendation, and
+the exact default the plan adopts. Plannotator feedback may change those
+defaults; approval resolves every decision by accepting the final artifact.
+
+When ready, call `structured_output` alone with outcome `submit`. Put the
 full Markdown plan in `artifact`. Put a self-contained execution handoff in
 `summary`, including the classification, every acceptance criterion, every
 repository contract, exact commands, worktree decisions, and risks. Include
 the exact fenced `json` contract unchanged in the summary so the next child
 receives only the reviewed Bash commands. Do not merely say that the plan is
-ready. Use outcome `blocked` when authoritative evidence or a required decision
-is unavailable.
+ready. If a recoverable tool or environment failure needs a fresh context after
+safe alternatives were attempted, use outcome `retry` with the exact failed
+call, error, attempts, current state, and next safe alternative. Use outcome
+`blocked` only when missing access or evidence prevents a safe reviewable plan
+and retry cannot resolve it, not merely because a user decision is needed.

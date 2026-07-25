@@ -8,6 +8,11 @@ Ticket input:
 Implementation handoff:
 {{last.summary}}
 
+The approved plan is final authority. Do not call `contact_supervisor`,
+`subagent_supervisor`, or `intercom`, and do not ask a terminal question. If
+verification cannot follow the approved contract, return `blocked` with
+declarative evidence; do not request a live decision.
+
 Re-read the authoritative Jira issue and repository instructions. Inspect every
 contracted repository, criterion, diff, commit, caller, test, and current
 status. Run the exact standalone commands under
@@ -18,7 +23,7 @@ titles, clean worktrees, unchanged post-review snapshots, RED/GREEN evidence,
 and criterion coverage. Anything skipped, stale, unavailable, timed out,
 blocked, or failing is non-passing.
 
-Call `workflow_complete_step` alone with outcome `passed` only when all ticket
+Call `structured_output` alone with outcome `passed` only when all ticket
 and user criteria pass with no actionable finding. Repeat the full criteria and
 contracts with fresh evidence in the summary. Use `failed` for actionable
 findings and include the criteria, exact failure, location, evidence, and

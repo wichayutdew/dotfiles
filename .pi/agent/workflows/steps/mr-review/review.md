@@ -8,6 +8,11 @@ Hosted review input:
 Approved review-plan handoff:
 {{last.summary}}
 
+The approved plan is final authority. Do not call `contact_supervisor`,
+`subagent_supervisor`, or `intercom`, and do not ask a terminal question. If
+review cannot follow the approved contract, return `blocked` with declarative
+evidence; do not request a live decision.
+
 Re-fetch the current head SHA, diff, checks, and discussions from the same
 host. If the head, anchors, scope, or material evidence changed, use `blocked`
 and require a new workflow run. Inspect every approved criterion and run useful
@@ -15,15 +20,15 @@ read-only checks that do not alter the checkout. Verify each proposed finding
 against current code and remove false, stale, duplicated, or non-actionable
 comments.
 
-Call `workflow_complete_step` alone:
+Call `structured_output` alone:
 
 - Use outcome `clean` when there is no actionable review comment. Include the
   full evidence-backed review report in `summary`.
 - Use outcome `comments` when one or more exact comments remain. The summary
   must repeat the URL, host, current head SHA, every finding and anchor, and the
-  exact reviewed `bash` actions needed to post them. Include exactly one fenced
-  `json` block whose top-level object has `actions`, copied from the approved
-  contract after removing only actions proven stale or invalid.
+  exact plan-approved `bash` actions needed to post them. Include exactly one
+  fenced `json` block whose top-level object has `actions`, copied from the
+  approved contract after removing only actions proven stale or invalid.
 - Use outcome `blocked` when current evidence cannot be obtained safely.
 
 Never post, approve, merge, resolve, close, delete, or mutate remote state in

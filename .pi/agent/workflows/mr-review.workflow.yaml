@@ -127,40 +127,10 @@ steps:
       skills: [ caveman, coding-standards, caveman-review, systematic-debugging, verification-before-completion, requesting-code-review ]
     transitions:
       clean: $done
-      comments: confirm
-      blocked: $pause
-  confirm:
-    title: Confirm exact review comments
-    prompt:
-      file: steps/mr-review/confirm.md
-    subagent:
-      agent: reviewer
-      context: fresh
-      timeoutMs: 300000
-      turnBudget:
-        maxTurns: 6
-        graceTurns: 1
-      toolBudget:
-        soft: 4
-        hard: 8
-        block: "*"
-    permissions:
-      extensions: [ plannotator ]
-    requires:
-      extensions: [ plannotator ]
-    gate:
-      provider: plannotator
-      submitOutcome: submit
-      approvedOutcome: publish-approved
-      rejectedOutcome: skip-publishing
-      timeoutMs: 10000
-    transitions:
-      publish-approved: publish
-      skip-publishing: $done
-      no-actions: $done
+      comments: publish
       blocked: $pause
   publish:
-    title: Post explicitly approved review comments
+    title: Post plan-approved review comments
     prompt:
       file: steps/shared/publish-remote.md
     subagent:

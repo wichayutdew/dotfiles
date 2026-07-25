@@ -8,6 +8,11 @@ Hosted review input:
 Implementation handoff:
 {{last.summary}}
 
+The approved plan is final authority. Do not call `contact_supervisor`,
+`subagent_supervisor`, or `intercom`, and do not ask a terminal question. If
+verification cannot follow the approved contract, return `blocked` with
+declarative evidence; do not request a live decision.
+
 Re-fetch the current head SHA and unresolved discussions from the same host.
 Inspect the current checkout, instructions, diff, commit, callers, tests, and
 every approved criterion. Run only the exact standalone commands under
@@ -18,10 +23,10 @@ reply, commit title, RED/GREEN evidence, clean checkout, and non-force remote
 action. A skipped, stale, unavailable, timed-out, blocked, or failing required
 check is non-passing.
 
-Call `workflow_complete_step` alone:
+Call `structured_output` alone:
 
-- Use `ready` when all criteria pass and one or more reviewed push/reply actions
-  still require explicit approval. Repeat the complete criteria, evidence, and
+- Use `ready` when all criteria pass and one or more push/reply actions remain
+  in the plan-approved contract. Repeat the complete criteria, evidence, and
   exact fenced Verification and Remote action JSON contracts in the summary.
 - Use `no-actions` when all criteria pass and the remote action array is empty.
   Include complete verification evidence and both exact JSON contracts.

@@ -8,9 +8,9 @@
     "@wichayutdew/pi-workflows": "^0.1.1",
     "context-mode": "^1.0.169",
     "pi-hermes-memory": "^0.8.2",
-    "pi-mcp-adapter": "2.11.0",
+    "pi-mcp-adapter": "^2.12.1",
     "pi-research": "^1.5.1",
-    "pi-subagents": "^0.35.1",
+    "pi-subagents": "^0.36.0",
     "pi-zentui": "^0.12.0"
   },
   "devDependencies": {

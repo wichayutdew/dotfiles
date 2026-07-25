@@ -8,6 +8,11 @@ Original request:
 Implementation handoff:
 {{last.summary}}
 
+The approved plan is final authority. Do not call `contact_supervisor`,
+`subagent_supervisor`, or `intercom`, and do not ask a terminal question. If
+verification cannot follow the approved contract, diagnose and recover as
+described below; do not request a live decision.
+
 Re-read repository instructions and inspect every contracted repository,
 approved criterion, diff, commit, caller, test, and current status. Run the
 exact standalone commands under `repositories[].reviewer[].command`, including
@@ -18,7 +23,25 @@ snapshots, RED/GREEN evidence, and per-criterion outcomes. Treat a skipped,
 stale, unavailable, timed-out, blocked, or failing required check as
 non-passing.
 
-Call `workflow_complete_step` alone with outcome `passed` only when every
+If the approved verification contract is exactly
+`Not applicable - read-only plan.`, the absence of repository test commands is
+intentional. Independently re-check every requested fact and acceptance
+criterion with non-mutating inspection, confirm the checkout stayed unchanged,
+and do not invent or require code-change tests, formatting, lint, commits, or
+RED/GREEN evidence that the approved read-only task does not call for.
+
+Do not stop at the first failed tool or command. Read the exact error, inspect
+current state, and try safe semantically equivalent read-only alternatives.
+Invocation-only repair is allowed when it preserves the exact check, target,
+flags, and side-effect scope; never turn a failing check into a different or
+weaker check. If a transient or context-bound failure has another safe attempt,
+use outcome `retry` with the exact call, error, attempts, current state, next
+alternative, and exact approved fenced `json` contract unchanged. Use `replan`
+when the reviewed command or authority itself is materially invalid. Use
+`blocked` only after safe alternatives are exhausted and neither retry nor
+replanning can resolve the missing access or environmental constraint.
+
+Call `structured_output` alone with outcome `passed` only when every
 criterion and required command passes with no actionable finding. The summary
 must repeat all approved criteria and contracts and provide fresh evidence.
 Use outcome `failed` for an actionable implementation or verification finding;

@@ -45,7 +45,11 @@ reviewer entry contains one exact standalone Bash command in `command` plus its
 purpose. Include every non-read-only Bash command required for RED/GREEN,
 generation, staging, commit, full tests, and non-fixing format or lint.
 Commands cannot use shell operators, substitutions, redirection, glob
-expansion, environment assignment, or wrapper shells. A reply-only plan uses
+expansion, environment assignment, or wrapper shells. Pi Bash has no separate
+working-directory argument, so every repository command must encode its
+absolute `cwd` using the executable's supported option (`git -C`, `bun --cwd`,
+or an exact equivalent). A bare cwd-dependent command is invalid and must be
+corrected before Plannotator review. A reply-only plan uses
 `Not applicable - read-only plan.`.
 
 Remote action contract is a separate fenced `json` block whose top-level object
@@ -54,9 +58,18 @@ has `actions`. Each action uses `toolName: "bash"` and one exact non-force
 approval, merge, thread resolution, closure, deletion, force-push, or an
 unrelated mutation.
 
-Call `workflow_complete_step` alone with outcome `submit`. Put the full plan in
+Do not call `contact_supervisor`, `subagent_supervisor`, or `intercom`, and do
+not end with a terminal question. Put every material uncertainty under Open
+questions as a decision record with options, evidence, a recommendation, and
+the exact default the plan adopts. Plannotator feedback may change those
+defaults; approval resolves every decision by accepting the final artifact.
+That approval also authorizes only the exact Remote action contract for later
+publication; there is no downstream confirmation. Use an empty action array
+when publication should not occur.
+
+Call `structured_output` alone with outcome `submit`. Put the full plan in
 `artifact`. Put a self-contained handoff in `summary`, including URL, host,
 head SHA, every discussion classification, exact fix and test contract, exact
 proposed replies, and exact remote actions. Include both exact fenced `json`
-contracts unchanged in the summary. Use `blocked` when authoritative evidence
-is unavailable.
+contracts unchanged in the summary. Use `blocked` only when missing access or
+evidence prevents a safe reviewable plan.

@@ -50,12 +50,24 @@ in `command` plus its purpose. Include every non-read-only Bash command needed
 for worktree setup, focused RED/GREEN checks, generation, staging, commit, full
 tests, and non-fixing format or lint. Commands must be standalone: no shell
 operators, substitutions, redirection, glob expansion, environment assignment,
-or wrapper shell. A read-only investigation uses exactly
+or wrapper shell. Pi Bash has no separate working-directory argument, so every
+command must encode its repository explicitly: use `git -C <sourceCwd>` for
+worktree creation, `git -C <cwd>` for later Git commands, `bun --cwd <cwd>`,
+or the exact equivalent supported by the executable. A bare cwd-dependent
+command is an invalid plan and must be corrected before Plannotator review. A
+read-only investigation uses exactly
 `Not applicable - read-only plan.`.
 
-Call `workflow_complete_step` alone with outcome `submit`. Put the full Markdown
+Do not call `contact_supervisor`, `subagent_supervisor`, or `intercom`, and do
+not end with a terminal question. Put every material uncertainty under Open
+questions as a decision record with options, evidence, a recommendation, and
+the exact default the plan adopts. Plannotator feedback may change those
+defaults; approval resolves every decision by accepting the final artifact.
+
+Call `structured_output` alone with outcome `submit`. Put the full Markdown
 plan in `artifact`. Put a self-contained execution handoff in `summary`,
 including authoritative ticket facts, every criterion, every repository
 contract, exact commands, and risks. Include the exact fenced `json` contract
 unchanged in the summary so the next child receives only the reviewed Bash
-commands. Use `blocked` when evidence or a required decision is unavailable.
+commands. Use `blocked` only when missing access or evidence prevents a safe
+reviewable plan.

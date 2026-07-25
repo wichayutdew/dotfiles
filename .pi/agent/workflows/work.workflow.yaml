@@ -39,13 +39,7 @@ steps:
       extensions: [ plannotator, pi-web-tools ]
       skills: [ caveman, brainstorming, writing-plans, using-git-worktrees, coding-standards ]
       bash:
-        mode: allow-list
-        allow:
-          - executable: rg
-          - executable: ls
-          - executable: pwd
-          - executable: git
-            argsPrefixes: [ [ status ], [ diff ], [ log ], [ show ], [ rev-parse ], [ ls-files ], [ branch, --show-current ], [ worktree, list ], [ remote, -v ], [ blame ], [ show-ref ], [ cat-file ] ]
+        mode: unrestricted
     requires:
       tools: [ read, ls, bash, mcp ]
       extensions: [ plannotator, pi-web-tools ]
@@ -59,6 +53,7 @@ steps:
     transitions:
       approved: implement
       changes-requested: plan
+      retry: plan
       blocked: $pause
   implement:
     title: Implement the approved local plan
@@ -85,19 +80,14 @@ steps:
         - gh_grep/searchGitHub
       skills: [ caveman, coding-standards, executing-plans, systematic-debugging, test-driven-development, verification-before-completion, receiving-code-review ]
       bash:
-        mode: allow-list
-        allow:
-          - executable: rg
-          - executable: ls
-          - executable: pwd
-          - executable: git
-            argsPrefixes: [ [ status ], [ diff ], [ log ], [ show ], [ rev-parse ], [ ls-files ], [ branch, --show-current ], [ worktree, list ], [ remote, -v ], [ blame ], [ show-ref ], [ cat-file ] ]
-        approvedSources: [ verification-worker ]
+        mode: unrestricted
     requires:
       tools: [ read, ls, bash, edit, write, mcp ]
       skills: [ coding-standards, executing-plans, systematic-debugging, test-driven-development, verification-before-completion, receiving-code-review ]
     transitions:
       ready: verify
+      retry: implement
+      replan: plan
       blocked: $pause
   verify:
     title: Independently verify local work
@@ -130,18 +120,13 @@ steps:
         - gh_grep/searchGitHub
       skills: [ caveman, coding-standards, verification-before-completion, requesting-code-review ]
       bash:
-        mode: allow-list
-        allow:
-          - executable: rg
-          - executable: ls
-          - executable: pwd
-          - executable: git
-            argsPrefixes: [ [ status ], [ diff ], [ log ], [ show ], [ rev-parse ], [ ls-files ], [ branch, --show-current ], [ worktree, list ], [ remote, -v ], [ blame ], [ show-ref ], [ cat-file ] ]
-        approvedSources: [ verification-reviewer ]
+        mode: unrestricted
     requires:
       tools: [ read, ls, bash, mcp ]
       skills: [ coding-standards, verification-before-completion, requesting-code-review ]
     transitions:
       passed: $done
       failed: implement
+      retry: verify
+      replan: plan
       blocked: $pause
