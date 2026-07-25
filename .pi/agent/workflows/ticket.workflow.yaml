@@ -15,6 +15,7 @@ steps:
       agent: scout
       context: fresh
       timeoutMs: 1200000
+      retryToolFailures: true
       turnBudget:
         maxTurns: 35
         graceTurns: 3
@@ -115,6 +116,7 @@ steps:
       agent: reviewer
       context: fresh
       timeoutMs: 3600000
+      retryToolFailures: true
       turnBudget:
         maxTurns: 40
         graceTurns: 3
