@@ -62,10 +62,10 @@ shell. Pi Bash has no separate working-directory argument, so every command
 must encode its repository explicitly: use `git -C <sourceCwd>` for worktree
 creation, `git -C <cwd>` for later Git commands, or the exact cwd syntax
 documented by the executable and subcommand. Do not assume one generic option
-order works for every subcommand. In particular, dependency installation is
-`bun install --cwd <cwd> --frozen-lockfile`; never write
-`bun --cwd <cwd> install ...`. A bare cwd-dependent command is invalid and
-must be corrected before Plannotator review.
+order works for every subcommand. Derive dependency-installation commands and
+lockfile constraints from repository documentation and scripts. A bare
+cwd-dependent command is invalid and must be corrected before Plannotator
+review.
 
 Before submission, validate every unfamiliar command's executable, subcommand,
 flag ordering, and cwd handling with repository scripts or authoritative

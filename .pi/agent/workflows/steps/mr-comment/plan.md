@@ -56,12 +56,11 @@ Commands cannot use shell operators, substitutions, redirection, glob
 expansion, environment assignment, or wrapper shells. Pi Bash has no separate
 working-directory argument, so every command must encode its absolute `cwd`
 using the exact form supported by that executable and subcommand. Use
-`git -C <cwd>` for Git. Dependency installation is
-`bun install --cwd <cwd> --frozen-lockfile`; never use
-`bun --cwd <cwd> install ...`. Validate unfamiliar option order with repository
-scripts, authoritative documentation, or installed `--help` when read-only
-Bash permits it. A bare cwd-dependent command is invalid and must be corrected
-before Plannotator review. A reply-only plan uses
+`git -C <cwd>` for Git. Derive dependency-installation commands and lockfile
+constraints from repository documentation and scripts. Validate unfamiliar
+option order with repository scripts, authoritative documentation, or installed
+`--help` when read-only Bash permits it. A bare cwd-dependent command is invalid
+and must be corrected before Plannotator review. A reply-only plan uses
 `Not applicable - read-only plan.`.
 
 Remote action contract is a separate fenced `json` block whose top-level object

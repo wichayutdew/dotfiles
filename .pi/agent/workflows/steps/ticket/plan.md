@@ -68,10 +68,10 @@ substitutions, redirection, glob expansion, environment assignment, or wrapper
 shell. Pi Bash has no separate working-directory argument, so every command
 must encode its repository explicitly: use `git -C <sourceCwd>` for worktree
 creation and `git -C <cwd>` for later Git commands. Validate each other
-executable and subcommand's exact cwd form and option order. In particular,
-dependency installation is `bun install --cwd <cwd> --frozen-lockfile`; never
-use `bun --cwd <cwd> install ...`. A bare cwd-dependent command is invalid and
-must be corrected before Plannotator review. A read-only investigation uses
+executable and subcommand's exact cwd form and option order. Derive
+dependency-installation commands and lockfile constraints from repository
+documentation and scripts. A bare cwd-dependent command is invalid and must be
+corrected before Plannotator review. A read-only investigation uses
 exactly `Not applicable - read-only plan.`.
 
 Before submission, validate unfamiliar executables, subcommands, flags, and cwd
