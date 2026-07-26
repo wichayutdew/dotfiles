@@ -19,6 +19,7 @@ plannotator-review-status.json
 /agent/**/node_modules/
 /agent/**/.cache/
 /agent/**/mcp-cache.json
+/agent/**/mcp-npx-cache.json
 /agent/**/mcp-oauth
 /agent/git/github.com/obra/superpowers/
 
