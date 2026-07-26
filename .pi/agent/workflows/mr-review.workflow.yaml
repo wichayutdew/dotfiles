@@ -2,15 +2,15 @@
 version: 1
 id: mr-review
 command: mr-review
-description: Plan and perform a hosted review, creating author-private drafts only
-start: plan
-maxStepVisits: 10
-summaryMaxChars: 30000
+description: Fetch, approve, publish, and verify one hosted code review
+start: fetch
+maxStepVisits: 3
+summaryMaxChars: 50000
 steps:
-  plan:
-    title: Gather hosted-review evidence and plan
+  fetch:
+    title: Fetch complete hosted-review evidence
     prompt:
-      file: steps/mr-review/plan.md
+      file: steps/mr-review/fetch.md
     subagent:
       agent: scout
       context: fresh
@@ -26,13 +26,13 @@ steps:
     permissions:
       tools: [read, ls, bash]
       mcp: &review-mcp
-        - gitlab/get_merge_request
-        - gitlab/get_merge_request_commits
-        - gitlab/get_merge_request_diffs
-        - gitlab/get_merge_request_pipelines
-        - gitlab/get_pipeline_jobs
-        - gitlab/get_merge_request_conflicts
-        - gitlab/search
+        - gitlab/gitlab_get_merge_request
+        - gitlab/gitlab_get_merge_request_commits
+        - gitlab/gitlab_get_merge_request_diffs
+        - gitlab/gitlab_get_merge_request_pipelines
+        - gitlab/gitlab_get_pipeline_jobs
+        - gitlab/gitlab_get_merge_request_conflicts
+        - gitlab/gitlab_search
         - context7/resolve-library-id
         - context7/query-docs
         - sourcegraph/code_finder
@@ -46,7 +46,7 @@ steps:
         - gh_grep/searchGitHub
       extensions: [pi-web-tools]
       skills:
-        &review-plan-skills [
+        &review-fetch-skills [
           caveman,
           coding-standards,
           caveman-review,
@@ -65,29 +65,31 @@ steps:
           - executable: wc
           - executable: git
             argsPrefixes:
-              [[status], [diff], [grep], [log], [ls-files], [rev-parse], [show]]
+              [
+                [status],
+                [diff],
+                [grep],
+                [log],
+                [ls-files],
+                [remote, -v],
+                [remote, get-url],
+                [rev-parse],
+                [show],
+              ]
           - executable: gh
             argsPrefixes: [[pr, view], [pr, diff], [pr, checks], [api]]
           - executable: glab
             argsPrefixes: [[mr, view], [mr, diff], [api]]
     requires:
       tools: [read, ls, bash]
-      skills: *review-plan-skills
-    gate:
-      provider: plannotator
-      submitOutcome: submit
-      approvedOutcome: approved
-      rejectedOutcome: changes-requested
-      timeoutMs: 10000
+      skills: *review-fetch-skills
     transitions:
-      approved: review
-      changes-requested: plan
-      retry: plan
+      fetched: review
       blocked: $pause
   review:
-    title: Perform independent hosted review
+    title: Produce and approve the complete hosted review
     prompt:
-      file: steps/mr-review/review.md
+      file: steps/mr-review/review-for-approval.md
     subagent:
       agent: reviewer
       context: fresh
@@ -118,16 +120,20 @@ steps:
     requires:
       tools: [read, ls, bash]
       skills: *review-skills
+    gate:
+      provider: plannotator
+      submitOutcome: submit
+      approvedOutcome: approved
+      rejectedOutcome: changes-requested
+      timeoutMs: 30000
     transitions:
-      clean: $done
-      drafts: create-drafts
-      retry: review
-      superseded: $done
+      approved: publish
+      changes-requested: $pause
       blocked: $pause
-  create-drafts:
-    title: Create author-private review drafts
+  publish:
+    title: Publish the approved hosted review
     prompt:
-      file: steps/shared/publish-remote.md
+      file: steps/mr-review/publish-approved.md
     subagent:
       agent: worker
       context: fresh
@@ -142,7 +148,12 @@ steps:
         block: "*"
     permissions:
       tools: [bash]
-      skills: [caveman, caveman-review]
+      skills:
+        &publish-skills [
+          caveman,
+          caveman-review,
+          verification-before-completion,
+        ]
       bash:
         mode: allow-list
         allow:
@@ -150,12 +161,41 @@ steps:
             argsPrefixes: [[pr, view], [api]]
           - executable: glab
             argsPrefixes: [[mr, view], [api]]
-        approvedSources: [remote-drafts]
     requires:
       tools: [bash]
-      skills: [caveman, caveman-review]
+      skills: *publish-skills
     transitions:
-      drafted: $done
-      retry: create-drafts
-      superseded: $done
+      published: verify
+      blocked: $pause
+  verify:
+    title: Verify the approved review is observable remotely
+    prompt:
+      file: steps/mr-review/verify-published.md
+    subagent:
+      agent: reviewer
+      context: fresh
+      timeoutMs: 900000
+      retryToolFailures: true
+      turnBudget:
+        maxTurns: 20
+        graceTurns: 2
+      toolBudget:
+        soft: 40
+        hard: 70
+        block: "*"
+    permissions:
+      tools: [bash]
+      skills: *publish-skills
+      bash:
+        mode: allow-list
+        allow:
+          - executable: gh
+            argsPrefixes: [[pr, view], [api]]
+          - executable: glab
+            argsPrefixes: [[mr, view], [api]]
+    requires:
+      tools: [bash]
+      skills: *publish-skills
+    transitions:
+      verified: $done
       blocked: $pause

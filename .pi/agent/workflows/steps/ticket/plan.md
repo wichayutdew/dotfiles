@@ -24,55 +24,66 @@ alternatives are exhausted.
 
 Inspect relevant repositories to identify exactly one implementation target.
 Read nearest instructions, branch, HEAD, `git status --short`, architecture and
-build documentation, representative code, callers, tests, and history. Label
-material claims as FACT with a source, HYPOTHESIS with confidence and a
-falsifier, or UNKNOWN with the next check. A code workflow may authorize
-exactly one repository. If the ticket requires mutations in multiple
-repositories, return `blocked` with the required split and evidence instead of
-creating an unenforceable multi-root contract.
+build documentation, representative code, callers, tests, and history. Track
+facts, hypotheses, and unknowns during analysis, but cite only decisive evidence
+inline in the review artifact. A code workflow may authorize exactly one
+repository. If the ticket requires mutations in multiple repositories, return
+`blocked` with the required split and evidence instead of creating an
+unenforceable multi-root contract.
 
-For code work, read `extensions/subagent/config.json` beneath the active Pi
-agent directory and use its `worktreeBaseDir`. Derive a lowercase ASCII hyphen
-summary of at most 20 characters. Use branch `<JIRA-ID>_<summary>` and directory
-`<repository>-<JIRA-ID>_<summary>`. The repository contract must contain exact
-source root, base HEAD, worktree, branch, Conventional Commit title, copied
-ticket/user criteria, worker checks, and reviewer checks.
+The previous-step handoff identifies the one dedicated branch and worktree
+prepared for this run. Confirm this child is actually running at that exact Git
+root and that the manifest still matches branch, HEAD, registration, and clean
+status. Use only that bound workspace. If it is missing, mismatched, or stale,
+return `blocked`; never create, switch, or select another branch or worktree.
+The repository contract must contain the bound Git root as `cwd`, its base HEAD,
+dedicated branch, Conventional Commit title, copied ticket/user criteria,
+worker checks, and reviewer checks.
 
-Produce Markdown with exactly these headings:
+Use the `caveman` skill at lite intensity for artifact prose: remove filler and
+repetition, but keep complete natural sentences, causal links, and exact
+technical names.
 
-- Goal
-- In scope
-- Out of scope
-- Evidence
-- Things to implement
-- Implementation plan
-- Requirement-to-test mapping
-- Done when
-- Verification contract
-- Skill recommendation
-- Open questions
-- Risks
+Produce the artifact in this order:
 
-Every action and acceptance criterion uses `- [ ]`. A code plan's Verification
-contract contains exactly one fenced `json` block whose top-level object has a
+1. `# <short outcome-oriented title>`
+2. `## Review summary` — three to five plain-language bullets covering ticket
+   outcome, why it matters, in-scope work, and explicit exclusions.
+3. `## Review focus` — only consequential user choices. For each, give the
+   recommendation, useful alternatives, and consequence. Write
+   `No decisions needed` when none remain.
+4. `## Proposed approach` — short numbered actions. Each names the exact target,
+   observable change, reason, and matching ticket criterion.
+5. `## Validation` — checks in reviewer language, including what each proves.
+6. `## Risks` — only material risks, each with a safeguard or rollback signal.
+7. `## Execution appendix (machine-readable)` — exact repository metadata and
+   commands, kept out of the main narrative.
+
+The first six sections must stand alone without decoding JSON, hashes, raw tool
+output, internal evidence labels, or a command catalog. Use checkboxes only for
+acceptance criteria a reviewer can verify. Do not repeat ticket text,
+exploration logs, command explanations, or contract fields.
+
+For code work, the Execution appendix contains exactly one fenced `json` block
+whose top-level object has a
 `repositories` array containing exactly one object. That object contains
-`cwd`, `sourceCwd`, `baseHead`, `branch`, `commitTitle`,
-`acceptanceCriteria`, `worker`, and `reviewer`. Each worker or reviewer entry
+`cwd`, `baseHead`, `branch`, `commitTitle`, `acceptanceCriteria`, `worker`, and
+`reviewer`. Each worker or reviewer entry
 contains one exact Bash command in `command` plus its purpose and stable ID.
-Include every command later stages must run when it depends on repository cwd,
-including read-only Git inspection, plus every non-read-only command needed for
-worktree setup, focused RED/GREEN checks, generation, staging, commit, full
-tests, and non-fixing format or lint. Reviewer IDs are exactly `full-tests`,
-`format`, and `lint`. Commands must be standalone: no shell operators,
-substitutions, redirection, glob expansion, environment assignment, or wrapper
-shell. Pi Bash has no separate working-directory argument, so every command
-must encode its repository explicitly: use `git -C <sourceCwd>` for worktree
-creation and `git -C <cwd>` for later Git commands. Validate each other
-executable and subcommand's exact cwd form and option order. Derive
-dependency-installation commands and lockfile constraints from repository
-documentation and scripts. A bare cwd-dependent command is invalid and must be
-corrected before Plannotator review. A read-only investigation uses
-exactly `Not applicable - read-only plan.`.
+Include every command later stages must run, including read-only Git inspection,
+plus every non-read-only command needed for focused RED/GREEN checks,
+generation, staging, commit, full tests, and non-fixing format or lint. Reviewer
+IDs are exactly `full-tests`, `format`, and `lint`. Commands must be standalone:
+no shell operators, substitutions, redirection, glob expansion, environment
+assignment, or wrapper shell. Every delegated step after workspace preparation
+starts in the workflow's bound execution directory. Record that path as `cwd`
+for identity and validation; do not add or reorder a cwd flag merely to restate
+it. Use
+repository-native commands exactly as documented by its scripts and tools. If a
+command intentionally targets another directory, validate that executable and
+subcommand's exact syntax before submission. Derive dependency-installation
+commands and lockfile constraints from repository documentation and scripts. A
+read-only investigation uses exactly `Not applicable - read-only plan.`.
 
 Before submission, validate unfamiliar executables, subcommands, flags, and cwd
 handling with repository scripts or authoritative documentation, and with
@@ -83,10 +94,13 @@ external effects. It may not skip or weaken a check, drop a safety flag,
 broaden a target, or add an external action.
 
 Do not call `contact_supervisor`, `subagent_supervisor`, or `intercom`, and do
-not end with a terminal question. Put every material uncertainty under Open
-questions as a decision record with options, evidence, a recommendation, and
-the exact default the plan adopts. Plannotator feedback may change those
-defaults; approval resolves every decision by accepting the final artifact.
+not end with a terminal question. Review focus contains only decisions that
+require user judgment because they materially change scope, observable behavior,
+risk, or an irreversible action. For each, give the decision, the smallest
+useful options, the recommendation, and the consequence of deferring it.
+Resolve all other uncertainty with an evidence-backed default in Review summary
+or Risks. Plannotator feedback may change those defaults; approval resolves
+every decision by accepting the final artifact.
 
 Call `structured_output` alone with outcome `submit`. Put the full Markdown
 plan in `artifact`. Put a self-contained execution handoff in `summary`,

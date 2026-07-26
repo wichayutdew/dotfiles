@@ -23,6 +23,9 @@ Re-read repository instructions and inspect the contracted repository, every
 approved criterion, diff, commit, caller, test, and current status. Run the
 exact standalone commands under `repositories[0].reviewer[].command`, including
 the complete repository test suite plus non-fixing format and lint checks.
+Confirm the actual child cwd, registered worktree, dedicated branch, and
+workspace manifest still identify the same prepared workspace; never create,
+switch, or replace it.
 Static Bash permissions are inspection-only; do not invent or broaden a
 command. Confirm exact commit titles, clean worktrees, unchanged post-review
 snapshots, RED/GREEN evidence, and per-criterion outcomes. Treat a skipped,
@@ -42,10 +45,10 @@ Invocation-only repair is allowed when it preserves the exact check, target,
 flags, and side-effect scope; never turn a failing check into a different or
 weaker check. If a transient or context-bound failure has another safe attempt,
 use outcome `retry` with the exact call, error, attempts, current state, next
-alternative, and exact approved fenced `json` contract unchanged. Materially
-invalid scope is deferred to a new workflow. Use `blocked` only after safe
-alternatives are exhausted and neither retry nor the approved plan can resolve
-the missing access or environmental constraint.
+alternative, and exact approved fenced `json` contract unchanged. Use `blocked`
+with exact evidence when reviewed intent, targets, commands, or authority are
+materially invalid, or after safe alternatives are exhausted and retry cannot
+resolve the environmental or access constraint.
 
 Call `structured_output` alone with outcome `passed` only when every
 criterion and required command passes with no actionable finding. The summary
@@ -55,4 +58,5 @@ include the full criteria, exact failure, location, evidence, and smallest
 required fix so the next implementation attempt has a complete handoff. For
 both `passed` and `failed`, include the exact approved fenced `json` repository
 contract unchanged so a retry retains only reviewed worker commands. Use
-`blocked` when verification cannot safely proceed.
+`blocked` for an invalid approved contract or when offered recovery cannot make
+verification proceed safely.

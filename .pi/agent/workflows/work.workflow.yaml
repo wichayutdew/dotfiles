@@ -2,17 +2,48 @@
 version: 1
 id: work
 command: work
-description: Plan, implement, and independently verify local work
-start: plan
+description: Prepare a dedicated workspace, plan, implement, and verify local work
+start: prepare-workspace
 maxStepVisits: 20
 summaryMaxChars: 30000
 steps:
+  prepare-workspace:
+    title: Prepare dedicated branch and worktree
+    prompt:
+      file: steps/shared/prepare-workspace.md
+    subagent:
+      agent: worker
+      context: fresh
+      timeoutMs: 900000
+      retryToolFailures: true
+      turnBudget:
+        maxTurns: 25
+        graceTurns: 3
+      toolBudget:
+        soft: 50
+        hard: 90
+        block: "*"
+    workspace:
+      bindOn: [ready]
+      allowedRoots: [".."]
+    permissions:
+      tools: [read, ls, bash]
+      skills: [caveman, coding-standards, using-git-worktrees]
+      bash:
+        mode: unrestricted
+    requires:
+      tools: [read, ls, bash]
+      skills: [caveman, coding-standards, using-git-worktrees]
+    transitions:
+      ready: plan
+      retry: prepare-workspace
+      blocked: $pause
   plan:
     title: Explore and plan local work
     prompt:
       file: steps/work/plan.md
     subagent:
-      agent: scout
+      agent: planner
       context: fresh
       timeoutMs: 1200000
       retryToolFailures: true
@@ -40,7 +71,19 @@ steps:
       extensions: [pi-web-tools]
       skills: &work-plan-skills [caveman, brainstorming, coding-standards]
       bash:
-        mode: read-only
+        mode: allow-list
+        allow: &work-inspection-bash
+          - executable: grep
+          - executable: head
+          - executable: ls
+          - executable: pwd
+          - executable: rg
+          - executable: stat
+          - executable: tail
+          - executable: wc
+          - executable: git
+            argsPrefixes:
+              [[status], [diff], [grep], [log], [ls-files], [rev-parse], [show]]
     requires:
       tools: [read, ls, bash]
       skills: *work-plan-skills
@@ -49,10 +92,10 @@ steps:
       submitOutcome: submit
       approvedOutcome: approved
       rejectedOutcome: changes-requested
-      timeoutMs: 10000
+      timeoutMs: 30000
     transitions:
       approved: implement
-      changes-requested: plan
+      changes-requested: $pause
       retry: plan
       blocked: $pause
   implement:
@@ -85,21 +128,7 @@ steps:
           receiving-code-review,
         ]
       bash:
-        mode: allow-list
-        allow: &work-inspection-bash
-          - executable: grep
-          - executable: head
-          - executable: ls
-          - executable: pwd
-          - executable: rg
-          - executable: stat
-          - executable: tail
-          - executable: wc
-          - executable: git
-            argsPrefixes:
-              [[status], [diff], [grep], [log], [ls-files], [rev-parse], [show]]
-        approvedSources: [verification-worker]
-        handoffSources: [verification-worker, verification-reviewer]
+        mode: unrestricted
     requires:
       tools: [read, ls, bash, edit, write]
       skills: *work-implement-skills
@@ -133,10 +162,7 @@ steps:
           verification-before-completion,
         ]
       bash:
-        mode: allow-list
-        allow: *work-inspection-bash
-        approvedSources: [verification-reviewer]
-        handoffSources: [verification-worker, verification-reviewer]
+        mode: unrestricted
     requires:
       tools: [read, ls, bash]
       skills: *work-verify-skills

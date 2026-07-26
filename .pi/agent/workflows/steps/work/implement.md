@@ -22,21 +22,21 @@ state before acting. Preserve unrelated user work. If the approved route is
 read-only, perform the investigation without changing files or creating a
 commit.
 
-For code work, create or reuse only the worktree named by the approved
-contract. A reused worktree must share the approved source repository's Git
-common directory. Treat `repositories[0].cwd` as the root for every read, edit,
-and write. If that worktree does not exist when the child starts, run its exact
-approved setup command first and then use absolute paths rooted at `cwd`; never
-edit or write in `sourceCwd`. Bash inspection commands allowed
-by the static policy may be used as needed. Run only non-read-only Bash
+For code work, stay in the dedicated workspace bound by the preparation step.
+Treat `repositories[0].cwd` and the workspace manifest as confirmation of that
+same root and branch for every read, edit, and write; if either differs from the
+actual child cwd, use `blocked` and do not switch directories, branches, or
+worktrees. Never create a replacement workspace. Bash inspection commands
+allowed by the static policy may be used as needed. Run only non-read-only Bash
 commands listed exactly under `repositories[].worker[].command` in the
 reviewed contract, except for an invocation-only recovery described below. Use test-driven
 development: demonstrate the approved focused check failing for the intended
 reason, make the smallest coherent change, then make it pass. Run every worker
 command, stage only scoped files, create the exact approved Conventional
-Commit, and leave each contracted worktree clean. If a required command was
-not reviewed or is blocked by policy, stop with `blocked`; never substitute a
-broader command. Never push, publish, tag, or mutate an external system.
+Commit, and leave the dedicated checkout clean. If a required command was not
+reviewed or the approved contract is blocked by policy, use `blocked`; never
+substitute a broader command. Never push, publish, tag, or mutate an external
+system.
 
 Do not stop at the first failed tool or command. Read the exact error, inspect
 current repository and external state, diagnose the cause, and try a safe
@@ -53,10 +53,10 @@ dependency version, or add an external effect to make recovery pass.
 If a plausible safe recovery needs more fresh context, call `structured_output`
 with outcome `retry`. Its summary must include the exact failed call and error,
 alternatives attempted, current observed state, the next safe alternative, and
-the exact approved fenced `json` contract unchanged. Material new scope is
-deferred to a new workflow. Use `blocked` only after safe alternatives are
-exhausted and neither a fresh retry nor the approved plan can resolve
-the missing access or environmental constraint.
+the exact approved fenced `json` contract unchanged. Use `blocked` when reviewed
+intent, sources, commands, targets, or authority are missing, stale,
+contradictory, or materially invalid, or after safe alternatives are exhausted
+and retry cannot resolve the environmental or access constraint.
 
 Call `structured_output` alone with outcome `ready` only after all worker
 criteria pass. Its summary must repeat the approved criteria and repository

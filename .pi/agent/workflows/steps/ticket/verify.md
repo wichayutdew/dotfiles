@@ -26,8 +26,10 @@ status. Run the exact standalone commands under
 and non-fixing format and lint checks. Static Bash permissions are
 inspection-only; do not invent or broaden a command. Confirm exact commit
 titles, clean worktrees, unchanged post-review snapshots, RED/GREEN evidence,
-and criterion coverage. Anything skipped, stale, unavailable, timed out,
-blocked, or failing is non-passing.
+and criterion coverage. Confirm the actual child cwd, registered worktree,
+dedicated branch, and workspace manifest still identify the same prepared
+workspace; never create, switch, or replace it. Anything skipped, stale,
+unavailable, timed out, blocked, or failing is non-passing.
 
 If the approved Verification contract is exactly
 `Not applicable - read-only plan.`, independently re-check every ticket and
@@ -41,9 +43,9 @@ Invocation-only repair must preserve the exact check, target, flags, and
 side-effect scope; never turn a failing check into a different or weaker check.
 Use `retry` for a transient or context-bound failure with the exact call, error,
 attempts, current state, next alternative, and unchanged approved contract. Use
-defer materially invalid reviewed command or authority to a new workflow. Use
-`blocked` only after safe alternatives are exhausted and neither retry nor the
-approved plan can resolve the environmental or access constraint.
+`blocked` for a materially invalid reviewed command, target, intent, or
+authority, or after safe alternatives are exhausted and retry cannot resolve
+the environmental or access constraint.
 
 Call `structured_output` alone with outcome `passed` only when all ticket
 and user criteria pass with no actionable finding. Repeat the full criteria and
@@ -52,4 +54,4 @@ findings and include the criteria, exact failure, location, evidence, and
 smallest fix for the next implementation attempt. For both `passed` and
 `failed`, include the exact approved fenced `json` repository contract
 unchanged so a retry retains only reviewed worker commands. Use `blocked` when
-verification cannot safely proceed.
+offered recovery cannot make verification proceed safely.

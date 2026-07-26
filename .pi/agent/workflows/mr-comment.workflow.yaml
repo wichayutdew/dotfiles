@@ -2,37 +2,37 @@
 version: 1
 id: mr-comment
 command: mr-comment
-description: Triage unresolved GitLab MR comments, implement fixes, verify, and create private drafts
-start: plan
+description: Fetch unresolved MR or PR comments, approve a fix plan, implement, verify, push, and reply
+start: fetch
 maxStepVisits: 10
 summaryMaxChars: 30000
 steps:
-  plan:
-    title: Triage unresolved review comments
+  fetch:
+    title: Fetch merge-request or pull-request evidence
     prompt:
-      file: steps/mr-comment/plan.md
+      file: steps/mr-comment/fetch.md
     subagent:
       agent: scout
       context: fresh
-      timeoutMs: 1800000
+      timeoutMs: 1200000
       retryToolFailures: true
       turnBudget:
-        maxTurns: 45
+        maxTurns: 30
         graceTurns: 3
       toolBudget:
-        soft: 120
-        hard: 200
+        soft: 90
+        hard: 150
         block: "*"
     permissions:
       tools: [read, ls, bash]
       mcp: &comment-mcp
-        - gitlab/get_merge_request
-        - gitlab/get_merge_request_commits
-        - gitlab/get_merge_request_diffs
-        - gitlab/get_merge_request_pipelines
-        - gitlab/get_pipeline_jobs
-        - gitlab/get_merge_request_conflicts
-        - gitlab/search
+        - gitlab/gitlab_get_merge_request
+        - gitlab/gitlab_get_merge_request_commits
+        - gitlab/gitlab_get_merge_request_diffs
+        - gitlab/gitlab_get_merge_request_pipelines
+        - gitlab/gitlab_get_pipeline_jobs
+        - gitlab/gitlab_get_merge_request_conflicts
+        - gitlab/gitlab_search
         - context7/resolve-library-id
         - context7/query-docs
         - sourcegraph/code_finder
@@ -46,12 +46,7 @@ steps:
         - gh_grep/searchGitHub
       extensions: [pi-web-tools]
       skills:
-        &comment-plan-skills [
-          caveman,
-          receiving-code-review,
-          coding-standards,
-          brainstorming,
-        ]
+        &comment-fetch-skills [caveman, receiving-code-review, coding-standards]
       bash:
         mode: allow-list
         allow: &comment-inspection-bash
@@ -65,9 +60,59 @@ steps:
           - executable: wc
           - executable: git
             argsPrefixes:
-              [[status], [diff], [grep], [log], [ls-files], [rev-parse], [show]]
+              [
+                [status],
+                [diff],
+                [grep],
+                [log],
+                [ls-files],
+                [remote, -v],
+                [remote, get-url],
+                [rev-parse],
+                [show],
+              ]
           - executable: glab
             argsPrefixes: [[mr, view], [mr, diff], [api]]
+          - executable: gh
+            argsPrefixes: [[pr, view], [pr, diff], [api]]
+          - executable: curl
+    requires:
+      tools: [read, ls, bash]
+      skills: *comment-fetch-skills
+    transitions:
+      ready: plan
+      retry: fetch
+      blocked: $pause
+  plan:
+    title: Propose a complete review-comment fix plan
+    prompt:
+      file: steps/mr-comment/plan.md
+    subagent:
+      agent: planner
+      context: fresh
+      timeoutMs: 1800000
+      retryToolFailures: true
+      turnBudget:
+        maxTurns: 45
+        graceTurns: 3
+      toolBudget:
+        soft: 120
+        hard: 200
+        block: "*"
+    permissions:
+      tools: [read, ls, bash]
+      mcp: *comment-mcp
+      extensions: [pi-web-tools]
+      skills:
+        &comment-plan-skills [
+          caveman,
+          receiving-code-review,
+          coding-standards,
+          brainstorming,
+        ]
+      bash:
+        mode: allow-list
+        allow: *comment-inspection-bash
     requires:
       tools: [read, ls, bash]
       skills: *comment-plan-skills
@@ -76,10 +121,10 @@ steps:
       submitOutcome: submit
       approvedOutcome: approved
       rejectedOutcome: changes-requested
-      timeoutMs: 10000
+      timeoutMs: 30000
     transitions:
       approved: implement
-      changes-requested: plan
+      changes-requested: $pause
       retry: plan
       blocked: $pause
   implement:
@@ -112,10 +157,7 @@ steps:
           verification-before-completion,
         ]
       bash:
-        mode: allow-list
-        allow: *comment-inspection-bash
-        approvedSources: [verification-worker]
-        handoffSources: [verification-worker, verification-reviewer]
+        mode: unrestricted
     requires:
       tools: [read, ls, bash, edit, write]
       skills: *comment-implement-skills
@@ -152,10 +194,7 @@ steps:
           verification-before-completion,
         ]
       bash:
-        mode: allow-list
-        allow: *comment-inspection-bash
-        approvedSources: [verification-reviewer]
-        handoffSources: [verification-worker, verification-reviewer]
+        mode: unrestricted
     requires:
       tools: [read, ls, bash]
       skills: *comment-verify-skills
@@ -166,9 +205,9 @@ steps:
       retry: verify
       blocked: $pause
   deliver:
-    title: Push the verified commit and create private draft replies
+    title: Push the verified commit and reply to review comments
     prompt:
-      file: steps/shared/publish-remote.md
+      file: steps/mr-comment/publish.md
     subagent:
       agent: worker
       context: fresh
@@ -182,21 +221,25 @@ steps:
         hard: 80
         block: "*"
     permissions:
-      tools: [bash]
+      tools: [read, ls, bash]
+      mcp: *comment-mcp
       skills: [caveman, receiving-code-review]
       bash:
         mode: allow-list
         allow:
           - executable: git
-            argsPrefixes: [[status], [rev-parse], [show], [ls-remote]]
+            argsPrefixes: [[status], [rev-parse], [show], [ls-remote], [push]]
           - executable: glab
             argsPrefixes: [[mr, view], [api]]
-        approvedSources: [remote-push, remote-drafts]
+          - executable: gh
+            argsPrefixes: [[pr, view], [api]]
+          - executable: curl
     requires:
-      tools: [bash]
+      tools: [read, ls, bash]
       skills: [caveman, receiving-code-review]
     transitions:
-      drafted: $done
+      published: $done
+      no-actions: $done
       retry: deliver
-      superseded: $done
+      superseded: $pause
       blocked: $pause

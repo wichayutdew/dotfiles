@@ -2,17 +2,48 @@
 version: 1
 id: ticket
 command: ticket
-description: Read a Jira ticket, plan, implement, and independently verify it
-start: plan
+description: Prepare a dedicated workspace, plan, implement, and verify a Jira ticket
+start: prepare-workspace
 maxStepVisits: 20
 summaryMaxChars: 30000
 steps:
+  prepare-workspace:
+    title: Prepare dedicated branch and worktree
+    prompt:
+      file: steps/shared/prepare-workspace.md
+    subagent:
+      agent: worker
+      context: fresh
+      timeoutMs: 900000
+      retryToolFailures: true
+      turnBudget:
+        maxTurns: 25
+        graceTurns: 3
+      toolBudget:
+        soft: 50
+        hard: 90
+        block: "*"
+    workspace:
+      bindOn: [ready]
+      allowedRoots: ["..", "../../worktrees"]
+    permissions:
+      tools: [read, ls, bash]
+      skills: [caveman, coding-standards, using-git-worktrees]
+      bash:
+        mode: unrestricted
+    requires:
+      tools: [read, ls, bash]
+      skills: [caveman, coding-standards, using-git-worktrees]
+    transitions:
+      ready: plan
+      retry: prepare-workspace
+      blocked: $pause
   plan:
     title: Read Jira evidence and plan
     prompt:
       file: steps/ticket/plan.md
     subagent:
-      agent: scout
+      agent: planner
       context: fresh
       timeoutMs: 1200000
       retryToolFailures: true
@@ -26,10 +57,10 @@ steps:
     permissions:
       tools: [read, ls, bash]
       mcp: &ticket-mcp
-        - atlassian/getAccessibleAtlassianResources
-        - atlassian/getJiraIssue
-        - atlassian/getJiraIssueRemoteIssueLinks
-        - atlassian/searchJiraIssuesUsingJql
+        - atlassian/atlassian_getAccessibleAtlassianResources
+        - atlassian/atlassian_getJiraIssue
+        - atlassian/atlassian_getJiraIssueRemoteIssueLinks
+        - atlassian/atlassian_searchJiraIssuesUsingJql
         - context7/resolve-library-id
         - context7/query-docs
         - sourcegraph/code_finder
@@ -50,7 +81,19 @@ steps:
           brainstorming,
         ]
       bash:
-        mode: read-only
+        mode: allow-list
+        allow: &ticket-inspection-bash
+          - executable: grep
+          - executable: head
+          - executable: ls
+          - executable: pwd
+          - executable: rg
+          - executable: stat
+          - executable: tail
+          - executable: wc
+          - executable: git
+            argsPrefixes:
+              [[status], [diff], [grep], [log], [ls-files], [rev-parse], [show]]
     requires:
       tools: [read, ls, bash, mcp]
       skills: *ticket-plan-skills
@@ -59,10 +102,10 @@ steps:
       submitOutcome: submit
       approvedOutcome: approved
       rejectedOutcome: changes-requested
-      timeoutMs: 10000
+      timeoutMs: 30000
     transitions:
       approved: implement
-      changes-requested: plan
+      changes-requested: $pause
       retry: plan
       blocked: $pause
   implement:
@@ -96,21 +139,7 @@ steps:
           receiving-code-review,
         ]
       bash:
-        mode: allow-list
-        allow: &ticket-inspection-bash
-          - executable: grep
-          - executable: head
-          - executable: ls
-          - executable: pwd
-          - executable: rg
-          - executable: stat
-          - executable: tail
-          - executable: wc
-          - executable: git
-            argsPrefixes:
-              [[status], [diff], [grep], [log], [ls-files], [rev-parse], [show]]
-        approvedSources: [verification-worker]
-        handoffSources: [verification-worker, verification-reviewer]
+        mode: unrestricted
     requires:
       tools: [read, ls, bash, edit, write, mcp]
       skills: *ticket-implement-skills
@@ -145,10 +174,7 @@ steps:
           verification-before-completion,
         ]
       bash:
-        mode: allow-list
-        allow: *ticket-inspection-bash
-        approvedSources: [verification-reviewer]
-        handoffSources: [verification-worker, verification-reviewer]
+        mode: unrestricted
     requires:
       tools: [read, ls, bash, mcp]
       skills: *ticket-verify-skills
