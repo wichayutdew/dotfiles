@@ -11,6 +11,9 @@ Plannotator-approved review artifact:
 Approval feedback:
 {{reviewed.feedback}}
 
+Previous step handoff:
+{{last.summary}}
+
 Parse exactly one fenced `json` Publication contract from the approved
 artifact. Require its top-level non-empty `actions` array and validate every
 action against the artifact's URL, host, current head SHA, finding or clean
@@ -37,6 +40,9 @@ either succeeded once or its exact effect was already observable. In `summary`
 record the canonical review URL, refreshed head, the unchanged approved
 contract, each pre-action observation, whether it was skipped or attempted,
 the exact command, result, remote identifier/URL, and remaining actions.
-Use outcome `blocked` with the same full action ledger when freshness,
-validation, execution, or correlation fails. There is no automatic retry; a
-blocked result pauses the workflow.
+When the previous handoff contains an actionable verification finding, treat it
+as a corrective publication handoff: re-check the exact approved effect and
+retry only when its absence is conclusive. Never use it to alter the approved
+content, target, or action list. Use outcome `blocked` with the same full
+action ledger when freshness, validation, execution, or correlation is
+ambiguous or unsafe.

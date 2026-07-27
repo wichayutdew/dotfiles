@@ -4,7 +4,7 @@ id: mr-review
 command: mr-review
 description: Fetch, approve, publish, and verify one hosted code review
 start: fetch
-maxStepVisits: 3
+maxStepVisits: 10
 summaryMaxChars: 50000
 steps:
   fetch:
@@ -168,7 +168,7 @@ steps:
       published: verify
       blocked: $pause
   verify:
-    title: Verify the approved review is observable remotely
+    title: Verify or return the approved review for publication repair
     prompt:
       file: steps/mr-review/verify-published.md
     subagent:
@@ -198,4 +198,6 @@ steps:
       skills: *publish-skills
     transitions:
       verified: $done
+      failed: publish
+      retry: verify
       blocked: $pause

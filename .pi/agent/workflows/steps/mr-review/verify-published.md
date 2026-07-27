@@ -18,9 +18,19 @@ discussion, note, or review collection and independently prove the exact
 marker, body, head, effect kind, optional path/line, and remote identifier or
 URL. Do not accept the publication ledger alone as proof.
 
-Call `structured_output` alone with outcome `verified` only when every approved
-effect is currently observable. In `summary`, report the canonical review URL, current head, exact
-verified remote identifiers/URLs and anchors, action count, and final verdict.
-Use outcome `blocked` when any approved effect is absent, stale, ambiguous, or
-different. Include exact read-only evidence and safe recovery. There is no
-automatic retry; a blocked result pauses the workflow.
+Call `structured_output` alone with:
+
+- `verified` only when every approved effect is currently observable exactly
+  once or in the explicitly idempotent form described by the contract;
+- `failed` for an actionable, unambiguous missing or mismatched approved
+  effect. Its self-contained summary becomes the next publication worker's
+  corrective handoff, so include the expected and observed state, exact
+  evidence, and the smallest safe repair;
+- `retry` for a transient read-only verification failure after safe equivalent
+  checks were attempted;
+- `blocked` only when the review, head, target, or remote result is stale,
+  ambiguous, or unsafe to repair automatically.
+
+For `verified` and `failed`, report the canonical review URL, current head,
+verified or missing remote identifiers/URLs and anchors, action count, and
+final verdict. Do not mutate state yourself.

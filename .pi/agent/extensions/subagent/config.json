@@ -2,6 +2,7 @@
   "toolDescriptionMode": "compact",
   "fleetView": false,
   "asyncWidget": false,
+  "artifactDir": "session",
   "worktreeBaseDir": "/Users/wphongphanpa/repositories/worktrees",
   "globalConcurrencyLimit": 4,
   "maxSubagentSpawnsPerSession": 100,
