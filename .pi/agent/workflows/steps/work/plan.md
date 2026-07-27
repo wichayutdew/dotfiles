@@ -5,8 +5,16 @@ Stay read-only.
 Workflow request:
 {{workflow.input}}
 
+Previously rejected artifact:
+{{gate.artifact}}
+
 Plannotator feedback from a previous submission:
 {{gate.feedback}}
+
+When feedback is non-empty, treat the artifact and feedback as the user's
+requested revision, update the complete plan against current evidence, and
+submit it for another review. Each rejection returns to this same planning step
+in the already-bound worktree; it never returns to workspace preparation.
 
 Use brainstorming only for internal option analysis. Do not ask a live
 question, open a visual companion, write or commit a plan file, or seek a
@@ -26,12 +34,29 @@ unenforceable multi-root contract.
 Classify the request as code work, bug repair, or a read-only investigation.
 The previous-step handoff identifies the one dedicated branch and worktree
 prepared for this run. Confirm this child is actually running at that exact Git
-root and that the manifest still matches branch, HEAD, registration, and clean
-status. Use only that bound workspace. If it is missing, mismatched, or stale,
-return `blocked`; never create, switch, or select another branch or worktree.
-The repository contract must contain the bound Git root as `cwd`, its base HEAD,
-dedicated branch, Conventional Commit title, acceptance criteria, worker
-checks, and reviewer checks.
+root. Validate its canonical path, registered branch, run marker, and lack of an
+in-progress Git operation. Treat the manifest's source HEAD and prepared
+selected HEAD as historical provenance, not immutable current-state values. If
+the recorded selected HEAD is an ancestor of the current selected HEAD and the
+current local source-ref HEAD is also an ancestor, target-only commits and dirty
+state are legitimate resumable work. Use the observed current selected HEAD as
+`baseHead`; cleanliness and equality with the original prepared HEAD are not
+required.
+
+Use outcome `workspace-refresh` only when the exact bound path/branch identity
+is intact, the selected checkout is clean, and the recorded local source ref
+has advanced to a commit that is not an ancestor of the selected HEAD. Its
+summary must carry the complete previous workspace manifest plus exact current
+source root/ref/HEAD and selected path/branch/HEAD/status. If preparation
+already reported `deferred-dirty` or `not-needed` for that same source snapshot,
+plan from the recorded current state instead of bouncing back. A canonical
+path, branch, registration, marker, rewritten-history, or in-progress-operation
+mismatch is `blocked`; never create, switch, reset, rebase, or select another
+branch or worktree from this read-only step.
+
+The repository contract must contain the bound Git root as `cwd`, the observed
+current selected HEAD as `baseHead`, dedicated branch, Conventional Commit
+title, acceptance criteria, worker checks, and reviewer checks.
 
 Use the `caveman` skill at lite intensity for artifact prose: remove filler and
 repetition, but keep complete natural sentences, causal links, and exact
@@ -109,5 +134,7 @@ receives only the reviewed Bash commands. Do not merely say that the plan is
 ready. If a recoverable tool or environment failure needs a fresh context after
 safe alternatives were attempted, use outcome `retry` with the exact failed
 call, error, attempts, current state, and next safe alternative. Use outcome
+`workspace-refresh` only for the exact clean source-ancestry condition above;
+omit `artifact` and preserve all workspace evidence in `summary`. Use outcome
 `blocked` only when missing access or evidence prevents a safe reviewable plan
 and retry cannot resolve it, not merely because a user decision is needed.

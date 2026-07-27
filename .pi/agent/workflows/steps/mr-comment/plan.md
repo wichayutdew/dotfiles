@@ -8,8 +8,15 @@ Review input:
 Fetched evidence from the explicit acquisition stage:
 {{last.summary}}
 
-Plannotator feedback retained after an explicit resume:
+Previously rejected artifact:
+{{gate.artifact}}
+
+Plannotator feedback from a previous submission:
 {{gate.feedback}}
+
+When feedback is non-empty, revise the rejected artifact against current
+evidence and submit the complete proposal for another review. Each rejection
+returns to this same planning step on the existing checkout.
 
 The current checkout is the only implementation workspace. Verify it again,
 then work on top of its current branch and files. Never create, switch, reset,
@@ -69,8 +76,8 @@ Put that complete plan in `artifact`. Put a self-contained handoff in
 `summary`, repeating URL/host/head, checkout identity, all classifications,
 scope, criteria, replies, and the exact fenced JSON appendix unchanged.
 Plannotator approval authorizes only this plan and these remote effects after
-independent verification. A rejection follows the configured `$pause`
-transition; never replan automatically.
+independent verification. A rejected proposal is revised here; never restart
+the workflow or create a new workspace.
 
 Use `retry` for a transient evidence failure after safe alternatives were
 attempted, with the exact call, error, current evidence, and next read-only

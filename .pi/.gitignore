@@ -3,7 +3,7 @@ context-mode/
 
 plannotator-review-status.json
 # local Hermes session and memory state
-/agent/.pi-hermes-locks.sqlite
+/agent/.pi-hermes-lock*
 /agent/pi-hermes-memory/
 /agent/projects-memory/
 

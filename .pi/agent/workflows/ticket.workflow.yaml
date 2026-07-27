@@ -93,7 +93,18 @@ steps:
           - executable: wc
           - executable: git
             argsPrefixes:
-              [[status], [diff], [grep], [log], [ls-files], [rev-parse], [show]]
+              [
+                [status],
+                [diff],
+                [grep],
+                [log],
+                [ls-files],
+                [rev-parse],
+                [show],
+                [merge-base],
+                [rev-list],
+                [worktree, list],
+              ]
     requires:
       tools: [read, ls, bash, mcp]
       skills: *ticket-plan-skills
@@ -105,7 +116,8 @@ steps:
       timeoutMs: 30000
     transitions:
       approved: implement
-      changes-requested: $pause
+      changes-requested: plan
+      workspace-refresh: prepare-workspace
       retry: plan
       blocked: $pause
   implement:

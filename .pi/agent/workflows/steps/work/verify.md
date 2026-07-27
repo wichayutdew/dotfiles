@@ -27,10 +27,12 @@ Confirm the actual child cwd, registered worktree, dedicated branch, and
 workspace manifest still identify the same prepared workspace; never create,
 switch, or replace it.
 Static Bash permissions are inspection-only; do not invent or broaden a
-command. Confirm exact commit titles, clean worktrees, unchanged post-review
-snapshots, RED/GREEN evidence, and per-criterion outcomes. Treat a skipped,
-stale, unavailable, timed-out, blocked, or failing required check as
-non-passing.
+command. Confirm exact commit titles, unchanged post-review snapshots,
+RED/GREEN evidence, and per-criterion outcomes. When preparation recorded a
+clean baseline, require a clean final worktree. When it recorded unrelated
+dirty resumable work, require that exact baseline state to remain unchanged and
+that no task-owned change remains uncommitted. Treat a skipped, stale,
+unavailable, timed-out, blocked, or failing required check as non-passing.
 
 If the approved verification contract is exactly
 `Not applicable - read-only plan.`, the absence of repository test commands is

@@ -32,8 +32,12 @@ commands listed exactly under `repositories[].worker[].command` in the
 reviewed contract, except for an invocation-only recovery described below. Use test-driven
 development: demonstrate the approved focused check failing for the intended
 reason, make the smallest coherent change, then make it pass. Run every worker
-command, stage only scoped files, create the exact approved Conventional
-Commit, and leave the dedicated checkout clean. If a required command was not
+command, stage only scoped files, and create the exact approved Conventional
+Commit. If preparation recorded a clean starting status, leave the dedicated
+checkout clean. If it recorded pre-existing dirty resumable work, preserve
+unrelated baseline paths and content exactly; the final status may retain only
+that recorded unrelated state, which must be reported rather than cleaned,
+stashed, reset, or folded into the task commit. If a required command was not
 reviewed or the approved contract is blocked by policy, use `blocked`; never
 substitute a broader command. Never push, publish, tag, or mutate an external
 system.

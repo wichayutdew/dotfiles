@@ -8,8 +8,15 @@ Original hosted review input:
 Fetched evidence bundle:
 {{last.summary}}
 
-Plannotator feedback from a previous paused submission:
+Previously rejected artifact:
+{{gate.artifact}}
+
+Plannotator feedback from a previous submission:
 {{gate.feedback}}
+
+When feedback is non-empty, revise the rejected artifact against current
+evidence and submit the complete review proposal for another review. Each
+rejection returns to this same review step.
 
 Treat the fetched bundle as the starting evidence, not as a verdict. Re-read
 applicable repository instructions and inspect the changed code, callers,
@@ -95,8 +102,8 @@ commit ID, path, side, and line supported by that host.
 
 Plannotator approval authorizes only the exact fenced contract. It never
 authorizes a push, approval, merge, resolution, closure, deletion,
-cross-host action, or unlisted mutation. Rejection pauses here and never starts
-an automatic replan.
+cross-host action, or unlisted mutation. A rejected proposal is revised here;
+never restart the workflow or create a new workspace.
 
 Call `structured_output` alone with outcome `submit`. Put the complete review
 in `artifact` and repeat it exactly in `summary`. Use outcome `blocked` only
