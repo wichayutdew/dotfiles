@@ -115,13 +115,42 @@ read-only investigation uses exactly `Not applicable - read-only plan.`.
 For code work, the same top-level JSON object also contains exactly one
 `publication` object with `provider`, `remote`, `sourceBranch`, `targetBranch`,
 `project`, `title`, `description`, and `ticketKey`, all resolved from current
-repository and ticket evidence. It authorizes the verifier only to non-force
-push its verified current HEAD to `sourceBranch` on `remote`, then create one
-GitLab merge request to `targetBranch`. It must not authorize force pushes,
-setting upstream, wildcard refspecs, another branch or remote, merging,
-approvals, closing, deletion, Jira mutation, arbitrary shell commands, or any
-other external change. If those fields cannot be established safely, return
-`blocked`; do not defer the publishing decision to verification.
+repository and ticket evidence. The `title` must use this Conventional Commit
+format exactly: `fix: [<JiraId>] <brief summary of the changes>`. The
+`description` must use this Markdown format exactly, replacing placeholders
+with current evidence and omitting the Experiment ID line when none exists:
+
+```md
+- Jira ID : {JiraId}
+- Experiment ID : {ExperimentId, if any}
+
+## Proposed changes
+- {changes}
+
+## Test added in this MR
+  - **Unit test**
+     - {test cases}
+  - **Functional test (If need)**
+     - {test cases}
+  - **Integration test (If need)**
+     - {test cases}
+
+ ## Tested scenarios with screenshots
+  | Scenario   | Production            | This branch  |
+  | ---        | ---                   | ---          |
+  | Scenario 1 | paste screenshot here | paste screenshot here |
+  | Scenario 2 | paste screenshot here | paste screenshot here |
+
+/assign me
+```
+
+It authorizes the verifier only to non-force push its verified current HEAD to
+`sourceBranch` on `remote`, then create one GitLab merge request to
+`targetBranch`. It must not authorize force pushes, setting upstream, wildcard
+refspecs, another branch or remote, merging, approvals, closing, deletion,
+Jira mutation, arbitrary shell commands, or any other external change. If
+those fields cannot be established safely, return `blocked`; do not defer the
+publishing decision to verification.
 
 Before submission, validate unfamiliar executables, subcommands, flags, and cwd
 handling with repository scripts or authoritative documentation, and with
