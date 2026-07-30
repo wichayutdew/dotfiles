@@ -34,6 +34,11 @@ dirty resumable work, require that exact baseline state to remain unchanged and
 that no task-owned change remains uncommitted. Treat a skipped, stale,
 unavailable, timed-out, blocked, or failing required check as non-passing.
 
+Any regression, lint failure, formatting failure, or other actionable local
+verification finding must use outcome `failed`, with the exact evidence and
+smallest fix. The workflow transition returns `failed` directly to
+implementation. Do not use `retry` or `blocked` for such a finding.
+
 If the approved verification contract is exactly
 `Not applicable - read-only plan.`, the absence of repository test commands is
 intentional. Independently re-check every requested fact and acceptance
