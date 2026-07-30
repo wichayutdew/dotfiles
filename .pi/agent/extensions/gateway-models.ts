@@ -73,8 +73,8 @@ export default function registerGatewayModels(pi: ExtensionAPI) {
         ...sonnetModelConfig,
       },
       {
-        id: "claude-opus-4-8",
-        name: "claude-opus-4-8",
+        id: "claude-opus-5",
+        name: "claude-opus-5",
         ...opusModelConfig,
       },
     ],
