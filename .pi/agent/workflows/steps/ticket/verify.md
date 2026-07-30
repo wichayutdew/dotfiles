@@ -28,10 +28,9 @@ status. Run the exact standalone commands under
 and non-fixing format and lint checks. Static Bash permissions apply to local
 inspection; do not invent or broaden a command. Confirm exact commit
 titles, unchanged post-review snapshots, RED/GREEN evidence, and criterion
-coverage. When preparation recorded a clean baseline, require a clean final
-worktree. When it recorded unrelated dirty resumable work, require that exact
-baseline state to remain unchanged and that no task-owned change remains
-uncommitted. Confirm the actual child cwd, registered worktree, dedicated
+coverage. Record working-tree status as evidence only; do not require a clean
+worktree or require staged or unstaged changes to be committed before
+publication. Confirm the actual child cwd, registered worktree, dedicated
 branch, and workspace manifest still identify the same prepared workspace;
 never create, switch, or replace it. Anything skipped, stale, unavailable,
 timed out, blocked, or failing is non-passing.
@@ -49,9 +48,12 @@ full current `HEAD`; that exact verified SHA is the only commit that may be
 published. Query the remote source branch and matching open merge requests
 first. If the same SHA is not already remote, push only current `HEAD` to the
 reviewed source branch using a non-force `git push`. Never use `--force`,
-`--set-upstream`, wildcard refspecs, another remote, or another branch. A
-rejected push, divergent remote history, or ambiguous push result is `blocked`;
-do not attempt a workaround or replay an ambiguous mutation.
+`--set-upstream`, wildcard refspecs, another remote, or another branch.
+Publish only committed code: do not stage, commit, stash, discard, or otherwise
+consider pending staged or unstaged working-tree changes part of the
+publication. Those changes must not alter the exact verified `HEAD` SHA being
+pushed. A rejected push, divergent remote history, or ambiguous push result is
+`blocked`; do not attempt a workaround or replay an ambiguous mutation.
 
 Use MCP only for an enabled, exact server/tool selector. Every MCP call must
 name both `server` and `tool`; never use MCP discovery or proxy modes such as
