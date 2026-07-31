@@ -13,7 +13,7 @@ Immutable approved Jira plan:
 Approval feedback:
 {{reviewed.feedback}}
 
-Implementation ledger:
+Implementation ledger or blocked recovery handoff:
 {{last.summary}}
 
 The approved plan is final authority. Do not call `contact_supervisor`,
@@ -105,3 +105,7 @@ smallest fix for the next implementation attempt. For both `passed` and
 `failed`, include the exact approved fenced `json` repository contract
 unchanged so a retry retains only reviewed worker commands. Use `blocked` when
 offered recovery cannot make verification proceed safely.
+On a retry after `blocked`, re-check the blocked
+source or reconciliation issue and use any remaining safe relevant alternative;
+do not repeat an exhausted attempt without a changed precondition. Do not ask a
+terminal question.

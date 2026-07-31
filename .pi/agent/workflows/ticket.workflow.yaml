@@ -194,4 +194,4 @@ steps:
       passed: $done
       failed: implement
       retry: verify
-      blocked: $pause
+      blocked: verify

@@ -11,7 +11,7 @@ Immutable approved plan:
 Approval feedback:
 {{reviewed.feedback}}
 
-Implementation ledger:
+Implementation ledger or blocked recovery handoff:
 {{last.summary}}
 
 Re-fetch the same-host review head and comments read-only. Verify the current
@@ -44,3 +44,7 @@ reviewed actions unchanged. Do not ask the user to push or post a reply.
 For `failed`, include the smallest corrective implementation handoff and the
 unchanged appendix. Never push, post, resolve, approve, merge, close, delete, or
 force-push. Do not ask a terminal question.
+On a retry after `blocked`, re-check the blocked source or reconciliation issue
+and use any remaining safe relevant alternative;
+do not repeat an exhausted attempt without a changed precondition. Do not ask a
+terminal question.

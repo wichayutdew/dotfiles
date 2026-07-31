@@ -8,7 +8,7 @@ Original request:
 Approved scope artifact:
 {{reviewed.artifact}}
 
-Investigation handoff and claim ledger:
+Investigation handoff and claim ledger or blocked recovery handoff:
 {{last.summary}}
 
 Re-read the report at the exact path in the investigation handoff. Confirm its
@@ -40,4 +40,7 @@ If evidence cannot be obtained or reconciled after safe relevant read-only
 attempts, call `structured_output` alone with outcome `blocked`. Include the
 same concrete gap report, failed or unavailable source, and what evidence would
 resolve it. Use `retry` only for a transient validation-tool failure after safe
-alternatives were attempted. Do not ask a terminal question.
+alternatives were attempted. On a retry after `blocked`, re-check the blocked
+source or reconciliation issue and use any remaining safe relevant alternative;
+do not repeat an exhausted attempt without a changed precondition. Do not ask a
+terminal question.
