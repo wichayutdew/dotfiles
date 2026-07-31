@@ -35,12 +35,12 @@
       },
       "main": {
         "enabled": true,
-        "model": "anthropic-gateway/claude-opus-5",
+        "model": "anthropic-gateway/claude-sonnet-5",
         "thinking": "high"
       },
       "children": {
         "enabled": true,
-        "model": "anthropic-gateway/claude-opus-5",
+        "model": "anthropic-gateway/claude-sonnet-5",
         "thinking": "high",
         "autoFollow": {
           "blockers": false
@@ -143,7 +143,7 @@
         "defaultContext": "fresh"
       },
       "reviewer": {
-        "model": "anthropic-gateway/claude-opus-5",
+        "model": "anthropic-gateway/claude-sonnet-5",
         "thinking": "high",
         "systemPromptMode": "replace",
         "inheritProjectContext": true,
