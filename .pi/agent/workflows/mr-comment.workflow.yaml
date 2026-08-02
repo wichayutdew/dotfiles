@@ -80,8 +80,40 @@ steps:
       tools: [read, ls, bash]
       skills: *comment-fetch-skills
     transitions:
-      ready: plan
+      ready: checkout-source
       retry: fetch
+      blocked: $pause
+  checkout-source:
+    title: Check out the reviewed source branch
+    prompt:
+      file: steps/mr-comment/checkout-source.md
+    subagent:
+      agent: worker
+      context: fresh
+      timeoutMs: 900000
+      retryToolFailures: true
+      turnBudget:
+        maxTurns: 25
+        graceTurns: 3
+      toolBudget:
+        soft: 60
+        hard: 100
+        block: "*"
+    workspace:
+      bindOn: [ready]
+      allowedRoots: ["~/repositories/worktrees", "."]
+    permissions:
+      tools: [read, ls, bash]
+      mcp: *comment-mcp
+      skills: [caveman, receiving-code-review, coding-standards]
+      bash:
+        mode: unrestricted
+    requires:
+      tools: [read, ls, bash]
+      skills: [caveman, receiving-code-review, coding-standards]
+    transitions:
+      ready: plan
+      retry: checkout-source
       blocked: $pause
   plan:
     title: Propose a complete review-comment fix plan
