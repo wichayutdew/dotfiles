@@ -95,29 +95,32 @@ and current `position[base_sha]`, `position[start_sha]`,
 `position[head_sha]`, `position[position_type]`, `position[old_path]`,
 `position[new_path]`, and the applicable old or new line. The contract command
 for a GitLab discussion must be Fish-compatible and preserve multiline bodies:
-first assign the exact body with `set body '<body>'`, escaping every embedded
-apostrophe as `\''`, then invoke `glab --hostname <host> api --method POST
-projects/<project-id>/merge_requests/<iid>/discussions --form "body=$body"`
-followed by one `--form` per required position field. Keep these two lines
-together as the exact approved command snippet; do not replace the `set` with
-POSIX assignment syntax, inline the body into `--form`, or collapse its
-newlines. For example:
+wrap the exact body assignment and discussion request in `begin` and `end`.
+Inside the block, assign the body with `set body '<body>'`, escaping every
+embedded apostrophe as `\''`, then invoke `glab --hostname <host> api
+--method POST projects/<project-id>/merge_requests/<iid>/discussions --form
+"body=$body"` followed by one `--form` per required position field. Keep the
+entire block as the exact approved command snippet; do not replace `begin …
+end` or `set` with POSIX syntax, inline the body into `--form`, or collapse
+its newlines. For example:
 
 ```fish
-set body 'Exact comment line one
+begin
+    set body 'Exact comment line one
 Exact comment line two with an apostrophe: two'\''s-complement.
 [stable-marker]'
-glab --hostname gitlab.example.com api \
-  --method POST \
-  projects/123/merge_requests/4/discussions \
-  --form "body=$body" \
-  --form "position[base_sha]=30a497e7c99866d41224c4ab3720eb67fea3b115" \
-  --form "position[start_sha]=30a497e7c99866d41224c4ab3720eb67fea3b115" \
-  --form "position[head_sha]=c416579b65a63a93b378da32eae01d4dba5c8100" \
-  --form "position[position_type]=text" \
-  --form "position[old_path]=app/src/test/kotlin/org/example/AppTest.kt" \
-  --form "position[new_path]=app/src/test/kotlin/org/example/AppTest.kt" \
-  --form "position[new_line]=20"
+    glab --hostname gitlab.example.com api \
+        --method POST \
+        projects/123/merge_requests/4/discussions \
+        --form "body=$body" \
+        --form "position[base_sha]=30a497e7c99866d41224c4ab3720eb67fea3b115" \
+        --form "position[start_sha]=30a497e7c99866d41224c4ab3720eb67fea3b115" \
+        --form "position[head_sha]=c416579b65a63a93b378da32eae01d4dba5c8100" \
+        --form "position[position_type]=text" \
+        --form "position[old_path]=app/src/test/kotlin/org/example/AppTest.kt" \
+        --form "position[new_path]=app/src/test/kotlin/org/example/AppTest.kt" \
+        --form "position[new_line]=20"
+end
 ```
 
 For GitHub, first prove the authenticated review-comments listing endpoint with
