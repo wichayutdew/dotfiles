@@ -76,11 +76,13 @@ body says no actionable findings and includes the reviewed head SHA.
 
 Every command and effect value must occur literally and completely in the
 artifact. Commands must use only configured `glab api` or `gh api`, target the
-same review and current head, and contain no shell operators, substitutions,
-redirection, glob expansion, environment assignment, wrapper shell,
-credentials, or placeholders. Each body must end with a stable unique marker
-derived from the workflow, head SHA, path, and line so publish and verify
-stages can prove idempotence.
+same review and current head, and contain no redirection, glob expansion,
+wrapper shell, credentials, or placeholders. GitHub commands must be a single
+shell-free `gh api` invocation. A GitLab inline-discussion command may instead
+be the required Fish `begin … end` block below, containing only the body
+assignment and one `glab api` invocation. Each body must end with a stable
+unique marker derived from the workflow, head SHA, path, and line so publish
+and verify stages can prove idempotence.
 
 A clean review-summary effect uses `kind: "review-summary"`, the same host,
 canonical review URL and head SHA, exact public body, and deterministic marker;

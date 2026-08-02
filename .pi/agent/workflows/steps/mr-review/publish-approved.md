@@ -18,9 +18,10 @@ Parse exactly one fenced `json` Publication contract from the approved
 artifact. Require its top-level non-empty `actions` array and validate every
 action against the artifact's URL, host, current head SHA, finding or clean
 verdict, optional path/line, exact body, effect kind, and marker. Execute only
-exact `toolName: "bash"` commands copied
-literally from the approved contract. Never synthesize, normalize, repair,
-re-quote, or add an action.
+exact `toolName: "bash"` commands copied literally from the approved
+contract. An approved GitLab inline-discussion action may be the Fish `begin
+… end` block containing `set body` and one `glab api` call. Never
+synthesize, normalize, repair, re-quote, or add an action.
 
 Refresh the same-host review head and anchor using configured read-only
 `glab`/`gh` calls. If either changed, execute nothing and return `blocked`.
