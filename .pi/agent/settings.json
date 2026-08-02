@@ -1,6 +1,6 @@
 {
   "lastChangelogVersion": "0.81.1",
-  "defaultProvider": "openai-gateway",
+  "defaultProvider": "anthropic-gateway",
   "defaultModel": "claude-sonnet-5",
   "defaultThinkingLevel": "medium",
   "packages": [
