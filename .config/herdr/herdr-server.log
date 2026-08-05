@@ -1,0 +1,101 @@
+2026-08-05T11:42:36.267781Z  INFO herdr::api::server: api server listening path=/Users/wphongphanpa/.config/herdr/herdr.sock
+2026-08-05T11:42:36.269252Z  INFO herdr::app: using pane scrollback configuration pane_scrollback_limit_bytes=10000000
+2026-08-05T11:42:36.282256Z  INFO herdr::logging: checking for updates event="update.check.start" subsystem="update" outcome="started"
+2026-08-05T11:42:36.302224Z  INFO herdr::logging: spawning pane terminal event="pane.spawn.start" subsystem="pane" outcome="started" pane_id=1 rows=24 cols=80 scrollback_limit_bytes=10000000
+2026-08-05T11:42:36.307145Z  INFO herdr::logging: pane child spawned event="pane.spawned" subsystem="pane" outcome="ok" pane_id=1 pid=24537
+2026-08-05T11:42:36.307833Z  INFO herdr::logging: workspace created event="workspace.create" subsystem="workspace" outcome="ok" workspace_id="w1" pane_id=1
+2026-08-05T11:42:36.307842Z  INFO herdr::logging: workspace focused event="workspace.focus" subsystem="workspace" outcome="ok" workspace_id="w1"
+2026-08-05T11:42:36.307877Z  INFO herdr::logging: tab focused event="tab.focus" subsystem="tab" outcome="ok" workspace_id="w1" tab_id="w1:t1"
+2026-08-05T11:42:36.307901Z  INFO herdr::server::headless: created startup workspace cwd=/Users/wphongphanpa
+2026-08-05T11:42:36.308129Z  INFO herdr::server::headless: client protocol socket listening path=/Users/wphongphanpa/.config/herdr/herdr-client.sock
+2026-08-05T11:42:36.308154Z  INFO herdr::server::headless: herdr server started api_socket=/Users/wphongphanpa/.config/herdr/herdr.sock client_socket=/Users/wphongphanpa/.config/herdr/herdr-client.sock
+2026-08-05T11:42:36.308538Z  INFO herdr::logging: herdr starting event="app.startup" subsystem="server" outcome="started" pid=24484
+2026-08-05T11:42:36.353050Z  INFO herdr::server::headless: client connected client_id=2 cols=314 rows=76 cell_width_px=0 cell_height_px=0 render_encoding=SemanticFrame
+2026-08-05T11:42:41.313502Z  INFO herdr::logging: session saved event="persist.save" subsystem="persist" outcome="ok" path=/Users/wphongphanpa/.config/herdr/session.json workspaces=1
+2026-08-05T11:42:42.018000Z  INFO herdr::logging: spawning pane terminal event="pane.spawn.start" subsystem="pane" outcome="started" pane_id=2 rows=75 cols=288 scrollback_limit_bytes=10000000
+2026-08-05T11:42:42.025913Z  INFO herdr::logging: pane child spawned event="pane.spawned" subsystem="pane" outcome="ok" pane_id=2 pid=24847
+2026-08-05T11:42:42.026283Z  INFO herdr::logging: tab focused event="tab.focus" subsystem="tab" outcome="ok" workspace_id="w1" tab_id="w1:t2"
+2026-08-05T11:42:43.115096Z  INFO herdr::logging: pane child exited event="pane.exit" subsystem="pane" outcome="completed" pane_id=2 status="ExitStatus { code: 1, signal: Some(\"Hangup: 1\") }"
+2026-08-05T11:42:43.139293Z  INFO herdr::pane: pane session terminated pane=2 pid=24847 signal=Hangup
+2026-08-05T11:42:43.139590Z  WARN herdr::app::actions: PaneDied for unknown pane pane=2
+2026-08-05T11:42:45.288410Z  INFO herdr::logging: spawning pane terminal event="pane.spawn.start" subsystem="pane" outcome="started" pane_id=3 rows=75 cols=288 scrollback_limit_bytes=10000000
+2026-08-05T11:42:45.295901Z  INFO herdr::logging: pane child spawned event="pane.spawned" subsystem="pane" outcome="ok" pane_id=3 pid=24890
+2026-08-05T11:42:45.296158Z  INFO herdr::logging: tab focused event="tab.focus" subsystem="tab" outcome="ok" workspace_id="w1" tab_id="w1:t3"
+2026-08-05T11:42:45.826950Z  INFO herdr::logging: pane child exited event="pane.exit" subsystem="pane" outcome="completed" pane_id=3 status="ExitStatus { code: 1, signal: Some(\"Hangup: 1\") }"
+2026-08-05T11:42:45.850723Z  INFO herdr::pane: pane session terminated pane=3 pid=24890 signal=Hangup
+2026-08-05T11:42:45.851074Z  WARN herdr::app::actions: PaneDied for unknown pane pane=3
+2026-08-05T11:42:50.854034Z  INFO herdr::logging: session saved event="persist.save" subsystem="persist" outcome="ok" path=/Users/wphongphanpa/.config/herdr/session.json workspaces=1
+2026-08-05T11:42:53.526028Z  INFO herdr::pane: agent changed pane=1 previous_agent=None agent=Some(Codex) process=codex pgid=Some(24979)
+2026-08-05T11:42:59.730383Z  INFO herdr::logging: tab focused event="tab.focus" subsystem="tab" outcome="ok" workspace_id="w1" tab_id="w1:t1"
+2026-08-05T11:43:04.736346Z  INFO herdr::logging: session saved event="persist.save" subsystem="persist" outcome="ok" path=/Users/wphongphanpa/.config/herdr/session.json workspaces=1
+2026-08-05T11:43:17.893467Z  INFO herdr::logging: tab renamed event="tab.rename" subsystem="tab" outcome="ok" workspace_id="w1" tab_id="w1:t1"
+2026-08-05T11:43:20.893404Z  INFO herdr::pane: agent changed pane=1 previous_agent=Some(Codex) agent=None pgid=Some(24537)
+2026-08-05T11:43:22.901598Z  INFO herdr::logging: session saved event="persist.save" subsystem="persist" outcome="ok" path=/Users/wphongphanpa/.config/herdr/session.json workspaces=1
+2026-08-05T11:43:23.928665Z  INFO herdr::pane: agent changed pane=1 previous_agent=None agent=Some(Codex) process=codex pgid=Some(25162)
+2026-08-05T11:43:27.346605Z  INFO herdr::logging: spawning pane terminal event="pane.spawn.start" subsystem="pane" outcome="started" pane_id=4 rows=75 cols=288 scrollback_limit_bytes=10000000
+2026-08-05T11:43:27.352021Z  INFO herdr::logging: pane child spawned event="pane.spawned" subsystem="pane" outcome="ok" pane_id=4 pid=25249
+2026-08-05T11:43:27.352169Z  INFO herdr::logging: tab renamed event="tab.rename" subsystem="tab" outcome="ok" workspace_id="w1" tab_id="w1:t4"
+2026-08-05T11:43:27.352194Z  INFO herdr::logging: tab focused event="tab.focus" subsystem="tab" outcome="ok" workspace_id="w1" tab_id="w1:t4"
+2026-08-05T11:43:29.936394Z  INFO herdr::pane: agent changed pane=4 previous_agent=None agent=Some(Pi) process=pi pgid=Some(25285)
+2026-08-05T11:43:32.356603Z  INFO herdr::logging: session saved event="persist.save" subsystem="persist" outcome="ok" path=/Users/wphongphanpa/.config/herdr/session.json workspaces=1
+2026-08-05T11:44:00.363018Z  INFO herdr::logging: tab focused event="tab.focus" subsystem="tab" outcome="ok" workspace_id="w1" tab_id="w1:t1"
+2026-08-05T11:44:01.056968Z  INFO herdr::logging: tab focused event="tab.focus" subsystem="tab" outcome="ok" workspace_id="w1" tab_id="w1:t4"
+2026-08-05T11:44:06.064392Z  INFO herdr::logging: session saved event="persist.save" subsystem="persist" outcome="ok" path=/Users/wphongphanpa/.config/herdr/session.json workspaces=1
+2026-08-05T11:45:26.335057Z  INFO herdr::logging: integration action finished event="integration.action" subsystem="integration" outcome="ok" action="install" target="pi"
+2026-08-05T11:45:26.336341Z  INFO herdr::logging: integration action finished event="integration.action" subsystem="integration" outcome="ok" action="install" target="codex"
+2026-08-05T11:45:31.350518Z  INFO herdr::logging: session saved event="persist.save" subsystem="persist" outcome="ok" path=/Users/wphongphanpa/.config/herdr/session.json workspaces=1
+2026-08-05T11:45:41.118920Z  INFO herdr::logging: tab focused event="tab.focus" subsystem="tab" outcome="ok" workspace_id="w1" tab_id="w1:t1"
+2026-08-05T11:45:42.562318Z  INFO herdr::pane: agent changed pane=1 previous_agent=Some(Codex) agent=None pgid=Some(24537)
+2026-08-05T11:45:46.123879Z  INFO herdr::logging: session saved event="persist.save" subsystem="persist" outcome="ok" path=/Users/wphongphanpa/.config/herdr/session.json workspaces=1
+2026-08-05T11:46:30.519227Z  INFO herdr::logging: tab focused event="tab.focus" subsystem="tab" outcome="ok" workspace_id="w1" tab_id="w1:t4"
+2026-08-05T11:46:31.260520Z  INFO herdr::logging: tab focused event="tab.focus" subsystem="tab" outcome="ok" workspace_id="w1" tab_id="w1:t1"
+2026-08-05T11:46:34.944915Z  INFO herdr::logging: tab focused event="tab.focus" subsystem="tab" outcome="ok" workspace_id="w1" tab_id="w1:t4"
+2026-08-05T11:46:35.764005Z  INFO herdr::logging: tab focused event="tab.focus" subsystem="tab" outcome="ok" workspace_id="w1" tab_id="w1:t1"
+2026-08-05T11:46:36.477059Z  INFO herdr::logging: tab focused event="tab.focus" subsystem="tab" outcome="ok" workspace_id="w1" tab_id="w1:t4"
+2026-08-05T11:46:37.603365Z  INFO herdr::pane: agent changed pane=4 previous_agent=Some(Pi) agent=None pgid=Some(25249)
+2026-08-05T11:46:38.595728Z  INFO herdr::logging: tab focused event="tab.focus" subsystem="tab" outcome="ok" workspace_id="w1" tab_id="w1:t1"
+2026-08-05T11:46:39.205466Z  INFO herdr::logging: tab focused event="tab.focus" subsystem="tab" outcome="ok" workspace_id="w1" tab_id="w1:t4"
+2026-08-05T11:46:40.829032Z  INFO herdr::logging: tab focused event="tab.focus" subsystem="tab" outcome="ok" workspace_id="w1" tab_id="w1:t1"
+2026-08-05T11:46:42.401373Z  INFO herdr::logging: tab focused event="tab.focus" subsystem="tab" outcome="ok" workspace_id="w1" tab_id="w1:t4"
+2026-08-05T11:46:45.132709Z  INFO herdr::logging: tab focused event="tab.focus" subsystem="tab" outcome="ok" workspace_id="w1" tab_id="w1:t1"
+2026-08-05T11:46:50.139818Z  INFO herdr::logging: session saved event="persist.save" subsystem="persist" outcome="ok" path=/Users/wphongphanpa/.config/herdr/session.json workspaces=1
+2026-08-05T11:47:31.266253Z  INFO herdr::logging: tab focused event="tab.focus" subsystem="tab" outcome="ok" workspace_id="w1" tab_id="w1:t4"
+2026-08-05T11:47:34.008484Z  INFO herdr::logging: tab focused event="tab.focus" subsystem="tab" outcome="ok" workspace_id="w1" tab_id="w1:t1"
+2026-08-05T11:47:39.034532Z  INFO herdr::logging: session saved event="persist.save" subsystem="persist" outcome="ok" path=/Users/wphongphanpa/.config/herdr/session.json workspaces=1
+2026-08-05T11:48:24.648122Z  INFO herdr::logging: tab focused event="tab.focus" subsystem="tab" outcome="ok" workspace_id="w1" tab_id="w1:t4"
+2026-08-05T11:48:29.652617Z  INFO herdr::logging: session saved event="persist.save" subsystem="persist" outcome="ok" path=/Users/wphongphanpa/.config/herdr/session.json workspaces=1
+2026-08-05T11:48:32.987811Z  INFO herdr::server::headless: client resize client_id=2 cols=156 rows=76 cell_width_px=0 cell_height_px=0
+2026-08-05T11:48:45.230730Z  INFO herdr::server::headless: client resize client_id=2 cols=314 rows=76 cell_width_px=0 cell_height_px=0
+2026-08-05T11:48:46.548959Z  INFO herdr::logging: tab focused event="tab.focus" subsystem="tab" outcome="ok" workspace_id="w1" tab_id="w1:t1"
+2026-08-05T11:48:51.555143Z  INFO herdr::logging: session saved event="persist.save" subsystem="persist" outcome="ok" path=/Users/wphongphanpa/.config/herdr/session.json workspaces=1
+2026-08-05T11:52:58.545592Z  INFO herdr::pane: agent changed pane=1 previous_agent=None agent=Some(Pi) process=pi pgid=Some(55877)
+2026-08-05T11:53:07.218112Z  INFO herdr::pane: agent changed pane=1 previous_agent=None agent=Some(Pi) process=pi pgid=Some(55877)
+2026-08-05T11:53:11.175612Z  INFO herdr::pane: agent changed pane=1 previous_agent=Some(Pi) agent=None pgid=Some(24537)
+2026-08-05T11:53:15.892732Z  INFO herdr::logging: session saved event="persist.save" subsystem="persist" outcome="ok" path=/Users/wphongphanpa/.config/herdr/session.json workspaces=1
+2026-08-05T11:57:19.449455Z  INFO herdr::logging: tab focused event="tab.focus" subsystem="tab" outcome="ok" workspace_id="w1" tab_id="w1:t4"
+2026-08-05T11:57:22.856633Z  INFO herdr::logging: tab focused event="tab.focus" subsystem="tab" outcome="ok" workspace_id="w1" tab_id="w1:t1"
+2026-08-05T11:57:27.859610Z  INFO herdr::logging: session saved event="persist.save" subsystem="persist" outcome="ok" path=/Users/wphongphanpa/.config/herdr/session.json workspaces=1
+2026-08-05T11:57:49.365955Z  INFO herdr::logging: tab focused event="tab.focus" subsystem="tab" outcome="ok" workspace_id="w1" tab_id="w1:t4"
+2026-08-05T11:57:50.501854Z  INFO herdr::logging: tab focused event="tab.focus" subsystem="tab" outcome="ok" workspace_id="w1" tab_id="w1:t1"
+2026-08-05T11:57:51.305361Z  INFO herdr::logging: spawning pane terminal event="pane.spawn.start" subsystem="pane" outcome="started" pane_id=5 rows=75 cols=288 scrollback_limit_bytes=10000000
+2026-08-05T11:57:51.311819Z  INFO herdr::logging: pane child spawned event="pane.spawned" subsystem="pane" outcome="ok" pane_id=5 pid=60303
+2026-08-05T11:57:51.312252Z  INFO herdr::logging: workspace created event="workspace.create" subsystem="workspace" outcome="ok" workspace_id="w2" pane_id=5
+2026-08-05T11:57:51.312320Z  INFO herdr::logging: workspace focused event="workspace.focus" subsystem="workspace" outcome="ok" workspace_id="w2"
+2026-08-05T11:57:51.312346Z  INFO herdr::logging: tab focused event="tab.focus" subsystem="tab" outcome="ok" workspace_id="w2" tab_id="w2:t1"
+2026-08-05T11:57:56.317944Z  INFO herdr::logging: session saved event="persist.save" subsystem="persist" outcome="ok" path=/Users/wphongphanpa/.config/herdr/session.json workspaces=2
+2026-08-05T11:57:58.140639Z  INFO herdr::logging: workspace focused event="workspace.focus" subsystem="workspace" outcome="ok" workspace_id="w1"
+2026-08-05T11:57:58.140769Z  INFO herdr::logging: tab focused event="tab.focus" subsystem="tab" outcome="ok" workspace_id="w1" tab_id="w1:t1"
+2026-08-05T11:58:03.148713Z  INFO herdr::logging: session saved event="persist.save" subsystem="persist" outcome="ok" path=/Users/wphongphanpa/.config/herdr/session.json workspaces=2
+2026-08-05T11:58:37.843861Z  INFO herdr::logging: tab focused event="tab.focus" subsystem="tab" outcome="ok" workspace_id="w1" tab_id="w1:t4"
+2026-08-05T11:58:38.458670Z  INFO herdr::logging: pane child exited event="pane.exit" subsystem="pane" outcome="completed" pane_id=4 status="ExitStatus { code: 1, signal: Some(\"Hangup: 1\") }"
+2026-08-05T11:58:38.482966Z  INFO herdr::pane: pane session terminated pane=4 pid=25249 signal=Hangup
+2026-08-05T11:58:38.483494Z  WARN herdr::app::actions: PaneDied for unknown pane pane=4
+2026-08-05T11:58:43.488234Z  INFO herdr::logging: session saved event="persist.save" subsystem="persist" outcome="ok" path=/Users/wphongphanpa/.config/herdr/session.json workspaces=2
+2026-08-05T11:58:47.532538Z  INFO herdr::logging: workspace focused event="workspace.focus" subsystem="workspace" outcome="ok" workspace_id="w2"
+2026-08-05T11:58:47.532577Z  INFO herdr::logging: tab focused event="tab.focus" subsystem="tab" outcome="ok" workspace_id="w2" tab_id="w2:t1"
+2026-08-05T11:58:52.540484Z  INFO herdr::logging: session saved event="persist.save" subsystem="persist" outcome="ok" path=/Users/wphongphanpa/.config/herdr/session.json workspaces=2
+2026-08-05T11:58:56.116247Z  INFO herdr::logging: workspace closed event="workspace.close" subsystem="workspace" outcome="ok" workspace_id="w2"
+2026-08-05T11:58:56.118129Z  INFO herdr::logging: pane child exited event="pane.exit" subsystem="pane" outcome="completed" pane_id=5 status="ExitStatus { code: 1, signal: Some(\"Hangup: 1\") }"
+2026-08-05T11:58:56.138881Z  INFO herdr::pane: pane session terminated pane=5 pid=60303 signal=Hangup
+2026-08-05T11:58:56.139198Z  WARN herdr::app::actions: PaneDied for unknown pane pane=5
+2026-08-05T11:59:01.142549Z  INFO herdr::logging: session saved event="persist.save" subsystem="persist" outcome="ok" path=/Users/wphongphanpa/.config/herdr/session.json workspaces=1
