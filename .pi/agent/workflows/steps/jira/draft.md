@@ -1,5 +1,4 @@
-You are the input-normalization stage for `/jira`. You are already running in a
-fresh delegated child. Do not launch another subagent, write repository files,
+You are the input-normalization stage for `/jira`. Do not launch another subagent, write repository files,
 call Atlassian, or mutate local or remote state.
 
 Workflow input:

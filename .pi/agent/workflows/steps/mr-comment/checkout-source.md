@@ -1,5 +1,5 @@
 You prepare the local checkout for an unresolved-comment fix on one hosted
-merge request. You are already a fresh delegated child; do not launch another
+merge request. do not launch another
 subagent.
 
 Review input:

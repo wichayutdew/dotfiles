@@ -1,4 +1,3 @@
-# yaml-language-server: $schema=/Users/wphongphanpa/repositories/personal/pi-workflows/schemas/workflow.schema.json
 version: 1
 id: jira
 command: jira
@@ -23,23 +22,64 @@ steps:
         soft: 60
         hard: 100
         block: "*"
-    permissions:
-      tools: [read, ls, bash]
-      skills: &jira-draft-skills [caveman, coding-standards, brainstorming]
+    permissions: &a1
+      tools:
+        - read
+        - ls
+        - bash
+        - edit
+        - write
+        - mcp
+      mcp:
+        - context7
+        - atlassian
+        - gitlab
+        - figma
+        - agoda_skills
+        - glean
+        - sourcegraph
+        - grafana
+        - slack
+        - gh_grep
+        - superset
+      extensions:
+        - /
+      skills:
+        - brainstorming
+        - cavecrew
+        - caveman
+        - caveman-commit
+        - caveman-compress
+        - caveman-help
+        - caveman-review
+        - caveman-stats
+        - coding-standards
+        - commit-format
+        - dispatching-parallel-agents
+        - doc-templates
+        - executing-plans
+        - finishing-a-development-branch
+        - grafana-logs
+        - jira-ticket
+        - lint-commands
+        - plannotator-compound
+        - plannotator-setup-goal
+        - plannotator-visual-explainer
+        - receiving-code-review
+        - requesting-code-review
+        - search-code-sourcegraph
+        - start-on-call
+        - start-triage
+        - subagent-driven-development
+        - systematic-debugging
+        - test-driven-development
+        - using-git-worktrees
+        - using-superpowers
+        - verification-before-completion
+        - writing-plans
+        - writing-skills
       bash:
-        mode: allow-list
-        allow:
-          - executable: grep
-          - executable: head
-          - executable: ls
-          - executable: pwd
-          - executable: rg
-          - executable: stat
-          - executable: tail
-          - executable: wc
-    requires:
-      tools: [read, ls, bash]
-      skills: *jira-draft-skills
+        mode: unrestricted
     transitions:
       ready: plan
       retry: draft
@@ -60,31 +100,7 @@ steps:
         soft: 120
         hard: 200
         block: "*"
-    permissions:
-      tools: [read, ls, bash]
-      mcp: &jira-read-mcp
-        - atlassian/atlassian_getAccessibleAtlassianResources
-        - atlassian/atlassian_getVisibleJiraProjects
-        - atlassian/atlassian_getJiraProjectIssueTypesMetadata
-        - atlassian/atlassian_getJiraIssueTypeMetaWithFields
-        - atlassian/atlassian_getIssueLinkTypes
-        - atlassian/atlassian_searchJiraIssuesUsingJql
-        - atlassian/atlassian_getJiraIssue
-      skills: &jira-plan-skills [caveman, coding-standards, brainstorming]
-      bash:
-        mode: allow-list
-        allow:
-          - executable: grep
-          - executable: head
-          - executable: ls
-          - executable: pwd
-          - executable: rg
-          - executable: stat
-          - executable: tail
-          - executable: wc
-    requires:
-      tools: [read, ls, bash, mcp]
-      skills: *jira-plan-skills
+    permissions: *a1
     gate:
       provider: plannotator
       submitOutcome: submit
@@ -112,33 +128,7 @@ steps:
         soft: 100
         hard: 170
         block: "*"
-    permissions:
-      tools: [read, ls, bash]
-      mcp: &jira-write-mcp
-        - atlassian/atlassian_getAccessibleAtlassianResources
-        - atlassian/atlassian_getVisibleJiraProjects
-        - atlassian/atlassian_getJiraProjectIssueTypesMetadata
-        - atlassian/atlassian_getJiraIssueTypeMetaWithFields
-        - atlassian/atlassian_getIssueLinkTypes
-        - atlassian/atlassian_getJiraIssue
-        - atlassian/atlassian_createJiraIssue
-        - atlassian/atlassian_editJiraIssue
-        - atlassian/atlassian_createIssueLink
-      skills: &jira-create-skills [caveman, coding-standards, verification-before-completion]
-      bash:
-        mode: allow-list
-        allow:
-          - executable: grep
-          - executable: head
-          - executable: ls
-          - executable: pwd
-          - executable: rg
-          - executable: stat
-          - executable: tail
-          - executable: wc
-    requires:
-      tools: [read, ls, bash, mcp]
-      skills: *jira-create-skills
+    permissions: *a1
     transitions:
       ready: $done
       retry: create

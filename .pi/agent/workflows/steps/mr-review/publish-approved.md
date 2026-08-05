@@ -1,5 +1,5 @@
 You are the publication stage for an explicitly approved hosted-code-review
-artifact. You are already a fresh delegated child; do not broaden, rewrite, or
+artifact. do not broaden, rewrite, or
 re-review the approved content and do not launch another subagent.
 
 Original workflow input:

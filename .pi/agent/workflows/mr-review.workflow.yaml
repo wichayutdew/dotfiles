@@ -1,4 +1,3 @@
-# yaml-language-server: $schema=/Users/wphongphanpa/repositories/personal/pi-workflows/schemas/workflow.schema.json
 version: 1
 id: mr-review
 command: mr-review
@@ -23,66 +22,64 @@ steps:
         soft: 100
         hard: 180
         block: "*"
-    permissions:
-      tools: [read, ls, bash]
-      mcp: &review-mcp
-        - gitlab/gitlab_get_merge_request
-        - gitlab/gitlab_get_merge_request_commits
-        - gitlab/gitlab_get_merge_request_diffs
-        - gitlab/gitlab_get_merge_request_pipelines
-        - gitlab/gitlab_get_pipeline_jobs
-        - gitlab/gitlab_get_merge_request_conflicts
-        - gitlab/gitlab_search
-        - context7/resolve-library-id
-        - context7/query-docs
-        - sourcegraph/code_finder
-        - sourcegraph/commit_search
-        - sourcegraph/diff_search
-        - sourcegraph/keyword_search
-        - sourcegraph/list_files
-        - sourcegraph/list_repos
-        - sourcegraph/nls_search
-        - sourcegraph/read_file
-        - gh_grep/searchGitHub
-      extensions: [pi-web-tools]
+    permissions: &a1
+      tools:
+        - read
+        - ls
+        - bash
+        - edit
+        - write
+        - mcp
+      mcp:
+        - context7
+        - atlassian
+        - gitlab
+        - figma
+        - agoda_skills
+        - glean
+        - sourcegraph
+        - grafana
+        - slack
+        - gh_grep
+        - superset
+      extensions:
+        - /
       skills:
-        &review-fetch-skills [
-          caveman,
-          coding-standards,
-          caveman-review,
-          brainstorming,
-        ]
+        - brainstorming
+        - cavecrew
+        - caveman
+        - caveman-commit
+        - caveman-compress
+        - caveman-help
+        - caveman-review
+        - caveman-stats
+        - coding-standards
+        - commit-format
+        - dispatching-parallel-agents
+        - doc-templates
+        - executing-plans
+        - finishing-a-development-branch
+        - grafana-logs
+        - jira-ticket
+        - lint-commands
+        - plannotator-compound
+        - plannotator-setup-goal
+        - plannotator-visual-explainer
+        - receiving-code-review
+        - requesting-code-review
+        - search-code-sourcegraph
+        - start-on-call
+        - start-triage
+        - subagent-driven-development
+        - systematic-debugging
+        - test-driven-development
+        - using-git-worktrees
+        - using-superpowers
+        - verification-before-completion
+        - writing-plans
+        - writing-skills
       bash:
-        mode: allow-list
-        allow: &review-inspection-bash
-          - executable: grep
-          - executable: head
-          - executable: ls
-          - executable: pwd
-          - executable: rg
-          - executable: stat
-          - executable: tail
-          - executable: wc
-          - executable: git
-            argsPrefixes:
-              [
-                [status],
-                [diff],
-                [grep],
-                [log],
-                [ls-files],
-                [remote, -v],
-                [remote, get-url],
-                [rev-parse],
-                [show],
-              ]
-          - executable: gh
-            argsPrefixes: [[pr, view], [pr, diff], [pr, checks], [api]]
-          - executable: glab
-            argsPrefixes: [[mr, view], [mr, diff], [api]]
-    requires:
-      tools: [read, ls, bash]
-      skills: *review-fetch-skills
+        mode: unrestricted
     transitions:
       fetched: review
       blocked: $pause
@@ -102,24 +99,7 @@ steps:
         soft: 100
         hard: 180
         block: "*"
-    permissions:
-      tools: [read, ls, bash]
-      mcp: *review-mcp
-      extensions: [pi-web-tools]
-      skills:
-        &review-skills [
-          caveman,
-          coding-standards,
-          caveman-review,
-          systematic-debugging,
-          verification-before-completion,
-        ]
-      bash:
-        mode: allow-list
-        allow: *review-inspection-bash
-    requires:
-      tools: [read, ls, bash]
-      skills: *review-skills
+    permissions: *a1
     gate:
       provider: plannotator
       submitOutcome: submit
@@ -146,19 +126,7 @@ steps:
         soft: 40
         hard: 70
         block: "*"
-    permissions:
-      tools: [bash]
-      skills:
-        &publish-skills [
-          caveman,
-          caveman-review,
-          verification-before-completion,
-        ]
-      bash:
-        mode: unrestricted
-    requires:
-      tools: [bash]
-      skills: *publish-skills
+    permissions: *a1
     transitions:
       published: verify
       blocked: $pause
@@ -178,19 +146,7 @@ steps:
         soft: 40
         hard: 70
         block: "*"
-    permissions:
-      tools: [bash]
-      skills: *publish-skills
-      bash:
-        mode: allow-list
-        allow:
-          - executable: gh
-            argsPrefixes: [[pr, view], [api]]
-          - executable: glab
-            argsPrefixes: [[mr, view], [api]]
-    requires:
-      tools: [bash]
-      skills: *publish-skills
+    permissions: *a1
     transitions:
       verified: $done
       failed: publish
