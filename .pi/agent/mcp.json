@@ -43,7 +43,10 @@
     "glean": {
       "url": "${GLEAN_MCP}",
       "auth": "oauth",
-      "directTools": true
+      "directTools": [
+        "read_document",
+        "search"
+      ]
     },
     "sourcegraph": {
       "url": "${SOURCEGRAPH_MCP}",

@@ -111,5 +111,6 @@
   "autocompleteMaxVisible": 3,
   "transport": "auto",
   "quietStartup": false,
-  "outputPad": 1
+  "outputPad": 1,
+  "theme": "light"
 }
