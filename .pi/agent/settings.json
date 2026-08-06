@@ -9,14 +9,10 @@
     "npm:pi-mcp-adapter",
     "npm:@plannotator/pi-extension",
     "npm:pi-subagents",
-    "npm:pi-hermes-memory",
-    "npm:context-mode",
-    "npm:@llttlltt/poimandres-pi",
     "npm:pi-zentui",
     "git:github.com/obra/superpowers",
     "npm:@wichayutdew/pi-workflows"
   ],
-  "theme": "poimandres white/poimandres storm",
   "terminal": {
     "showTerminalProgress": true,
     "clearOnShrink": true
