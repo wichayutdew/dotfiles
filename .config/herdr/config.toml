@@ -1,3 +1,4 @@
+onboarding = false
 [ui.toast]
 delivery = "terminal"
 
@@ -7,6 +8,9 @@ auto_switch = false
 
 [ui]
 show_agent_labels_on_pane_borders = true
+
+[experimental]
+kitty_graphics = true
 
 [keys]
 workspace_picker = "prefix+w"
