@@ -58,7 +58,6 @@
       "planner": {
         "model": "openai-gateway/gpt-5.6-terra",
         "thinking": "high",
-        "tools": false,
         "acceptanceRole": "read-only",
         "completionGuard": false,
         "inheritProjectContext": true,
@@ -78,7 +77,6 @@
       "scout": {
         "model": "openai-gateway/gpt-5.6-terra",
         "thinking": "low",
-        "tools": false,
         "acceptanceRole": "read-only",
         "completionGuard": false,
         "inheritProjectContext": true,
@@ -88,7 +86,6 @@
       "worker": {
         "model": "openai-gateway/gpt-5.6-terra",
         "thinking": "high",
-        "tools": false,
         "acceptanceRole": "writer",
         "inheritProjectContext": true,
         "inheritSkills": true,
@@ -97,7 +94,6 @@
       "reviewer": {
         "model": "openai-gateway/gpt-5.6-terra",
         "thinking": "high",
-        "tools": false,
         "acceptanceRole": "read-only",
         "completionGuard": false,
         "inheritProjectContext": true,
