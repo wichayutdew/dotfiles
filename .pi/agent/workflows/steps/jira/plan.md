@@ -75,7 +75,7 @@ merge, deployment, or production validation only when that delivery work is
 applicable and source-backed. Keep background, implementation, and risks
 readable in short bullets.
 
-Call `structured_output` exactly once with `submit`, `retry`, or `blocked`. Use
+Call `workflow_complete_step` exactly once with `submit`, `retry`, or `blocked`. Use
 `retry` only for a transient read-only Atlassian failure after safe equivalent
 reads. Use `blocked` when required Jira evidence cannot support a safe,
 reviewable creation plan.

@@ -8,7 +8,6 @@
     "npm:@bitcraft-apps/pi-web-tools",
     "npm:pi-mcp-adapter",
     "npm:@plannotator/pi-extension",
-    "npm:pi-subagents",
     "npm:pi-zentui",
     "git:github.com/obra/superpowers",
     "npm:@wichayutdew/pi-workflows"
@@ -23,84 +22,6 @@
     "enabled": true,
     "reserveTokens": 32768,
     "keepRecentTokens": 24000
-  },
-  "subagents": {
-    "watchdog": {
-      "enabled": true,
-      "autoFollow": {
-        "blockers": false
-      },
-      "main": {
-        "enabled": true,
-        "model": "openai-gateway/gpt-5.6-terra",
-        "thinking": "high"
-      },
-      "children": {
-        "enabled": false
-      }
-    },
-    "agentOverrides": {
-      "context-builder": {
-        "tools": false,
-        "inheritProjectContext": true,
-        "inheritSkills": true
-      },
-      "delegate": {
-        "tools": false,
-        "inheritProjectContext": true,
-        "inheritSkills": true
-      },
-      "oracle": {
-        "tools": false,
-        "inheritProjectContext": true,
-        "inheritSkills": true
-      },
-      "planner": {
-        "model": "openai-gateway/gpt-5.6-terra",
-        "thinking": "high",
-        "acceptanceRole": "read-only",
-        "completionGuard": false,
-        "inheritProjectContext": true,
-        "inheritSkills": true,
-        "defaultContext": "fresh"
-      },
-      "researcher": {
-        "model": "openai-gateway/gpt-5.6-terra",
-        "thinking": "medium",
-        "tools": false,
-        "acceptanceRole": "read-only",
-        "completionGuard": false,
-        "inheritProjectContext": true,
-        "inheritSkills": true,
-        "defaultContext": "fresh"
-      },
-      "scout": {
-        "model": "openai-gateway/gpt-5.6-terra",
-        "thinking": "low",
-        "acceptanceRole": "read-only",
-        "completionGuard": false,
-        "inheritProjectContext": true,
-        "inheritSkills": true,
-        "defaultContext": "fresh"
-      },
-      "worker": {
-        "model": "openai-gateway/gpt-5.6-terra",
-        "thinking": "high",
-        "acceptanceRole": "writer",
-        "inheritProjectContext": true,
-        "inheritSkills": true,
-        "defaultContext": "fresh"
-      },
-      "reviewer": {
-        "model": "openai-gateway/gpt-5.6-terra",
-        "thinking": "high",
-        "acceptanceRole": "read-only",
-        "completionGuard": false,
-        "inheritProjectContext": true,
-        "inheritSkills": true,
-        "defaultContext": "fresh"
-      }
-    }
   },
   "enableSkillCommands": false,
   "editorPaddingX": 2,

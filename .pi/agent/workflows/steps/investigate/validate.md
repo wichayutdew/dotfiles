@@ -34,13 +34,13 @@ never decorative.
 
 If all material claims have sufficient support, the report accurately states
 its uncertainty, and it passes the reader-clarity review, call
-`structured_output` alone with outcome `approved`. Include the report path,
+`workflow_complete_step` alone with outcome `approved`. Include the report path,
 validated claims and sources, validation limits, and a concise approval basis
 in the summary.
 
 If a material claim is contradicted, unsupported, stale, missing a source, or
 outside approved scope, or the reader-clarity review finds a problem, call
-`structured_output` alone with outcome `gaps` so investigation can correct the
+`workflow_complete_step` alone with outcome `gaps` so investigation can correct the
 report. The summary must be a concrete gap report with each affected report
 claim or section, the fresh evidence or missing source, why it conflicts or is
 insufficient, and the smallest required correction. For each reader-clarity
@@ -49,7 +49,7 @@ identify the preferred concise form, and require the smallest safe correction.
 Do not silently approve a doubtful report.
 
 If evidence cannot be obtained or reconciled after safe relevant read-only
-attempts, call `structured_output` alone with outcome `blocked`. Include the
+attempts, call `workflow_complete_step` alone with outcome `blocked`. Include the
 same concrete gap report, failed or unavailable source, and what evidence would
 resolve it. Use `retry` only for a transient validation-tool failure after safe
 alternatives were attempted. On a retry after `blocked`, re-check the blocked
