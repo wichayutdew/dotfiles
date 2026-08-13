@@ -4,6 +4,7 @@
 # except these directories
 !/.config
 /.config/github-copilot
+/.config/raycast-x
 /.config/raycast
 /.config/jgit
 /.config/karabiner
