@@ -52,5 +52,5 @@ Then include `## Stories`, with one numbered Story containing numeric ID, key,
 URL, Epic membership evidence, dependency evidence, and any approved
 references. Include `## Creation ledger` with the preflight mapping and every
 created or already-confirmed object. Keep the report concise and do not expose
-credentials. Call `workflow_complete_step` exactly once with `ready`, `retry`, or
+credentials. Call `structured_output` exactly once with `ready`, `retry`, or
 `blocked`.

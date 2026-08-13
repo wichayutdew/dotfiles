@@ -37,5 +37,5 @@ Return `ready` with this self-contained Markdown summary:
 
 Use short headings and bullets. No Jira issue exists yet. Use `retry` only for a
 transient local read failure after a safe equivalent read. Use `blocked` for
-invalid input or missing source evidence. Call `workflow_complete_step` exactly once
+invalid input or missing source evidence. Call `structured_output` exactly once
 with `ready`, `retry`, or `blocked`.
