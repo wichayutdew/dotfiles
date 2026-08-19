@@ -1,5 +1,6 @@
 [tools]
 bun = "latest"
+dotnet = "10.0.400"
 java = "zulu-21"
 node = "25"
 pnpm = "latest"
@@ -7,3 +8,4 @@ poetry = "latest"
 python = "3.13"
 ruby = "3.4.9"
 rust = "latest"
+yarn = "1.22.19"
