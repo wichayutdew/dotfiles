@@ -3,9 +3,9 @@
   "private": true,
   "dependencies": {
     "@bitcraft-apps/pi-web-tools": "^1.6.0",
-    "@plannotator/pi-extension": "^0.26.8",
+    "@plannotator/pi-extension": "^0.27.4",
     "@wichayutdew/pi-workflows": "^2.6.0",
-    "pi-mcp-adapter": "^2.22.0",
-    "pi-zentui": "^0.18.1"
+    "pi-mcp-adapter": "^2.26.1",
+    "pi-zentui": "^0.20.1"
   }
 }

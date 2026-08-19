@@ -13,6 +13,39 @@ const reasoningModelConfig = {
   reasoning: true,
 } as const;
 
+const geminiFlashModelConfig = {
+  input: ["text"],
+  contextWindow: 1048576,
+  maxTokens: 65536,
+  cost: {
+    input: 0.375,
+    output: 1.875,
+    cacheRead: 0.0375,
+    cacheWrite: 0.0208333333333,
+  },
+} as const;
+
+const grokModelConfig = {
+  input: ["text"],
+  contextWindow: 500000,
+  maxTokens: 128000,
+  cost: {
+    input: 2,
+    output: 6,
+    cacheRead: 0.5,
+    cacheWrite: 0,
+  },
+  tiers: [
+    {
+      inputTokensAbove: 200000,
+      input: 4,
+      output: 12,
+      cacheRead: 1,
+      cacheWrite: 0,
+    },
+  ],
+} as const;
+
 const sonnetModelConfig = {
   ...reasoningModelConfig,
   cost: { input: 2, output: 10, cacheRead: 0.2, cacheWrite: 2.5 },
@@ -106,9 +139,35 @@ export default function registerGatewayModels(pi: ExtensionAPI) {
     ],
   });
 
+  pi.registerProvider("google-gateway", {
+    baseUrl: gatewayUrl,
+    api: "openai-responses",
+    apiKey: "$GENAI_API_KEY",
+    models: [
+      {
+        id: "gemini-3.7-flash",
+        name: "gemini-3.7-flash",
+        ...geminiFlashModelConfig,
+      },
+    ],
+  });
+
+  pi.registerProvider("xai-gateway", {
+    baseUrl: gatewayUrl,
+    api: "openai-responses",
+    apiKey: "$GENAI_API_KEY",
+    models: [
+      {
+        id: "grok-4.6",
+        name: "grok-4.6",
+        ...grokModelConfig,
+      },
+    ],
+  });
+
   pi.on("before_provider_request", (event, ctx) => {
     if (
-      ctx.model?.provider !== "openai-gateway" ||
+      !["openai-gateway", "google-gateway", "xai-gateway"].includes(ctx.model?.provider ?? "") ||
       ctx.model.api !== "openai-responses" ||
       typeof event.payload !== "object" ||
       event.payload === null ||
