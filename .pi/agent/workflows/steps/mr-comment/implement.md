@@ -25,8 +25,9 @@ commit or other side effect. Use repository-native commands from the approved
 appendix, but diagnose a failed invocation and apply safe task-level resume
 guidance when present. Do not weaken checks or broaden mutation scope. Use
 test-driven development where meaningful, run the complete worker validation,
-stage only approved files, and create the approved commit only when no
-equivalent commit already exists.
+stage all necessary changed files (including any unmentioned files strictly
+required for the fix to function, format, lint, or build cleanly), and create
+the approved commit only when no equivalent commit already exists.
 
 Do not push, post replies, resolve discussions, approve, merge, close, delete,
 or mutate any remote system in this step.
