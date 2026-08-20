@@ -1,25 +1,50 @@
-# Prerequisites to clone the repo
-  ```bash
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    brew install --cask 1password
-  ```
-  - Login to 1Password, then clone this Repo
+# Dotfiles & Workstation Setup
 
-# Device Setup
-  - Starts with `cd .config`
-  - run `bash setup.sh`
-  - restart terminal to make Fish default sh
-  - run `fish init.fish`
-  - to add env variable, add `set -gx SECRET_NAME ${SECRET}` to `/Users/wphongphanpa/.config/fish/conf.d/environment.fish`
+Personal environment bootstrap and configuration.
 
-# Device config
-  - cmd+` = change language
-  - cmd+space = Raycast
-  - Hot corner bottom right = show desktop
+## Setup Flow
 
-# Browser Extension
-- Vimium keymap
+```mermaid
+flowchart TD
+    A[Install Homebrew & 1Password] --> B[Login 1Password & Clone Repo]
+    B --> C[Run .config/setup.sh]
+    C --> D[Restart Terminal -> Fish Shell]
+    D --> E[Run fish init.fish]
+    E --> F[Configure Secrets in environment.fish]
 ```
+
+## Quick Start
+
+```bash
+# 1. Prerequisites
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+brew install --cask 1password
+
+# 2. Setup
+cd .config
+bash setup.sh
+
+# 3. Initialize Fish
+fish init.fish
+```
+
+### Environment Secrets
+Add custom environment variables to `~/.config/fish/conf.d/environment.fish`:
+```fish
+set -gx SECRET_NAME ${SECRET}
+```
+
+## System Shortcuts
+
+| Shortcut | Action |
+|---|---|
+| `Cmd + \`` | Change input language |
+| `Cmd + Space` | Raycast launcher |
+| Hot corner (bottom right) | Show desktop |
+
+## Vimium Keymaps
+
+```vim
 unmap J
 unmap K
 map J nextTab

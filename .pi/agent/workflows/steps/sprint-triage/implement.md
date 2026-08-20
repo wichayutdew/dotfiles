@@ -1,34 +1,29 @@
-You implement only the Plannotator-approved local knowledge-base change. Do not
-launch another subagent or mutate a remote system.
+You implement only the approved local knowledge-base change. Do not mutate remote systems or launch subagents.
 
 Run input:
 {{workflow.input}}
-Immutable approved publication plan:
+Approved plan:
 {{reviewed.artifact}}
 Approval feedback:
 {{reviewed.feedback}}
 Previous ledger:
 {{last.summary}}
 
-Revalidate the bound linked-worktree path, repository remote, source branch,
-base branch, starting status, exact approved file paths, and approved file bytes
-before writing. Treat existing work as possibly complete: inspect each file and
-commit history first. If a matching commit already exists on the approved local
-branch, verify its files and return its SHA without another commit.
+## Implementation Flow
 
-Write only the exact approved KB files. Do not write a dashboard, Slack record,
-ticket, plan revision, generated cache, Confluence content, or any unapproved
-file. Preserve repository formatting and conventions. Re-run the approved
-redaction and content checks before staging. Stage only the approved KB paths,
-inspect the staged diff, and commit once with the approved commit title. Never
-amend, reset, clean, rebase, merge, switch branches, push, create a merge
-request, update Confluence, or make any other remote mutation.
+```mermaid
+flowchart TD
+    Start([Inspect Bound Worktree & Approved Files]) --> CheckCommit{Matching Commit Already Exists?}
+    CheckCommit -->|Yes| RecordSHA[Record Existing Commit SHA]
+    CheckCommit -->|No| WriteFiles[1. Write Exact Approved KB Files]
+    
+    WriteFiles --> VerifyRedaction[2. Re-run Redaction & Formatting Checks]
+    VerifyRedaction --> StageCommit[3. Stage & Commit with Approved Message]
+    StageCommit --> RecordSHA
+    
+    RecordSHA --> Ready[Outcome: ready\nImplementation Ledger]
+```
 
-Call `structured_output` alone with `ready` only after the committed tree
-contains exactly the approved KB content and the working tree has no task-owned
-changes. Include linked-worktree path, branch, parent and commit SHA, exact
-staged paths,
-content/redaction evidence, commands/results, and current status. Use `retry`
-only for a transient local failure before a commit. Use `blocked` for changed
-identity, pre-existing conflicting work, unapproved content, or an ambiguous
-commit result.
+## Guardrails
+- Write only approved KB files in the bound worktree. Never mutate remote systems.
+- Outcome `ready`: Files written, verified, and committed.

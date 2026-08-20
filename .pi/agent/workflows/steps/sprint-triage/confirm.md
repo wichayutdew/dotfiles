@@ -1,25 +1,25 @@
-You independently confirm the approved sprint-triage publication. Do not launch
-another subagent or modify local or remote state.
+You independently confirm the approved sprint-triage publication. Stay read-only; do not launch subagents.
 
 Run input:
 {{workflow.input}}
-Immutable approved publication plan:
+Approved plan:
 {{reviewed.artifact}}
 Publication ledger:
 {{last.summary}}
 
-Reread the bound linked-worktree status, committed branch, matching remote ref,
-approved GitLab MR, and configured Confluence page. Use enabled GitLab MCP to read the
-recorded MR and enabled Atlassian MCP to read the page. Verify exactly one
-approved source branch, base branch, title, description, and committed KB
-diff; verify the exact stable marker and append body occur once in the current
-page. Check that no unapproved local or remote action appears in the publication
-ledger.
+## Confirmation Flow
 
-Call `structured_output` alone with `ready` only when the non-force push, one
-MR creation/read, and one marked Confluence append/read are independently
-observable and every approved criterion remains true. Include remote commit,
-MR ID/URL, page identity, marker evidence, and final local status. Use `retry`
-only for a transient read failure. Use `blocked` for a missing, stale,
-duplicated, divergent, or ambiguous effect; retain the full effect ledger and
-do not attempt remediation.
+```mermaid
+flowchart TD
+    Start([Read Independent Remote State]) --> VerifyGitLab[1. Verify GitLab MR & Branch via GitLab MCP]
+    VerifyGitLab --> VerifyConfluence[2. Verify Confluence Page & Unique Marker via Atlassian MCP]
+    VerifyConfluence --> CheckLedger{No Unapproved Mutations in Ledger?}
+    
+    CheckLedger -->|Yes: All Verified| Ready[Outcome: ready\nFinal Confirmation Summary]
+    CheckLedger -->|No / Missing Effect| BlockedState[Outcome: blocked\nPublication mismatch]
+```
+
+## Outcomes
+- `ready`: GitLab MR, Confluence append, and branch verified independently.
+- `retry`: Transient read-only API failure.
+- `blocked`: Missing, duplicate, or divergent remote effect.
