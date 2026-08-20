@@ -18,9 +18,10 @@ the approved action ambiguous, block before writing.
 
 Perform remaining actions in this order only:
 1. Non-force push the approved committed branch to the verified matching remote.
-2. Use `gitlab_create_merge_request` exactly once for the approved project,
-   source/target branches, title, and description; immediately use
-   `gitlab_get_merge_request` to reread the returned MR and verify all fields.
+2. Use `gitlab_gitlab_create_merge_request` exactly once for the approved
+   project, source/target branches, title, and description; immediately use
+   `gitlab_gitlab_get_merge_request` to reread the returned MR and verify all
+   fields.
 3. Reread the configured Confluence page immediately before the update. Confirm
    the exact marker is still absent, append only the approved marker and body,
    then reread the page through Atlassian MCP and confirm the exact appended
