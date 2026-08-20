@@ -6,14 +6,15 @@ Run input:
 Checkout ledger:
 {{last.summary}}
 
-Revalidate the exact profile, inclusive dates, timezone, Grafana dashboard UID,
-and unique panel title from the checkout ledger. Convert the inclusive local
-calendar dates to an explicit UTC start and exclusive UTC end. Use only enabled
-Grafana MCP reads to retrieve the configured dashboard and panel definition.
-Block if the UID, unique title, datasource, query, profile filter, or time range
-cannot be resolved without guessing. Execute only the panel's supported Loki or
-Elasticsearch query through its configured datasource. Preserve the panel query
-semantics; bind the configured profile and each queried interval rather than
+Revalidate the configured support profile, inclusive dates, timezone, Grafana
+dashboard UID, and unique panel title from the checkout ledger. Convert the
+inclusive local calendar dates to an explicit UTC start and exclusive UTC end.
+Use only enabled Grafana MCP reads to retrieve the configured dashboard and
+panel definition. Block if the UID, unique title, datasource, query, `profiles`
+variable, or time range cannot be resolved without guessing. Execute only the
+panel's supported Loki or Elasticsearch query through its configured datasource.
+Preserve the panel query semantics; bind the configured support profile as the
+exact dashboard `profiles` variable and bind each queried interval rather than
 inventing a query.
 
 Grafana result limits can hide tickets. For every query response, record its

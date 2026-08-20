@@ -3,19 +3,17 @@
 version: 1
 supportProfile: REPLACE_WITH_SUPPORT_PROFILE
 grafana:
-  # Keep the user-facing link with the selectors required for collection.
-  dashboardUrl: REPLACE_WITH_GRAFANA_DASHBOARD_URL
   dashboardUid: REPLACE_WITH_RESOLVED_DASHBOARD_UID
   panelTitle: REPLACE_WITH_UNIQUE_PANEL_TITLE
   timeZone: REPLACE_WITH_IANA_TIME_ZONE
 knowledgeBase:
   repositoryUrl: REPLACE_WITH_GITLAB_REPOSITORY_URL
+  # Existing clean Git checkout. Workflow creates a linked worktree from it.
   localRepositoryPath: REPLACE_WITH_LOCAL_KNOWLEDGE_BASE_REPOSITORY_PATH
   projectId: REPLACE_WITH_GITLAB_PROJECT_ID
   targetBranch: main
   # Must be inside ~/repositories/worktrees.
   workspaceRoot: REPLACE_WITH_WORKTREE_ROOT
 confluence:
-  pageUrl: REPLACE_WITH_CONFLUENCE_PAGE_URL
   cloudId: REPLACE_WITH_CONFLUENCE_CLOUD_ID
   pageId: REPLACE_WITH_CONFLUENCE_PAGE_ID
