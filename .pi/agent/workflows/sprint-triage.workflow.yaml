@@ -1,0 +1,147 @@
+version: 1
+id: sprint-triage
+command: sprint-triage
+description: Collect sprint support evidence, approve triage guidance, and publish it safely
+start: checkout
+maxStepVisits: 16
+summaryMaxChars: 30000
+steps:
+  checkout:
+    title: Validate targets and create a bound knowledge-base checkout
+    prompt:
+      file: steps/sprint-triage/checkout.md
+    agent: worker
+    workspace:
+      bindOn:
+        - ready
+      allowedRoots:
+        - ~/repositories/worktrees
+    permissions:
+      tools: [read, ls, bash, edit, write]
+      mcp: []
+      extensions: [/]
+      skills: [coding-standards, caveman]
+      bash:
+        mode: unrestricted
+    transitions:
+      ready: collect
+      retry: checkout
+      blocked: $pause
+  collect:
+    title: Collect complete support-ticket and Slack-thread evidence
+    prompt:
+      file: steps/sprint-triage/collect.md
+    agent: scout
+    permissions:
+      tools: [read, ls, mcp]
+      mcp: [grafana, slack]
+      extensions: [/]
+      skills: [coding-standards, caveman]
+    transitions:
+      ready: draft
+      retry: collect
+      blocked: $pause
+  draft:
+    title: Draft redacted triage knowledge and a decision tree
+    prompt:
+      file: steps/sprint-triage/draft.md
+    agent: worker
+    permissions:
+      tools: [read, ls, bash, edit, write, mcp]
+      mcp: [atlassian]
+      extensions: [/]
+      skills: [coding-standards, caveman]
+      bash:
+        mode: unrestricted
+    transitions:
+      ready: plan
+      retry: draft
+      blocked: $pause
+  plan:
+    title: Approve exact knowledge-base and Confluence publication
+    prompt:
+      file: steps/sprint-triage/plan.md
+    agent: planner
+    permissions:
+      tools: [read, ls, bash, edit, write]
+      mcp: []
+      extensions: [/]
+      skills: [coding-standards, caveman]
+      bash:
+        mode: unrestricted
+    gate:
+      provider: plannotator
+      submitOutcome: submit
+      approvedOutcome: approved
+      rejectedOutcome: changes-requested
+      timeoutMs: 30000
+    transitions:
+      approved: implement
+      changes-requested: plan
+      retry: plan
+      blocked: $pause
+  implement:
+    title: Write and commit approved knowledge-base content
+    prompt:
+      file: steps/sprint-triage/implement.md
+    agent: worker
+    permissions:
+      tools: [read, ls, bash, edit, write]
+      mcp: []
+      extensions: [/]
+      skills: [coding-standards, caveman]
+      bash:
+        mode: unrestricted
+    transitions:
+      ready: verify
+      retry: implement
+      blocked: $pause
+  verify:
+    title: Independently verify approved triage content and publication preconditions
+    prompt:
+      file: steps/sprint-triage/verify.md
+    agent: reviewer
+    permissions:
+      tools: [read, ls, bash, edit, write]
+      mcp: []
+      extensions: [/]
+      skills: [coding-standards, caveman]
+      bash:
+        mode: unrestricted
+    transitions:
+      ready: publish
+      failed: implement
+      retry: verify
+      blocked: $pause
+  publish:
+    title: Push one approved branch and publish one MR and page append
+    prompt:
+      file: steps/sprint-triage/publish.md
+    agent: worker
+    permissions:
+      tools: [read, ls, bash, edit, write, mcp]
+      mcp: [atlassian, gitlab]
+      extensions: [/]
+      skills: [coding-standards, caveman]
+      bash:
+        mode: unrestricted
+    transitions:
+      ready: confirm
+      retry: publish
+      blocked: $pause
+  confirm:
+    title: Confirm the published merge request and Confluence append
+    prompt:
+      file: steps/sprint-triage/confirm.md
+    agent: reviewer
+    permissions:
+      tools: [read, ls, bash, edit, write, mcp]
+      mcp: [atlassian, gitlab]
+      extensions: [/]
+      skills: [coding-standards, caveman]
+      bash:
+        mode: unrestricted
+    transitions:
+      ready: $done
+      retry: confirm
+      blocked: $pause

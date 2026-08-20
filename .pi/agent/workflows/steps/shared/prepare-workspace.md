@@ -72,6 +72,10 @@ captured local source HEAD:
 - If the captured source HEAD is already an ancestor of the selected HEAD,
   preserve the selected HEAD. Target-only commits are legitimate resumable
   workflow work, not a stale workspace. Rebasing would be a no-op.
+- A completed external rebase is valid resumable work when the exact run-owned
+  branch/worktree identity remains intact, the captured source HEAD is an
+  ancestor of the selected HEAD, and no Git operation is active. Preserve that
+  selected HEAD; never rewrite it from this stage. Report `rebase: observed`.
 - If the source HEAD is not an ancestor and the selected worktree is dirty,
   preserve it without stashing or rebasing. Report `rebase: deferred-dirty`
   with exact source and selected state. The next planner must work from that
@@ -103,7 +107,8 @@ pass. Include `workspace: {cwd: "<absolute selected worktree path>"}`. The
 summary must be a self-contained workspace manifest containing source Git root,
 source branch/ref and captured HEAD; selected worktree path, dedicated branch,
 before/after HEAD, whether it was created or reused, ancestry before/after,
-`rebase: not-needed | completed | deferred-dirty`, initial/final status, and
+`rebase: not-needed | completed | observed | deferred-dirty`, initial/final
+status, and
 exact verification evidence.
 
 Use outcome `retry` without `workspace` only for a recoverable tool or

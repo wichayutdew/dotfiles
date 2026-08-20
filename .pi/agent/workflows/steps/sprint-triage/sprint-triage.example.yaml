@@ -1,0 +1,16 @@
+# Copy to sprint-triage.yaml in this directory and replace every placeholder locally.
+# Do not commit the concrete file: it identifies private operational targets.
+version: 1
+grafana:
+  supportProfile: REPLACE_WITH_SUPPORT_PROFILE
+  dashboardUid: REPLACE_WITH_RESOLVED_DASHBOARD_UID
+  panelTitle: REPLACE_WITH_UNIQUE_PANEL_TITLE
+  timeZone: REPLACE_WITH_IANA_TIME_ZONE
+knowledgeBase:
+  # Existing clean Git checkout. Workflow creates a linked worktree from it.
+  localRepositoryPath: REPLACE_WITH_LOCAL_KNOWLEDGE_BASE_REPOSITORY_PATH
+  # Must be inside ~/repositories/worktrees.
+  workspaceRoot: REPLACE_WITH_WORKTREE_ROOT
+confluence:
+  cloudId: REPLACE_WITH_CONFLUENCE_CLOUD_ID
+  pageId: REPLACE_WITH_CONFLUENCE_PAGE_ID
