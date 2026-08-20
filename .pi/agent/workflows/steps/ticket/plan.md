@@ -50,14 +50,20 @@ state are legitimate resumable work. Use the observed current selected HEAD as
 `baseHead`; cleanliness and equality with the original prepared HEAD are not
 required.
 
+A completed rebase of the exact bound branch is valid when its canonical path,
+registration, and run marker remain intact, the current local source-ref HEAD
+is an ancestor of the selected HEAD, and no Git operation is active. Treat the
+prepared selected HEAD as provenance, use the observed selected HEAD as
+`baseHead`, and do not request a workspace refresh for that rebase.
+
 Use outcome `workspace-refresh` only when the exact bound path/branch identity
 is intact, the selected checkout is clean, and the recorded local source ref
 has advanced to a commit that is not an ancestor of the selected HEAD. Its
 summary must carry the complete previous workspace manifest plus exact current
 source root/ref/HEAD and selected path/branch/HEAD/status. If preparation
-already reported `deferred-dirty` or `not-needed` for that same source snapshot,
-plan from the recorded current state instead of bouncing back. A canonical
-path, branch, registration, marker, rewritten-history, or in-progress-operation
+already reported `deferred-dirty`, `not-needed`, or `observed` for that same
+source snapshot, plan from the recorded current state instead of bouncing back.
+A canonical path, branch, registration, marker, or in-progress-operation
 mismatch is `blocked`; never create, switch, reset, rebase, or select another
 branch or worktree from this read-only step.
 
