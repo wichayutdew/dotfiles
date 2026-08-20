@@ -1,0 +1,17 @@
+# Copy to .pi/agent/sprint-triage.yaml and replace every placeholder locally.
+# Do not commit the concrete file: it identifies private operational targets.
+version: 1
+grafana:
+  # Resolve the dashboard's UID in Grafana. A /goto token is not a dashboard UID.
+  dashboardUid: REPLACE_WITH_RESOLVED_DASHBOARD_UID
+  panelTitle: REPLACE_WITH_UNIQUE_PANEL_TITLE
+  timeZone: REPLACE_WITH_IANA_TIME_ZONE
+knowledgeBase:
+  repositoryUrl: REPLACE_WITH_GITLAB_CLONE_URL
+  projectId: REPLACE_WITH_GITLAB_PROJECT_ID
+  targetBranch: main
+  # Must be inside ~/repositories/worktrees.
+  workspaceRoot: ~/repositories/worktrees
+confluence:
+  cloudId: REPLACE_WITH_CONFLUENCE_CLOUD_ID
+  pageId: REPLACE_WITH_CONFLUENCE_PAGE_ID
