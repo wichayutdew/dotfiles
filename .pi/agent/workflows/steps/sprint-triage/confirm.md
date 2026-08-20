@@ -8,10 +8,10 @@ Immutable approved publication plan:
 Publication ledger:
 {{last.summary}}
 
-Reread the bound clone status, committed branch, matching remote ref, approved
-GitLab MR, and configured Confluence page. Use enabled GitLab MCP to read the
+Reread the bound linked-worktree status, committed branch, matching remote ref,
+approved GitLab MR, and configured Confluence page. Use enabled GitLab MCP to read the
 recorded MR and enabled Atlassian MCP to read the page. Verify exactly one
-approved source branch, target branch, title, description, and committed KB
+approved source branch, base branch, title, description, and committed KB
 diff; verify the exact stable marker and append body occur once in the current
 page. Check that no unapproved local or remote action appears in the publication
 ledger.

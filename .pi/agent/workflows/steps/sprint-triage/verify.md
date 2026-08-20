@@ -9,11 +9,11 @@ Immutable approved publication plan:
 Implementation ledger:
 {{last.summary}}
 
-Confirm the bound clone, remote identity, approved source branch, target branch,
-parent SHA, commit SHA, and final status. Inspect the committed diff and every
+Confirm the bound linked worktree, remote identity, approved source branch,
+base branch, parent SHA, commit SHA, and final status. Inspect the committed diff and every
 approved KB file. Recompute or otherwise independently verify that the bytes,
 paths, and commit title match the approved artifact exactly. Reject unapproved
-files, unstaged task changes, a merge/rebase/reset history, or a changed target
+files, unstaged task changes, a merge/rebase/reset history, or a changed base
 branch.
 
 Validate every publication precondition without writing: complete Grafana query

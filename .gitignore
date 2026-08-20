@@ -23,9 +23,6 @@
 !README.md
 !Brewfile
 
-# local sprint-triage targets
-/.pi/agent/sprint-triage.yaml
-
 # opencode runtime / cache
 /.config/opencode/**/.cache/
 /.config/opencode/**/mcp-cache.json

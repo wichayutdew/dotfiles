@@ -6,7 +6,7 @@ Run input:
 Collection ledger:
 {{last.summary}}
 
-Work only in the bound knowledge-base clone. First inspect its contribution,
+Work only in the bound knowledge-base linked worktree. First inspect its contribution,
 formatting, taxonomy, and file-location conventions. Use the enabled Atlassian
 MCP only to read the configured Confluence page and record its current content
 identity and existing append markers. Do not edit either target.

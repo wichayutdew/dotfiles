@@ -6,8 +6,8 @@ Run input:
 Checkout ledger:
 {{last.summary}}
 
-Revalidate the configured support profile, inclusive dates, timezone, Grafana
-dashboard UID, and unique panel title from the checkout ledger. Convert the
+Revalidate `grafana.supportProfile`, inclusive dates, timezone, Grafana dashboard
+UID, and unique panel title from the checkout ledger. Convert the
 inclusive local calendar dates to an explicit UTC start and exclusive UTC end.
 Use only enabled Grafana MCP reads to retrieve the configured dashboard and
 panel definition. Block if the UID, unique title, datasource, query, `profiles`

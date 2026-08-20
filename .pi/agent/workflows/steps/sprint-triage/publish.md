@@ -8,9 +8,10 @@ Immutable approved publication plan:
 Verification ledger and any prior publication attempt:
 {{last.summary}}
 
-Before any write, reread the bound clone status, branch, commit, remote, target
-branch, and approved KB paths. Use enabled GitLab and Atlassian MCP reads to
-refresh the configured project and Confluence page. Check for the exact approved
+Before any write, reread the bound linked-worktree status, branch, commit,
+remote, base branch, canonical GitLab project path derived from `origin`, and
+approved KB paths. Use enabled GitLab and Atlassian MCP reads to refresh that
+canonical GitLab project and the Confluence page. Check for the exact approved
 MR source/target/title and the exact Confluence marker. If an approved effect is
 already present, record its identifier and do not duplicate it. If a different
 MR, marker, page identity, source branch, target branch, or content state makes
@@ -19,7 +20,8 @@ the approved action ambiguous, block before writing.
 Perform remaining actions in this order only:
 1. Non-force push the approved committed branch to the verified matching remote.
 2. Use `gitlab_gitlab_create_merge_request` exactly once for the approved
-   project, source/target branches, title, and description; immediately use
+   canonical GitLab project path, source/base branches, title, and description;
+   immediately use
    `gitlab_gitlab_get_merge_request` to reread the returned MR and verify all
    fields.
 3. Reread the configured Confluence page immediately before the update. Confirm

@@ -10,8 +10,8 @@ Approval feedback:
 Previous ledger:
 {{last.summary}}
 
-Revalidate the bound clone path, repository remote, source branch, target
-branch, starting status, exact approved file paths, and approved file bytes
+Revalidate the bound linked-worktree path, repository remote, source branch,
+base branch, starting status, exact approved file paths, and approved file bytes
 before writing. Treat existing work as possibly complete: inspect each file and
 commit history first. If a matching commit already exists on the approved local
 branch, verify its files and return its SHA without another commit.
@@ -26,7 +26,8 @@ request, update Confluence, or make any other remote mutation.
 
 Call `structured_output` alone with `ready` only after the committed tree
 contains exactly the approved KB content and the working tree has no task-owned
-changes. Include clone path, branch, parent and commit SHA, exact staged paths,
+changes. Include linked-worktree path, branch, parent and commit SHA, exact
+staged paths,
 content/redaction evidence, commands/results, and current status. Use `retry`
 only for a transient local failure before a commit. Use `blocked` for changed
 identity, pre-existing conflicting work, unapproved content, or an ambiguous
