@@ -4,10 +4,12 @@ Run input:
 {{workflow.input}}
 Collection ledger:
 {{last.summary}}
+Persistent collection ledger:
+`SPRINT_TRIAGE_COLLECTION_LEDGER.md`
 
 ## Preconditions
 
-The collection output must identify every OpsBot ticket row as either a successful linked Slack-thread summary or a skipped-ticket record. Do not replace missing ticket knowledge with channel-history observations, generic support advice, a decision tree, or inferred procedures. Do not block for individual inaccessible threads; retain them in `skippedTickets`.
+Read `SPRINT_TRIAGE_COLLECTION_LEDGER.md` from the bound worktree. Require that it states the UTC interval, configured and rendered support profile, channel name and resolved ID, ticket status, include-all-unclosed value, dataset request variables, row count, each ordered unique ticket URL, and exactly one summarized/skipped disposition for each URL. The collection output must identify every OpsBot ticket row as either a successful linked Slack-thread summary or a skipped-ticket record. Do not replace missing ticket knowledge with channel-history observations, generic support advice, a decision tree, or inferred procedures. Do not block for individual inaccessible threads; retain them in `skippedTickets`.
 
 ## Drafting Flow
 
