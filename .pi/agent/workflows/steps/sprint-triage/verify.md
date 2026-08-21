@@ -15,7 +15,7 @@ Implementation summary:
    - Contains ledger SHA-256, query values, row count, and URL accounting.
    - Every unique ticket link is accounted for (summarized or skipped with reason/timestamp).
 3. Verify Confluence plan preconditions:
-   - Contains source page version, exact raw HTML, SHA-256 hash, and exact resulting full HTML.
+   - Contains source page version, exact raw Markdown, SHA-256 hash, append marker, append Markdown, and exact resulting Markdown.
 
 ## Outcomes
 - `ready`: All local diffs and publication preconditions verified.

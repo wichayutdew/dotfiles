@@ -7,6 +7,12 @@ Approved plan:
 Publication ledger:
 {{last.summary}}
 
+## Confirmation Rules
+
+1. Call `getConfluencePage` in Markdown format.
+2. Verify the stored Markdown exactly equals the approved resulting Markdown and the publication-ledger SHA-256.
+3. Verify exactly one approved append marker and a page version newer than the approved source version.
+
 ## Outcomes
 - `ready`: GitLab MR, Confluence append, and branch verified independently.
 - `retry`: Transient read-only API failure.
