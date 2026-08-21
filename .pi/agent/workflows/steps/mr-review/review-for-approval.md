@@ -14,22 +14,6 @@ Plannotator feedback:
 
 ## Review & Proposal Flow
 
-```mermaid
-flowchart TD
-    Start([Inspect Evidence Bundle & Code Diff]) --> RefreshContext[Refresh Head SHA, Checks & Discussions]
-    
-    RefreshContext --> AnalyzeDiff[Analyze Correctness, Security, Concurrency & Tests]
-    AnalyzeDiff --> TriageFindings{Actionable Findings Found?}
-    
-    TriageFindings -->|Yes: Gaps Exist| GenerateFindingsContract[Draft Inline Comment Actions per Finding\nInclude exact path, line, body & marker]
-    TriageFindings -->|No: Clean Review| GenerateCleanContract[Draft Single Review Summary Action\nNote no actionable findings]
-    
-    GenerateFindingsContract --> AssembleArtifact[Assemble Complete Markdown Review Artifact]
-    GenerateCleanContract --> AssembleArtifact
-    
-    AssembleArtifact --> PlannotatorSubmit[Outcome: submit via Plannotator]
-```
-
 ## Review Artifact Structure
 
 1. `# Review: <Short verdict>`

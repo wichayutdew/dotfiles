@@ -5,19 +5,6 @@ Review input:
 
 ## Fetch Flow
 
-```mermaid
-flowchart TD
-    Start([Parse Review URL]) --> DetectHost{GitLab MR or GitHub PR?}
-    DetectHost -->|Invalid URL| BlockedURL[Outcome: blocked\nInvalid URL]
-    DetectHost -->|Valid URL| FetchMeta[1. Fetch MR/PR Metadata, Source & Target Branches, SHAs]
-    
-    FetchMeta --> FetchDiscussions[2. Fetch All Review Discussions & Unresolved Comments]
-    FetchDiscussions --> FetchDiff[3. Fetch Changed Files & Complete Diff]
-    FetchDiff --> MatchLocalRemote[4. Inspect Local Git Root, Remotes & Current Status]
-    
-    MatchLocalRemote --> Ready[Outcome: ready\nStructured Review Evidence Packet]
-```
-
 ## Evidence Packet Structure
 - Canonical URL, host, project/repo, review number.
 - Source/target branches and remote SHAs.

@@ -4,32 +4,20 @@ Run input:
 {{workflow.input}}
 Approved plan:
 {{reviewed.artifact}}
-Implementation ledger:
+Implementation summary:
 {{last.summary}}
 
-## Verification Flow
+## Verification Rules
 
-```mermaid
-flowchart TD
-    Start([Inspect Committed KB Diff & Files]) --> VerifyDiff{Diff & Commit Match Plan Exactly?}
-    VerifyDiff -->|Mismatch| BlockedDiff[Outcome: blocked\nDiff mismatch]
-    VerifyDiff -->|Match| VerifyPreconditions[Verify Preconditions:\nCoverage, Redaction, Marker, MR & Confluence Actions]
-    
-    VerifyPreconditions --> PreconditionsPass{All Preconditions Satisfied?}
-    PreconditionsPass -->|No| BlockedPreconditions[Outcome: blocked\nPrecondition gap]
-    PreconditionsPass -->|Yes| Ready[Outcome: ready\nVerification Summary]
-```
-
-## Collection Verification
-- Verify the approved artifact's collection evidence includes the collection-ledger SHA-256, configured and rendered channel resolution, support profile, ticket status, include-all-unclosed values, dataset request variables, returned row count, and every unique ticket URL in API order. Do not require `SPRINT_TRIAGE_COLLECTION_LEDGER.md` in the bound knowledge-base worktree; it remains in the generic planning location.
-- Verify each unique ticket link is accounted for exactly once: either a drafted factual summary or a skipped-ticket record.
-- Verify skipped-ticket entries contain only URL, reason, and collection timestamp and have no raw Slack content.
-- Verify the draft contains successful summaries and exposes the skipped-ticket notification section when records exist.
-
-## Confluence Body Verification
-- Require the approved artifact to contain the source page version, exact source HTML, SHA-256 hash of that exact UTF-8 HTML, append HTML, and exact resulting full HTML. Reject normalized empty-body representations such as treating `<p></p>` as an empty string.
-- Verify `appendMode: end` derives the resulting full HTML by exact source-HTML concatenation with the approved append HTML. Publication must re-read and compare those exact identity values before writing.
+1. Inspect `git diff HEAD~1` and committed files in the bound worktree:
+   - Ensure diff contains **only** the approved report, ledger, and index paths with exact approved contents.
+2. Verify collection evidence in the approved plan artifact:
+   - Contains ledger SHA-256, query values, row count, and URL accounting.
+   - Every unique ticket link is accounted for (summarized or skipped with reason/timestamp).
+3. Verify Confluence plan preconditions:
+   - Contains source page version, exact raw HTML, SHA-256 hash, and exact resulting full HTML.
 
 ## Outcomes
-- `ready`: All local and remote preconditions verified.
-- `blocked`: Unapproved file modification, missing redactions, invalid markers, or incomplete ticket coverage.
+- `ready`: All local diffs and publication preconditions verified.
+- `failed`: Diff mismatch or missing file content (transitions back to `implement`).
+- `blocked`: Unapproved file modifications or missing redactions.

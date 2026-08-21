@@ -14,26 +14,6 @@ Implementation ledger:
 
 ## Verification & Publication Flow
 
-```mermaid
-flowchart TD
-    Start([Inspect Bound Workspace & CWD]) --> CheckWorkspace{CWD & Branch Match Contract?}
-    CheckWorkspace -->|No| BlockedState[Outcome: blocked\nWorkspace mismatch]
-    CheckWorkspace -->|Yes| InspectCommit[Inspect Diff, Commits & Criteria]
-    
-    InspectCommit --> RunReviewerCmds[Run Reviewer Commands\nfull-tests, lint, format]
-    
-    RunReviewerCmds --> CheckResults{All Checks Passed?}
-    CheckResults -->|Failure / Regression / Lint Gap| Failed[Outcome: failed\nReturn to implement stage]
-    
-    CheckResults -->|Passed| PreflightSSH[Run git ls-remote SSH Preflight]
-    PreflightSSH -->|Auth Failure| BlockedSSH[Outcome: blocked\nRequest 1Password SSH unlock]
-    
-    PreflightSSH -->|Success| CheckRemote[Check Remote Ref & Existing MR]
-    CheckRemote --> PushBranch[git push origin HEAD:<sourceBranch>]
-    PushBranch --> CreateMR[Create/Verify GitLab MR via glab api]
-    CreateMR --> Passed[Outcome: passed\nMR URL logged]
-```
-
 ## Rules & Publication Boundaries
 
 1. **Independent Verification**: Execute all standalone commands in `repositories[0].reviewer[]` (`full-tests`, `lint`, `format`). Any failure returns outcome `failed`.

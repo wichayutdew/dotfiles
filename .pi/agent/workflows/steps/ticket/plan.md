@@ -11,24 +11,6 @@ Plannotator feedback:
 
 ## Planning & Jira Ingestion Flow
 
-```mermaid
-flowchart TD
-    Start([Parse Input for Jira Key/URL]) --> ReadJira{Fetch Authoritative Issue via Atlassian MCP}
-    
-    ReadJira -->|Auth/Network Error| SafeRetry{Safe Read Alternatives?}
-    SafeRetry -->|Exhausted| BlockedJira[Outcome: blocked\nJira data unavailable]
-    SafeRetry -->|Available| ReadJira
-    
-    ReadJira -->|Success| VerifyWorkspace{Verify Bound Run Worktree & CWD}
-    VerifyWorkspace -->|Mismatch / Corrupted| BlockedWS[Outcome: blocked\nWorkspace error]
-    VerifyWorkspace -->|Valid| CheckSourceSync{Source Ref Advanced & Non-Ancestor?}
-    
-    CheckSourceSync -->|Yes & Clean| Refresh[Outcome: workspace-refresh]
-    CheckSourceSync -->|No / Resumable Work| DraftPlan[Draft Comprehensive Ticket Plan]
-    
-    DraftPlan --> PlannotatorSubmit[Outcome: submit via Plannotator]
-```
-
 ## Plan Artifact Structure
 
 1. `# <Short outcome-oriented title>`

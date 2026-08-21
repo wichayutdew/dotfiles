@@ -14,17 +14,6 @@ Plannotator feedback:
 
 ## Planning & Triage Flow
 
-```mermaid
-flowchart TD
-    Start([Inspect Bound Source Branch]) --> ClassifyComments[1. Classify Unresolved Comments\nValid | Partially Valid | Invalid | Addressed]
-    
-    ClassifyComments --> PlanFixes[2. Plan Code Fixes & Focused Tests]
-    PlanFixes --> DraftReplies[3. Draft Public Discussion Replies per Thread]
-    DraftReplies --> AssembleContract[4. Assemble JSON Contract & Remote Actions]
-    
-    AssembleContract --> PlannotatorSubmit[Outcome: submit via Plannotator]
-```
-
 ## Plan Artifact Structure
 
 1. `# <Outcome-oriented title>`

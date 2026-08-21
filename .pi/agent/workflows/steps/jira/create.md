@@ -14,27 +14,6 @@ Previous creation ledger:
 
 ## Jira Creation Sequence
 
-```mermaid
-flowchart TD
-    Start([Preflight Contract Checks]) --> CheckLedger{Objects Already Created in Ledger?}
-    
-    CheckLedger -->|Epic Not Created| CreateEpic[1. Create Epic with Verified Mappings]
-    CheckLedger -->|Epic Done| CreateStories[2. Iterate Stories in Dependency Order]
-    
-    CreateEpic --> VerifyEpic[Read Back Epic & Record ID/Key/URL]
-    VerifyEpic --> CreateStories
-    
-    CreateStories --> CreateStory[Create Story with Verified Epic Link]
-    CreateStory --> VerifyStory[Read Back Story & Record ID/Key/URL]
-    VerifyStory --> MoreStories{More Stories?}
-    
-    MoreStories -->|Yes| CreateStories
-    MoreStories -->|No| CreateLinks[3. Create Verified Dependency Links]
-    
-    CreateLinks --> VerifyLinks[Read Back Links & Verify Direction]
-    VerifyLinks --> Ready[Outcome: ready\nDetailed Creation Summary]
-```
-
 ## Guardrails & Output Contract
 
 1. **Idempotence**: Check the creation ledger before every write; skip any issue or link already created and confirmed.

@@ -1,7 +1,7 @@
 version: 1
 id: sprint-triage
 command: sprint-triage
-description: Collect Grafana-selected support ticket threads, summarize verified outcomes, and publish them safely
+description: "Collect Grafana-selected support ticket threads, summarize verified outcomes, and publish them safely. Example: /sprint-triage 2026-08-10 2026-08-21"
 start: collect
 maxStepVisits: 16
 summaryMaxChars: 30000
@@ -20,7 +20,7 @@ steps:
       tools: [read, ls, bash, edit, write]
       mcp: []
       extensions: [/]
-      skills: [coding-standards, caveman]
+      skills: [using-git-worktrees, caveman]
       bash:
         mode: unrestricted
     transitions:
@@ -36,7 +36,7 @@ steps:
       tools: [read, ls, bash, write, mcp]
       mcp: [grafana, slack]
       extensions: [/]
-      skills: [coding-standards, caveman]
+      skills: [grafana-logs, caveman]
       bash:
         mode: unrestricted
     transitions:
@@ -68,7 +68,7 @@ steps:
       tools: [read, ls, bash, edit, write, mcp]
       mcp: [atlassian]
       extensions: [/]
-      skills: [coding-standards, caveman]
+      skills: [writing-plans, caveman]
       bash:
         mode: unrestricted
     gate:
@@ -107,7 +107,7 @@ steps:
       tools: [read, ls, bash, edit, write]
       mcp: []
       extensions: [/]
-      skills: [coding-standards, caveman]
+      skills: [verification-before-completion, caveman]
       bash:
         mode: unrestricted
     transitions:
@@ -124,7 +124,7 @@ steps:
       tools: [read, ls, bash, edit, write, mcp]
       mcp: [atlassian, gitlab]
       extensions: [/]
-      skills: [coding-standards, caveman]
+      skills: [commit-format, caveman]
       bash:
         mode: unrestricted
     transitions:
@@ -140,7 +140,7 @@ steps:
       tools: [read, ls, bash, edit, write, mcp]
       mcp: [atlassian, gitlab]
       extensions: [/]
-      skills: [coding-standards, caveman]
+      skills: [verification-before-completion, caveman]
       bash:
         mode: unrestricted
     transitions:

@@ -5,25 +5,6 @@ Workflow input:
 
 ## Draft Normalization Flow
 
-```mermaid
-flowchart TD
-    Start([Parse Input String]) --> CheckType{Input Format?}
-    CheckType -->|Markdown File Path .md| ReadFile[Read Markdown Content]
-    CheckType -->|Plain Text Summary| ParseText[Parse Text Breakdown]
-    CheckType -->|Invalid / Empty| BlockedInput[Outcome: blocked\nInvalid input]
-    
-    ReadFile --> ExtractHierarchy[Extract Epic & Ordered Stories]
-    ParseText --> ExtractHierarchy
-    
-    ExtractHierarchy --> CheckProjectKey{Project Key Explicitly Provided?}
-    CheckProjectKey -->|Yes| SetKey[Record Project Key]
-    CheckProjectKey -->|No| SetMissing[Mark Project Key: Missing]
-    
-    SetKey --> DraftSummary[Generate Structured Jira Draft]
-    SetMissing --> DraftSummary
-    DraftSummary --> Ready[Outcome: ready\nStructured draft artifact]
-```
-
 ## Draft Artifact Structure
 
 1. `# Jira draft`

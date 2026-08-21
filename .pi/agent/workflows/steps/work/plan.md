@@ -11,20 +11,6 @@ Plannotator feedback:
 
 ## Planning & Validation Flow
 
-```mermaid
-flowchart TD
-    Start([Inspect Bound Workspace]) --> VerifyIdentity{Worktree & Branch Marker Valid?}
-    
-    VerifyIdentity -->|Mismatch / Corrupted| BlockedID[Outcome: blocked]
-    VerifyIdentity -->|Valid| CheckSourceSync{Source Ref Advanced & Non-Ancestor?}
-    
-    CheckSourceSync -->|Yes & Clean| Refresh[Outcome: workspace-refresh]
-    CheckSourceSync -->|No / Resumable Work| GatherEvidence[Gather Local Facts & Code Evidence]
-    
-    GatherEvidence --> DraftPlan[Draft Scoped Plan Artifact]
-    DraftPlan --> PlannotatorSubmit[Outcome: submit via Plannotator]
-```
-
 ## Plan Artifact Structure
 
 Format the artifact in order:
@@ -59,6 +45,6 @@ Format the artifact in order:
 ```
 
 ## Outcomes
-- `submit`: Plan ready for Plannotator review.
+- `submit`: Plan ready for Plannotator review. Pass the **complete Markdown text content** directly in the `artifact` parameter.
 - `workspace-refresh`: Source ref advanced unexpectedly and workspace is clean.
 - `blocked`: Unsafe multi-repo requirement or unrecoverable workspace state.

@@ -2,42 +2,33 @@ You are the approval-planning stage for sprint-triage publication. Stay read-onl
 
 Run input:
 {{workflow.input}}
-Draft ledger:
+Draft summary:
 {{last.summary}}
-Canonical configuration path:
-`/Users/wphongphanpa/.pi/agent/workflows/steps/sprint-triage/sprint-triage.yaml`
 Previously rejected artifact:
 {{gate.artifact}}
 Plannotator feedback:
 {{gate.feedback}}
 
-## Planning Flow
+## Planning Contract
 
-```mermaid
-flowchart TD
-    Start([Inspect draft ledger, redactions, and local sprint-triage.yaml]) --> CheckTargets{Configured targets valid?}
-    CheckTargets -->|Missing / conflicting| BlockedState[Outcome: blocked]
-    CheckTargets -->|Valid| DraftPlan[Draft publication plan artifact]
-    DraftPlan --> PlannotatorSubmit[Outcome: submit via Plannotator]
-```
-
-## Publication Target Contract
-- Re-read `/Users/wphongphanpa/.pi/agent/workflows/steps/sprint-triage/sprint-triage.yaml`; the draft ledger is not the source of publication targets.
-- Read `SPRINT_TRIAGE_COLLECTION_LEDGER.md` from the generic workflow working directory. The Plannotator plan artifact must be created and submitted from that same generic location, never from the later bound knowledge-base worktree. Block unless the ledger proves the configured `grafana.channel`, `ticketStatus`, and `includeAllUnclosed` values; dataset request variables and row count; every ordered unique ticket URL; and exactly one summarized/skipped disposition per URL. Include its full SHA-256 and a compact URL/disposition accounting table in the submitted artifact.
-- Use Atlassian MCP `getConfluencePage` with `confluence.pageId` and HTML content immediately before drafting publication. Treat its returned body as exact UTF-8 HTML bytes: hash that exact string with SHA-256 and record the source HTML, page version, hash, retrieval timestamp, and zero append-marker occurrences in the submitted artifact. Never normalize `<p></p>`, whitespace, or empty elements to another representation. With `confluence.appendMode: end`, the approved Confluence body is the exact source HTML followed by the approved decision-tree HTML. Record the exact resulting full HTML. Block only when the page cannot be read or append mode is unsupported.
-- Use `gitlab.targetBranch` as the MR target branch.
-- When the configured knowledge-base repository has no convention or tracked files, this is valid. After approval, `implement` must create the AI-readable convention in its bound worktree: one Markdown file per sprint at `<contentDirectory>/<start-date>_to_<end-date>.md`, plus `<indexFile>` linking each report in reverse chronological order. Each repository ticket record contains only Slack URL, inquiry summary, action taken to mitigate the issue, knowledge gained from this support, and unknown gap. Skipped records contain URL, skip reason, and collection timestamp only.
-- The Confluence append contains only inquiry topic and steps to take an action to resolve the inquiry. Include useful verified guide/runbook/ticket links in those steps when explicitly mentioned in source evidence and they guide triage, mitigation, escalation, or content enhancement. Omit one-off/non-repeatable tickets from Confluence.
-- The complete path, index update, source page version/source HTML/SHA-256 body hash, and exact resulting full HTML must appear in the submitted artifact.
+1. Re-read `~/.pi/agent/workflows/steps/sprint-triage/sprint-triage.yaml`.
+2. Read `SPRINT_TRIAGE_COLLECTION_LEDGER.md` in the current working directory. Verify it proves the configured `grafana.channel`, `ticketStatus`, `includeAllUnclosed`, query variables, row count, and URL dispositions. Calculate its SHA-256.
+3. Call Atlassian MCP `getConfluencePage` (`confluence.pageId`, HTML format). Treat returned body as exact UTF-8 HTML bytes; compute its SHA-256 hash. Record source HTML, page version, hash, retrieval timestamp, and verify zero occurrences of the append marker. Never normalize `<p></p>` or whitespace.
+4. Construct the complete full resulting HTML by concatenating the exact source HTML with the approved append HTML.
+5. For empty or convention-free KB repositories, specify the standard files:
+   - Report: `<contentDirectory>/<start-date>_to_<end-date>.md`
+   - Ledger: `<contentDirectory>/<start-date>_to_<end-date>.ledger.md`
+   - Index: `<indexFile>` (reverse-chronological links)
+6. **Plan Draft & Artifact Submission:** Save the plan draft to `~/.plannotator/plans/` (or current directory `PLAN.md`). When completing the step with outcome `submit`, **pass the complete Markdown text content of the plan directly in the `artifact` parameter**. Do not pass a file path as the artifact.
 
 ## Plan Structure
 1. `# Publish reviewed sprint triage knowledge`
-2. `## Submitted evidence capture` (collection-ledger SHA-256, configured/resolved query values, row count, URL/disposition accounting, Confluence retrieval timestamp, version, exact HTML, SHA-256, and zero append-marker occurrences)
-3. `## Evidence and coverage` (completeness and stated limitations)
-4. `## Approved local content` (exact file paths and complete contents)
+2. `## Submitted evidence capture` (ledger SHA-256, query values, row count, URL accounting, Confluence retrieval time, version, exact raw HTML, SHA-256, marker count)
+3. `## Evidence and coverage` (completeness and limitations)
+4. `## Approved local content` (exact repository file paths and complete contents for report, ledger, and index)
 5. `## Approved GitLab action` (push ref, MR title, MR description)
-6. `## Approved Confluence action` (page ID, append marker, exact append body)
+6. `## Approved Confluence action` (page ID, append marker, exact append body, exact resulting full HTML)
 
 ## Outcomes
-- `submit`: Plan submitted for Plannotator gate review only when the submitted artifact contains the complete `Submitted evidence capture`; unsupported FACT claims are `blocked`.
-- `blocked`: Unsafe gaps, marker conflicts, or incomplete redactions.
+- `submit`: Complete plan artifact passed in the `artifact` parameter for Plannotator gate review.
+- `blocked`: Unsafe gaps, missing evidence, or incomplete redactions.

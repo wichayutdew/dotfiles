@@ -8,27 +8,6 @@ Stable workflow run ID:
 
 ## Preparation Logic
 
-```mermaid
-flowchart TD
-    Start([Inspect Git State & Refs]) --> SearchMarker{Run Marker Exists?}
-    
-    SearchMarker -->|Yes: Exact Pair Found| ValidatePair{Inside Authorized Root & Safe?}
-    ValidatePair -->|No / Ambiguous| Blocked[Outcome: blocked]
-    ValidatePair -->|Yes| CheckAncestry{Source HEAD is Ancestor?}
-    
-    CheckAncestry -->|Yes / Rebase Done| ReadyReused[Outcome: ready\nrebase: not-needed / observed]
-    CheckAncestry -->|No & Dirty| ReadyDeferred[Outcome: ready\nrebase: deferred-dirty]
-    CheckAncestry -->|No & Clean| AttemptRebase{Rebase onto Source HEAD}
-    
-    AttemptRebase -->|Success| ReadyRebased[Outcome: ready\nrebase: completed]
-    AttemptRebase -->|Conflict / Failure| AbortRebase[Abort Rebase -> Outcome: blocked]
-    
-    SearchMarker -->|No: New Pair Needed| ValidateNewPath{Path Inside Authorized Root?}
-    ValidateNewPath -->|No| Blocked
-    ValidateNewPath -->|Yes| CreateWorktree[Create Branch & Worktree from Source HEAD]
-    CreateWorktree --> ReadyCreated[Outcome: ready\nrebase: not-needed]
-```
-
 ## Rules & Invariants
 
 1. **Idempotence**: Extract marker from `{{run.id}}`. Reuse existing run-owned worktree/branch if present; never create a duplicate.

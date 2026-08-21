@@ -14,24 +14,6 @@ Plannotator feedback:
 
 ## Planning & Atlassian Verification Flow
 
-```mermaid
-flowchart TD
-    Start([Check Jira Project Key]) --> KeyCheck{Explicit Project Key Provided?}
-    KeyCheck -->|No / Missing| BlockedKey[Outcome: blocked\nProject key required]
-    KeyCheck -->|Yes| DiscoverResources[1. Discover Accessible Resources & Visibility]
-    
-    DiscoverResources --> ReadIssueTypes[2. Verify Epic & Story Issue Types]
-    ReadIssueTypes --> ReadFieldMeta[3. Get Create Field Metadata\nMap Epic Name, Descriptions, AC, Epic Link]
-    ReadFieldMeta --> ReadLinkTypes[4. Read Project Issue Link Types]
-    ReadLinkTypes --> VerifyRepSample[5. Search & Read Representative Epic/Story Sample]
-    
-    VerifyRepSample --> ValidationGate{All Mappings Verified?}
-    ValidationGate -->|No / Missing Field Meta| BlockedMeta[Outcome: blocked\nField mapping unverified]
-    ValidationGate -->|Yes| DraftArtifact[Draft Comprehensive Jira Plan with Mermaid]
-    
-    DraftArtifact --> PlannotatorSubmit[Outcome: submit via Plannotator]
-```
-
 ## Plan Artifact Structure
 
 1. `# Create Jira Epic and Stories`

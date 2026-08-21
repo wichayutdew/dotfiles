@@ -1,8 +1,7 @@
 version: 1
 id: investigate
 command: investigate
-description: Derive, approve, investigate, and independently validate an
-  evidence-backed finding
+description: "Derive, approve, investigate, and independently validate an evidence-backed finding. Example: /investigate PROJ-123 Root cause of elevated 500 error rates in checkout service"
 start: retrieve
 maxStepVisits: 12
 summaryMaxChars: 30000
@@ -12,54 +11,11 @@ steps:
     prompt:
       file: steps/investigate/retrieve.md
     agent: scout
-    permissions: &a1
-      tools:
-        - read
-        - ls
-        - bash
-        - edit
-        - write
-        - mcp
-      mcp:
-        - context7
-        - atlassian
-        - gitlab
-        - figma
-        - agoda_skills
-        - glean
-        - sourcegraph
-        - grafana
-        - slack
-        - gh_grep
-        - superset
-      extensions:
-        - /
-      skills:
-        - brainstorming
-        - cavecrew
-        - caveman
-        - coding-standards
-        - commit-format
-        - dispatching-parallel-agents
-        - executing-plans
-        - finishing-a-development-branch
-        - grafana-logs
-        - jira-ticket
-        - lint-commands
-        - mcp-scripting
-        - receiving-code-review
-        - requesting-code-review
-        - search-code-sourcegraph
-        - start-on-call
-        - start-triage
-        - subagent-driven-development
-        - systematic-debugging
-        - test-driven-development
-        - using-git-worktrees
-        - using-superpowers
-        - verification-before-completion
-        - writing-plans
-        - writing-skills
+    permissions:
+      tools: [read, ls, bash, mcp]
+      mcp: [atlassian, context7, sourcegraph, glean, grafana]
+      extensions: [/]
+      skills: [jira-ticket, start-triage, search-code-sourcegraph, caveman]
       bash:
         mode: unrestricted
     gate:
@@ -78,7 +34,13 @@ steps:
     prompt:
       file: steps/investigate/investigate.md
     agent: worker
-    permissions: *a1
+    permissions:
+      tools: [read, ls, bash, write, mcp]
+      mcp: [atlassian, context7, sourcegraph, glean, grafana, gitlab]
+      extensions: [/]
+      skills: [coding-standards, systematic-debugging, start-triage, grafana-logs, search-code-sourcegraph, caveman]
+      bash:
+        mode: unrestricted
     transitions:
       ready: validate
       retry: investigate
@@ -88,7 +50,13 @@ steps:
     prompt:
       file: steps/investigate/validate.md
     agent: reviewer
-    permissions: *a1
+    permissions:
+      tools: [read, ls, bash, mcp]
+      mcp: [atlassian, sourcegraph, glean, gitlab]
+      extensions: [/]
+      skills: [verification-before-completion, caveman]
+      bash:
+        mode: unrestricted
     transitions:
       approved: $done
       gaps: investigate

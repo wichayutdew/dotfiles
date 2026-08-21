@@ -11,20 +11,6 @@ Investigation ledger:
 
 ## Validation Decision Flow
 
-```mermaid
-flowchart TD
-    Start([Read Report at Specified Path]) --> CheckStructure{Required 6 Sections Present?}
-    CheckStructure -->|No| GapsStructure[Outcome: gaps\nMissing required sections]
-    CheckStructure -->|Yes| VerifyClaims[Independently Check Every Material Claim]
-    
-    VerifyClaims --> ValidateEvidence{All Claims Backed by Fresh Evidence?}
-    ValidateEvidence -->|Unsupported / Contradicted / Stale| GapsClaims[Outcome: gaps\nSpecific claim contradictions]
-    ValidateEvidence -->|Yes| ClarityCheck{Passes Reader Clarity & Brevity?}
-    
-    ClarityCheck -->|Verbose / Hard to scan| GapsClarity[Outcome: gaps\nRequire tighter prose or Mermaid]
-    ClarityCheck -->|Clear & Precise| Approved[Outcome: approved\nVerified report summary]
-```
-
 ## Validation Rules & Review Criteria
 
 1. **Independent Verification**: Do not trust the prior claim ledger; verify citations, line numbers, and sources directly with read-only tools.

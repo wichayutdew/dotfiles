@@ -14,20 +14,6 @@ Implementation ledger:
 
 ## Verification Flow
 
-```mermaid
-flowchart TD
-    Start([Inspect Bound Workspace & CWD]) --> CheckWorkspace{CWD & Branch Match Contract?}
-    CheckWorkspace -->|No| BlockedState[Outcome: blocked\nWorkspace mismatch]
-    CheckWorkspace -->|Yes| InspectCommit[Inspect Diff, Commits & Criteria]
-    
-    InspectCommit --> RunReviewerCmds[Run Standalone Reviewer Commands\nfull-tests, lint, format]
-    
-    RunReviewerCmds --> CheckResults{All Checks Passed & Clean?}
-    CheckResults -->|Failure / Regression / Lint Gap| Failed[Outcome: failed\nReturn exact error & fix location]
-    CheckResults -->|Transient Tool Error| Retry[Outcome: retry]
-    CheckResults -->|All Passed & Evidence Verified| Passed[Outcome: passed\nVerification summary]
-```
-
 ## Rules & Verification Criteria
 
 1. **Independent Verification**: Re-run all standalone commands under `repositories[0].reviewer[]` (`full-tests`, `lint`, `format`).

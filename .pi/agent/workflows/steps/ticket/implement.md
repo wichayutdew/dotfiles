@@ -14,24 +14,6 @@ Latest ledger:
 
 ## Implementation Flow (TDD)
 
-```mermaid
-flowchart TD
-    Start([Check Bound CWD & Jira Reference]) --> CwdCheck{CWD matches repositories[0].cwd?}
-    CwdCheck -->|No| BlockedCWD[Outcome: blocked\nCWD mismatch]
-    CwdCheck -->|Yes| TDD_Red[1. Write Failing Test\nProve RED against Jira AC]
-    
-    TDD_Red --> TDD_Green[2. Minimal Implementation\nMake test pass GREEN]
-    TDD_Green --> RunWorkerCmds[3. Run Approved Worker Commands\nFormat, lint, build, checks]
-    
-    RunWorkerCmds --> CheckWorkerStatus{All Checks Passed?}
-    CheckWorkerStatus -->|No| SafeRecovery{Safe Invocation Recovery?}
-    SafeRecovery -->|Yes| RunWorkerCmds
-    SafeRecovery -->|No| BlockedState[Outcome: blocked or retry]
-    
-    CheckWorkerStatus -->|Yes| Commit[4. Stage & Conventional Commit\nExact approved commit title]
-    Commit --> Ready[Outcome: ready\nPass contract & ledger to verifier]
-```
-
 ## Rules & Guardrails
 
 1. **Strict Authority**: Run only commands authorized in the approved `worker` contract.

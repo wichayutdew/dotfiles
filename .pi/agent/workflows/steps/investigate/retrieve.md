@@ -11,22 +11,6 @@ Plannotator feedback:
 
 ## Retrieval & Scoping Flow
 
-```mermaid
-flowchart TD
-    Start([Parse Input String]) --> InputCheck{Has Jira Key/URL or Text?}
-    InputCheck -->|Empty| BlockedEmpty[Outcome: blocked\nScope missing]
-    InputCheck -->|Jira Key/URL Present| FetchJira[Fetch Issue Details via Atlassian MCP]
-    InputCheck -->|Text Summary Only| DefineScope[Define Local Investigation Scope]
-    
-    FetchJira -->|Success| DefineScope
-    FetchJira -->|Auth/Network Error| RetryJira{Safe Retry Available?}
-    RetryJira -->|Yes| FetchJira
-    RetryJira -->|No| BlockedJira[Outcome: blocked\nJira data inaccessible]
-    
-    DefineScope --> DerivePath[Derive Deterministic Report Path\n~/repositories/investigation-findings/slug.md]
-    DerivePath --> PlannotatorSubmit[Outcome: submit via Plannotator]
-```
-
 ## Scope Artifact Structure
 
 1. `# <Investigation title>`

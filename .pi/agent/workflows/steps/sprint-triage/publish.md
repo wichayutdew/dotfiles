@@ -4,24 +4,20 @@ Run input:
 {{workflow.input}}
 Approved plan:
 {{reviewed.artifact}}
-Verification ledger:
+Verification summary:
 {{last.summary}}
 
-## Publication Flow
+## Publication Rules
 
-```mermaid
-flowchart TD
-    Start([Check Remote Ref & Read Current Confluence Page]) --> PushBranch[1. Non-Force Push Committed Branch]
-    PushBranch --> CreateMR[2. Create GitLab MR via API]
-    CreateMR --> VerifyMR[3. Read Back & Confirm MR]
-    VerifyMR --> BuildBody[4. Concatenate current HTML and approved guide]
-    BuildBody --> UpdateConfluence[5. Replace page with complete resulting body]
-    UpdateConfluence --> VerifyConfluence[6. Read Back Confluence Page]
-    VerifyConfluence --> Ready[Outcome: ready\nComplete Publication Ledger]
-```
+1. **GitLab Push & MR:**
+   - Push the committed local branch to GitLab without force.
+   - Create the single approved MR via GitLab MCP with approved title/description against `gitlab.targetBranch`.
+2. **Confluence Append:**
+   - Before mutating, call `getConfluencePage` (HTML format). Compute SHA-256 of the raw UTF-8 HTML.
+   - Verify page version, exact HTML string, SHA-256 hash, and zero append markers match the approved artifact. If different, block immediately (never overwrite concurrent edits).
+   - Update page with the exact approved resulting full HTML (`confluence.appendMode: end`).
+   - Read back the page to confirm the append succeeded with exactly one marker instance and updated version.
 
-## Guardrails
-- Before Confluence mutation, read the current page in HTML and compare its version, exact source HTML, and SHA-256 hash with the approved artifact. Compute the hash from exact UTF-8 HTML returned by Atlassian MCP. Never normalize `<p></p>`, whitespace, or empty elements before comparison. If any identity value differs, block rather than overwrite concurrent edits.
-- With `appendMode: end`, replace the page only with the complete approved resulting full HTML: exact approved source HTML followed by the approved decision-tree HTML. Never send a partial body.
-- After updating, read back the page and verify the approved source HTML and new guide are present exactly once and the complete resulting full HTML matches exactly.
-- Execute only the approved push, single MR creation, and complete Confluence body update. If an effect already exists, verify it and avoid duplication. Outcome `ready` on completion; `blocked` on ambiguity.
+## Outcomes
+- `ready`: GitLab branch/MR and Confluence update completed and verified.
+- `blocked`: Precondition hash mismatch, marker conflict, or API failure.

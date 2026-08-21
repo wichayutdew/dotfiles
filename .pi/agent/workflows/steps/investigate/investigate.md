@@ -11,16 +11,6 @@ Plannotator feedback:
 
 ## Investigation & Report Flow
 
-```mermaid
-flowchart TD
-    Start([Inspect Approved Scope & Goals]) --> ReadLocal[1. Read Local Code & Docs with rg / fd]
-    ReadLocal --> QueryRemote[2. Read Authoritative MCP Sources\nAtlassian, GitLab, Glean, Sourcegraph, Context7]
-    QueryRemote --> ReconcileClaims[3. Reconcile Evidence\nClassify Facts, Hypotheses, Unknowns]
-    
-    ReconcileClaims --> WriteReport[4. Write Markdown Report\n~/repositories/investigation-findings/slug.md]
-    WriteReport --> Ready[Outcome: ready\nDetailed claim & evidence ledger]
-```
-
 ## Report Template (`~/repositories/investigation-findings/<slug>.md`)
 
 ```markdown
