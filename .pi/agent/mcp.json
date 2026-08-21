@@ -85,7 +85,7 @@
       "directTools": true
     },
     "opsbot": {
-      "url": "https://mcp-gateway.agodadev.io/opsbot/mcp",
+      "url": "${OPSBOT_MCP}",
       "headers": {},
       "directTools": true
     }
