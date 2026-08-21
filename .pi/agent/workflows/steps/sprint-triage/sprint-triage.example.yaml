@@ -16,6 +16,13 @@ knowledgeBase:
   localRepositoryPath: REPLACE_WITH_LOCAL_KNOWLEDGE_BASE_REPOSITORY_PATH
   # Must be inside ~/repositories/worktrees.
   workspaceRoot: REPLACE_WITH_WORKTREE_ROOT
+  # AI-readable sprint reports and reverse-chronological index.
+  contentDirectory: REPLACE_WITH_KNOWLEDGE_CONTENT_DIRECTORY
+  indexFile: REPLACE_WITH_KNOWLEDGE_INDEX_FILE
 confluence:
   cloudId: REPLACE_WITH_CONFLUENCE_CLOUD_ID
   pageId: REPLACE_WITH_CONFLUENCE_PAGE_ID
+  # Exact existing heading after which sprint knowledge is appended.
+  appendMarker: REPLACE_WITH_CONFLUENCE_APPEND_MARKER
+gitlab:
+  targetBranch: REPLACE_WITH_MR_TARGET_BRANCH
