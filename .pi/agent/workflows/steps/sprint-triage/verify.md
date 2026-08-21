@@ -18,6 +18,7 @@ Implementation summary:
    - The report is the primary source for LLM agents and contains all five Knowledge-Base Record fields for every summarized ticket; do not accept a URL-only report.
 3. Verify Confluence plan preconditions:
    - Contains source page version, exact raw Markdown, SHA-256 hash, append marker, append Markdown, and exact resulting Markdown.
+   - Every Confluence Action Tree has exactly one `**Useful guide links:**` field directly after its ordered resolution steps. Its content is either `None verified.` or the exact approved, deduplicated guide-link Markdown with a trigger and practical purpose.
 
 ## Outcomes
 - `ready`: All local diffs and publication preconditions verified.

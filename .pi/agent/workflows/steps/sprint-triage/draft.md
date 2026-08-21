@@ -14,10 +14,11 @@ Collection summary:
    - **Knowledge gained from this support:** reusable takeaway with verified references; or `case-specific; no reusable knowledge`.
    - **Unknown gap:** explicit `UNKNOWN` gaps.
 
-2. **Confluence Action Tree (2 fields):** Use these exact bold labels once per human guide:
+2. **Confluence Action Tree (3 fields):** Use these exact bold labels once per human guide, in this order:
    - **Inquiry topic:**
    - **Steps to take an action to resolve the inquiry:** ordered resolution steps.
-   *(Omit Slack URLs, ticket IDs, metrics, or one-off narratives from Confluence. Group equivalent inquiries; omit tickets with no repeatable mitigation).*
+   - **Useful guide links:** directly after the ordered resolution steps. Include only deduplicated evidence-backed internal guide/runbook links in the format `[Guide title](URL) — use when <trigger>; <practical purpose>.`; otherwise write `None verified.`
+   *(Omit Slack URLs, ticket IDs, metrics, diagnostic-only links, or one-off narratives from Confluence. Group equivalent inquiries; omit tickets with no repeatable mitigation).*
 
 When `skippedTickets` exists, include their URL, reason, and timestamp in the repository report only.
 
@@ -36,7 +37,7 @@ Return only:
 
 1. `## Collection Ledger` — reproduce the collection ledger from `{{last.summary}}` verbatim.
 2. `## Staged Knowledge-Base Manifest` — directory, report/ledger absolute paths, SHA-256, byte counts, and summarized-ticket count.
-3. `## Draft Summaries` — complete Confluence Action Trees only, using the exact two bold labels above. Do not repeat Knowledge-Base Records.
+3. `## Draft Summaries` — complete Confluence Action Trees only, using the exact three bold labels above. Do not repeat Knowledge-Base Records.
 
 ## Artifact limit
 Keep the handoff concise and at most 20,000 characters. Preserve all Confluence guide fields and manifest values; remove repeated process narrative before removing evidence.

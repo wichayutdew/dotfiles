@@ -178,6 +178,10 @@ export default function (pi) {
   }
 
   let agentActive = false;
+  // pi-workflows-herdr-lifecycle-patch:start
+  let workflowActive = false;
+  let workflowMessage: string | undefined;
+  // pi-workflows-herdr-lifecycle-patch:end
   let blockedCount = 0;
   let blockedMessage: string | undefined;
   let lastState: AgentState | undefined;
@@ -188,10 +192,10 @@ export default function (pi) {
     if (blockedCount > 0) {
       return { state: "blocked" as const, message: blockedMessage };
     }
-    if (agentActive) {
-      return { state: "working" as const, message: undefined };
+    if (agentActive || workflowActive) {
+      return { state: "working" as const, message: workflowMessage };
     }
-    return { state: "idle" as const, message: undefined };
+    return { state: "idle" as const, message: workflowMessage };
   }
 
   function publishState(force = false) {
@@ -203,6 +207,23 @@ export default function (pi) {
     lastMessage = next.message;
     queueState(next.state, next.message);
   }
+
+  // pi-workflows-herdr-lifecycle-patch:start
+  pi.events.on("pi-workflows:state", (data) => {
+    if (!rootSession || !data || typeof data !== "object") {
+      return;
+    }
+    const state = data.state;
+    if (state === "working") {
+      workflowActive = true;
+      workflowMessage = data.message;
+    } else {
+      workflowActive = false;
+      workflowMessage = data.message;
+    }
+    publishState();
+  });
+  // pi-workflows-herdr-lifecycle-patch:end
 
   pi.events.on("herdr:blocked", (data) => {
     if (!rootSession) {
@@ -243,6 +264,7 @@ export default function (pi) {
     updateSessionRef(ctx);
     void reportSession();
     agentActive = true;
+    workflowMessage = undefined;
     publishState();
   });
 

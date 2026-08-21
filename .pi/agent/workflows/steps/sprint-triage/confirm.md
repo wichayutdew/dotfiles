@@ -10,8 +10,8 @@ Publication ledger:
 ## Confirmation Rules
 
 1. Call `getConfluencePage` in Markdown format.
-2. Verify the stored Markdown exactly equals the approved resulting Markdown and the publication-ledger SHA-256.
-3. Verify exactly one approved append marker and a page version newer than the approved source version.
+2. Verify the stored Markdown exactly equals the publication-ledger canonical representation and its SHA-256.
+3. Verify the approved semantic append contract: exactly one approved append marker; every approved Action Tree field, order, and text; the approved guide-link content (labels and destinations) accepting Confluence-canonical internal-link URLs; no extra or missing Action Trees; and a page version newer than the approved source version.
 
 ## Outcomes
 - `ready`: GitLab MR, Confluence append, and branch verified independently.

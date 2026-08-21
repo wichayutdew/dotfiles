@@ -95,6 +95,7 @@ steps:
           -
             - "**Inquiry topic:**"
             - "**Steps to take an action to resolve the inquiry:**"
+            - "**Useful guide links:**"
     transitions:
       approved: checkout
       changes-requested: plan

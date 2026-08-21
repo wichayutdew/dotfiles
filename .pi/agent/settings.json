@@ -10,7 +10,7 @@
     "npm:@plannotator/pi-extension",
     "npm:pi-zentui",
     "git:github.com/obra/superpowers",
-    "npm:@wichayutdew/pi-workflows"
+    "/Users/wphongphanpa/repositories/worktrees/pi-workflows-gate-artifact-contract"
   ],
   "terminal": {
     "showTerminalProgress": true,
