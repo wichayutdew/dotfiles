@@ -161,7 +161,7 @@ flowchart TD
 ---
 
 ## 7. `/sprint-triage` — Support Ticket Triage & Knowledge Base
-Collects OpsBot/Slack ticket threads in generic workspace, drafts redacted records and Confluence action trees, approves publication plan via Plannotator, checks out & binds KB repo, writes report + ledger + index, verifies, and publishes to GitLab & Confluence.
+Collects OpsBot/Slack ticket threads and drafts redacted records in step handoffs, stores complete ledger and draft content in the Plannotator plan artifact, then checks out & binds KB repo only after approval to write report + ledger + index, verify, and publish to GitLab & Confluence.
 
 ```mermaid
 flowchart TD

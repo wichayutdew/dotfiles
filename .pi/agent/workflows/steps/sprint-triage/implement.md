@@ -9,7 +9,7 @@ Approval feedback:
 
 ## Implementation Rules
 
-1. Read approved file paths and contents from `Approved local content` in the plan artifact.
+1. Read approved file paths and contents only from `Approved local content` in the Plannotator-approved plan artifact. Do not use or create `SPRINT_TRIAGE_COLLECTION_LEDGER.md` or `SPRINT_TRIAGE_DRAFT.md`.
 2. Create required directories (e.g. `<contentDirectory>`) if they do not exist.
 3. Write the exact approved Markdown content for:
    - Sprint report (e.g. `<contentDirectory>/YYYY-MM-DD_to_YYYY-MM-DD.md`)

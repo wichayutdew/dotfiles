@@ -4,7 +4,7 @@ command: sprint-triage
 description: "Collect Grafana-selected support ticket threads, summarize verified outcomes, and publish them safely. Example: /sprint-triage 2026-08-10 2026-08-21"
 start: collect
 maxStepVisits: 16
-summaryMaxChars: 30000
+summaryMaxChars: 50000
 steps:
   checkout:
     title: Validate targets and create a bound knowledge-base checkout
@@ -33,7 +33,7 @@ steps:
       file: steps/sprint-triage/collect.md
     agent: scout
     permissions:
-      tools: [read, ls, bash, write, mcp]
+      tools: [read, ls, bash, mcp]
       mcp: [grafana, slack]
       extensions: [/]
       skills: [grafana-logs, caveman]
@@ -49,7 +49,7 @@ steps:
       file: steps/sprint-triage/draft.md
     agent: worker
     permissions:
-      tools: [read, ls, bash, edit, write, mcp]
+      tools: [read, ls, bash, mcp]
       mcp: [atlassian]
       extensions: [/]
       skills: [coding-standards, caveman]
