@@ -11,14 +11,17 @@ Verification ledger:
 
 ```mermaid
 flowchart TD
-    Start([Check Remote Ref & Confluence Page]) --> PushBranch[1. Non-Force Push Committed Branch]
+    Start([Check Remote Ref & Read Current Confluence Page]) --> PushBranch[1. Non-Force Push Committed Branch]
     PushBranch --> CreateMR[2. Create GitLab MR via API]
     CreateMR --> VerifyMR[3. Read Back & Confirm MR]
-    VerifyMR --> AppendConfluence[4. Append Section to Confluence Page with Marker]
-    AppendConfluence --> VerifyConfluence[5. Read Back Confluence Page]
+    VerifyMR --> BuildBody[4. Concatenate current HTML and approved guide]
+    BuildBody --> UpdateConfluence[5. Replace page with complete resulting body]
+    UpdateConfluence --> VerifyConfluence[6. Read Back Confluence Page]
     VerifyConfluence --> Ready[Outcome: ready\nComplete Publication Ledger]
 ```
 
 ## Guardrails
-- Execute only the approved push, single MR creation, and marked Confluence append.
-- If an effect already exists, verify it and avoid duplication. Outcome `ready` on completion; `blocked` on ambiguity.
+- Before Confluence mutation, read the current page in HTML and compare its version/body hash with the approved artifact. If they differ, block rather than overwrite concurrent edits.
+- With `appendMode: end`, replace the page only with the complete approved resulting HTML body: exact current content followed by the approved decision-tree HTML. Never send a partial body.
+- After updating, read back the page and verify both the prior body and new guide are present exactly once.
+- Execute only the approved push, single MR creation, and complete Confluence body update. If an effect already exists, verify it and avoid duplication. Outcome `ready` on completion; `blocked` on ambiguity.

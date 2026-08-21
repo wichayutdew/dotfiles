@@ -30,8 +30,8 @@ Each ticket record must contain exactly these evidence fields:
 
 1. **Slack URL**
 2. **Inquiry summary** — what the requester asked or observed, grounded in the thread.
-3. **Action taken to mitigate the issue** — ordered actions and verified outcome; use `no verified mitigation` when absent.
-4. **Knowledge gained from this support** — a reusable factual takeaway, or `case-specific; no reusable knowledge`.
+3. **Action taken to mitigate the issue** — ordered actions and verified outcome, including every useful link explicitly mentioned in the thread that guides triage, mitigation, escalation, or content enhancement; use `no verified mitigation` when absent.
+4. **Knowledge gained from this support** — a reusable factual takeaway, including a verified link when the thread identifies a guide, runbook, ticket, dashboard, or other source that should be used or enhanced; otherwise state `case-specific; no reusable knowledge`.
 5. **Unknown gap** — explicit `UNKNOWN` items; a reaction/status emoji alone is not a resolution.
 
 ### Confluence decision tree / step-by-step guide
@@ -41,7 +41,7 @@ The Confluence append under the configured marker contains only:
 1. **Inquiry topic**
 2. **Steps to take an action to resolve the inquiry**
 
-Do not include Slack URLs, ticket identifiers, owners, timestamps, evidence gaps, metrics, raw thread content, or one-off ticket narratives in Confluence. Group only substantively equivalent inquiries into one topic; when no repeatable resolution exists, omit that ticket from Confluence and retain its repository record.
+Do not include Slack URLs, ticket identifiers, owners, timestamps, evidence gaps, metrics, raw thread content, or one-off ticket narratives in Confluence. Include a useful verified guide/runbook/ticket link in the resolution steps when it is explicitly mentioned in the source and helps a reader take the action. Group only substantively equivalent inquiries into one topic; when no repeatable resolution exists, omit that ticket from Confluence and retain its repository record.
 
 When `skippedTickets` is non-empty, keep their URL, reason, and timestamp in the repository report only. Do not infer their topic, resolution, or knowledge.
 

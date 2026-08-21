@@ -22,7 +22,7 @@ knowledgeBase:
 confluence:
   cloudId: REPLACE_WITH_CONFLUENCE_CLOUD_ID
   pageId: REPLACE_WITH_CONFLUENCE_PAGE_ID
-  # Exact existing heading after which sprint knowledge is appended.
-  appendMarker: REPLACE_WITH_CONFLUENCE_APPEND_MARKER
+  # Append approved knowledge at the end of the dedicated guide page.
+  appendMode: end
 gitlab:
   targetBranch: REPLACE_WITH_MR_TARGET_BRANCH
