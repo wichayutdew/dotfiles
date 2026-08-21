@@ -5,12 +5,11 @@
   "defaultThinkingLevel": "medium",
   "shellPath": "/opt/homebrew/bin/fish",
   "packages": [
-    "npm:@bitcraft-apps/pi-web-tools",
-    "npm:pi-mcp-adapter",
-    "npm:@plannotator/pi-extension",
     "npm:pi-zentui",
-    "git:github.com/obra/superpowers",
-		"npm:@wichayutdew/pi-workflows"
+    "npm:@plannotator/pi-extension",
+    "npm:pi-mcp-adapter",
+    "npm:pi-web-access",
+    "npm:@wichayutdew/pi-workflows"
   ],
   "terminal": {
     "showTerminalProgress": true,

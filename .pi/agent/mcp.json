@@ -60,7 +60,7 @@
       "url": "${GRAFANA_MCP}",
       "auth": false,
       "directTools": true,
-			"headers": {
+      "headers": {
         "X-Grafana-Org-Id": "1"
       }
     },
@@ -77,6 +77,11 @@
     },
     "superset": {
       "url": "${SUPERSET_MCP}",
+      "directTools": true
+    },
+    "query-writer": {
+      "url": "${QUERY_WRITER_MCP}",
+      "headers": {},
       "directTools": true
     }
   }

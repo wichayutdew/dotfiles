@@ -2,10 +2,10 @@
   "name": "pi-extensions",
   "private": true,
   "dependencies": {
-    "@bitcraft-apps/pi-web-tools": "^1.6.0",
-    "@plannotator/pi-extension": "^0.27.5",
+    "@plannotator/pi-extension": "^0.27.6",
     "@wichayutdew/pi-workflows": "^2.7.0",
     "pi-mcp-adapter": "^2.27.0",
+    "pi-web-access": "^0.24.0",
     "pi-zentui": "^0.20.1"
   }
 }

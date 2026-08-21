@@ -13,9 +13,9 @@ steps:
     agent: scout
     permissions:
       tools: [read, ls, bash, mcp]
-      mcp: [atlassian, context7, sourcegraph, glean, grafana]
+      mcp: [atlassian, context7, sourcegraph, glean, gh_grep, grafana, slack, superset, query-writer]
       extensions: [/]
-      skills: [jira-ticket, start-triage, search-code-sourcegraph, caveman]
+      skills: [using-superpowers, caveman]
       bash:
         mode: unrestricted
     gate:
@@ -48,9 +48,9 @@ steps:
     agent: worker
     permissions:
       tools: [read, ls, bash, write, mcp]
-      mcp: [atlassian, context7, sourcegraph, glean, grafana, gitlab]
+      mcp: [atlassian, context7, sourcegraph, glean, gh_grep, grafana, slack, gitlab, superset, query-writer]
       extensions: [/]
-      skills: [coding-standards, systematic-debugging, start-triage, grafana-logs, search-code-sourcegraph, caveman]
+      skills: [using-superpowers, caveman, systematic-debugging, grafana-logs]
       bash:
         mode: unrestricted
     transitions:
@@ -64,9 +64,9 @@ steps:
     agent: reviewer
     permissions:
       tools: [read, ls, bash, mcp]
-      mcp: [atlassian, sourcegraph, glean, gitlab]
+      mcp: [atlassian, sourcegraph, glean, grafana, slack, gitlab, superset, query-writer]
       extensions: [/]
-      skills: [verification-before-completion, caveman]
+      skills: [using-superpowers, caveman, verification-before-completion]
       bash:
         mode: unrestricted
     transitions:

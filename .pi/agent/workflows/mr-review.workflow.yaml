@@ -15,7 +15,7 @@ steps:
       tools: [read, ls, bash, mcp]
       mcp: [gitlab, context7]
       extensions: [/]
-      skills: [caveman]
+      skills: [using-superpowers, caveman]
       bash:
         mode: unrestricted
     transitions:
@@ -30,7 +30,7 @@ steps:
       tools: [read, ls, bash, mcp]
       mcp: [gitlab, sourcegraph, context7]
       extensions: [/]
-      skills: [coding-standards, requesting-code-review, search-code-sourcegraph, caveman]
+      skills: [using-superpowers, caveman, caveman-review, ponytail-review]
       bash:
         mode: unrestricted
     gate:
@@ -65,7 +65,7 @@ steps:
       tools: [read, ls, bash, mcp]
       mcp: [gitlab]
       extensions: [/]
-      skills: [caveman]
+      skills: [using-superpowers, caveman]
       bash:
         mode: unrestricted
     transitions:
@@ -80,7 +80,7 @@ steps:
       tools: [read, ls, bash, mcp]
       mcp: [gitlab]
       extensions: [/]
-      skills: [verification-before-completion, caveman]
+      skills: [using-superpowers, caveman, verification-before-completion]
       bash:
         mode: unrestricted
     transitions:

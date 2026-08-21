@@ -15,7 +15,7 @@ steps:
       tools: [read, ls, bash]
       mcp: []
       extensions: [/]
-      skills: [jira-ticket, caveman]
+      skills: [using-superpowers, caveman]
       bash:
         mode: unrestricted
     transitions:
@@ -31,7 +31,7 @@ steps:
       tools: [read, ls, bash, mcp]
       mcp: [atlassian]
       extensions: [/]
-      skills: [jira-ticket, caveman]
+      skills: [using-superpowers, caveman]
       bash:
         mode: unrestricted
     gate:
@@ -66,7 +66,7 @@ steps:
       tools: [read, ls, bash, mcp]
       mcp: [atlassian]
       extensions: [/]
-      skills: [jira-ticket, caveman]
+      skills: [using-superpowers, caveman]
       bash:
         mode: unrestricted
     transitions:

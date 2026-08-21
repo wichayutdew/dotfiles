@@ -20,7 +20,7 @@ steps:
       tools: [read, ls, bash, edit, write]
       mcp: []
       extensions: [/]
-      skills: [using-git-worktrees, caveman]
+      skills: [using-superpowers, using-git-worktrees, caveman]
       bash:
         mode: unrestricted
     transitions:
@@ -36,7 +36,7 @@ steps:
       tools: [read, ls, bash, mcp]
       mcp: [grafana, slack]
       extensions: [/]
-      skills: [grafana-logs, caveman]
+      skills: [using-superpowers, caveman, grafana-logs]
       bash:
         mode: unrestricted
     transitions:
@@ -52,7 +52,7 @@ steps:
       tools: [read, ls, bash, mcp]
       mcp: [atlassian]
       extensions: [/]
-      skills: [coding-standards, caveman]
+      skills: [using-superpowers, caveman]
       bash:
         mode: unrestricted
     transitions:
@@ -68,7 +68,7 @@ steps:
       tools: [read, ls, bash, edit, write, mcp]
       mcp: [atlassian]
       extensions: [/]
-      skills: [writing-plans, caveman]
+      skills: [using-superpowers, caveman]
       bash:
         mode: unrestricted
     gate:
@@ -110,7 +110,7 @@ steps:
       tools: [read, ls, bash, edit, write]
       mcp: []
       extensions: [/]
-      skills: [coding-standards, caveman]
+      skills: [using-superpowers, caveman]
       bash:
         mode: unrestricted
     transitions:
@@ -126,7 +126,7 @@ steps:
       tools: [read, ls, bash, edit, write]
       mcp: []
       extensions: [/]
-      skills: [verification-before-completion, caveman]
+      skills: [using-superpowers, caveman, verification-before-completion]
       bash:
         mode: unrestricted
     transitions:
@@ -143,7 +143,7 @@ steps:
       tools: [read, ls, bash, edit, write, mcp]
       mcp: [atlassian, gitlab]
       extensions: [/]
-      skills: [commit-format, caveman]
+      skills: [using-superpowers, caveman, caveman-commit]
       bash:
         mode: unrestricted
     transitions:
@@ -159,7 +159,7 @@ steps:
       tools: [read, ls, bash, edit, write, mcp]
       mcp: [atlassian, gitlab]
       extensions: [/]
-      skills: [verification-before-completion, caveman]
+      skills: [using-superpowers, caveman, verification-before-completion]
       bash:
         mode: unrestricted
     transitions:
