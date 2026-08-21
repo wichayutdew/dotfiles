@@ -42,6 +42,9 @@ Format the artifact in order:
 }
 ```
 
+## Artifact limit
+Keep the submitted artifact concise and at most 8,000 characters. Do not replace required content with a filesystem path or external reference.
+
 ## Outcomes
 - `submit`: Plan ready for Plannotator review. Pass the **complete Markdown text content** directly in the `artifact` parameter.
 - `workspace-refresh`: Source ref advanced unexpectedly and workspace is clean.

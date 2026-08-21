@@ -39,9 +39,22 @@ steps:
       approvedOutcome: approved
       rejectedOutcome: changes-requested
       timeoutMs: 30000
+      artifactContract:
+        maxChars: 8000
+        requiredSubstrings:
+          - "# Review:"
+          - "## Verdict"
+          - "## Findings"
+          - "## Validation"
+          - "## Publication contract"
+          - "## Safety boundaries"
+        forbiddenSubstrings:
+          - "The complete gate artifact is the exact Markdown saved at"
+        onValidationFailure: retry
     transitions:
       approved: publish
       changes-requested: review
+      retry: review
       blocked: $pause
   publish:
     title: Publish the approved hosted review

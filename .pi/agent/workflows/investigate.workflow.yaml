@@ -24,6 +24,18 @@ steps:
       approvedOutcome: approved
       rejectedOutcome: changes-requested
       timeoutMs: 30000
+      artifactContract:
+        maxChars: 6000
+        requiredSubstrings:
+          - "## Brief description"
+          - "## Goals"
+          - "## Boundaries"
+          - "## Evidence & sources"
+          - "## Report destination"
+          - "## Open evidence gaps"
+        forbiddenSubstrings:
+          - "The complete gate artifact is the exact Markdown saved at"
+        onValidationFailure: retry
     transitions:
       approved: investigate
       changes-requested: retrieve

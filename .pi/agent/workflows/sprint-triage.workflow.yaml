@@ -77,6 +77,24 @@ steps:
       approvedOutcome: approved
       rejectedOutcome: changes-requested
       timeoutMs: 30000
+      artifactContract:
+        maxChars: 20000
+        requiredSubstrings:
+          - "# Publish reviewed sprint triage knowledge"
+          - "## Collection Ledger"
+          - "## Draft Summaries"
+          - "## Submitted evidence capture"
+          - "## Evidence and coverage"
+          - "## Approved local content"
+          - "## Approved GitLab action"
+          - "## Approved Confluence action"
+        forbiddenSubstrings:
+          - "The complete gate artifact is the exact Markdown saved at"
+        onValidationFailure: retry
+        equalOccurrenceGroups:
+          -
+            - "**Inquiry topic:**"
+            - "**Steps to take an action to resolve the inquiry:**"
     transitions:
       approved: checkout
       changes-requested: plan

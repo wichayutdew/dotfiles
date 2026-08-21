@@ -62,6 +62,19 @@ steps:
       approvedOutcome: approved
       rejectedOutcome: changes-requested
       timeoutMs: 30000
+      artifactContract:
+        maxChars: 10000
+        requiredSubstrings:
+          - "## Review summary"
+          - "## Comment decisions"
+          - "## Implementation plan"
+          - "## Validation"
+          - "## Replies and remote actions"
+          - "## Risks"
+          - "## Execution appendix (machine-readable)"
+        forbiddenSubstrings:
+          - "The complete gate artifact is the exact Markdown saved at"
+        onValidationFailure: retry
     transitions:
       approved: implement
       changes-requested: plan

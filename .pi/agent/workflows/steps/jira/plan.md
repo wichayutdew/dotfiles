@@ -21,6 +21,9 @@ Plannotator feedback:
 5. `## Creation sequence` — Epic first, followed by stories in dependency order.
 6. `## Safety limits` — Exact mapped fields only; no guessed IDs or unapproved objects.
 
+## Artifact limit
+Keep the submitted artifact concise and at most 16,000 characters. Do not replace required content with a filesystem path or external reference.
+
 ## Outcomes
 - `submit`: Plan ready for Plannotator review.
 - `retry`: Transient read-only Atlassian API failure.

@@ -44,6 +44,9 @@ Plannotator feedback:
 }
 ```
 
+## Artifact limit
+Keep the submitted artifact concise and at most 8,000 characters. Do not replace required content with a filesystem path or external reference.
+
 ## Outcomes
 - `submit`: Review artifact ready for Plannotator gate.
 - `retry`: Transient read-only API failure.

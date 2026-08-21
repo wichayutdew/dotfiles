@@ -9,12 +9,12 @@ Approval feedback:
 
 ## Implementation Rules
 
-1. Read approved file paths and contents only from `Approved local content` in the Plannotator-approved plan artifact. Do not use or create `SPRINT_TRIAGE_COLLECTION_LEDGER.md` or `SPRINT_TRIAGE_DRAFT.md`.
+1. Read staged report/ledger paths, SHA-256 values, byte counts, and final paths from `Staged Knowledge-Base Manifest` and `Approved local content` in the approved plan artifact. Reject paths outside `/tmp/sprint-triage.*` or any hash/byte mismatch.
 2. Create required directories (e.g. `<contentDirectory>`) if they do not exist.
-3. Write the exact approved Markdown content for:
+3. Copy the exact hash-verified staged Markdown files to:
    - Sprint report (e.g. `<contentDirectory>/YYYY-MM-DD_to_YYYY-MM-DD.md`)
    - Collection ledger (e.g. `<contentDirectory>/YYYY-MM-DD_to_YYYY-MM-DD.ledger.md`)
-   - Index file (e.g. `<indexFile>`)
+   - Write the exact approved index content (e.g. `<indexFile>`)
 4. Verify no extra files were created and run formatting/redaction checks.
 5. Stage and commit with the approved commit message.
 

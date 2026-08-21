@@ -40,6 +40,18 @@ steps:
       approvedOutcome: approved
       rejectedOutcome: changes-requested
       timeoutMs: 30000
+      artifactContract:
+        maxChars: 16000
+        requiredSubstrings:
+          - "# Create Jira Epic and Stories"
+          - "## Jira field contract"
+          - "## Epic"
+          - "## Ordered Stories"
+          - "## Creation sequence"
+          - "## Safety limits"
+        forbiddenSubstrings:
+          - "The complete gate artifact is the exact Markdown saved at"
+        onValidationFailure: retry
     transitions:
       approved: create
       changes-requested: plan

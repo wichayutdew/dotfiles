@@ -19,6 +19,9 @@ Plannotator feedback:
 6. `## Report destination` (`~/repositories/investigation-findings/<slug>.md`)
 7. `## Open evidence gaps`
 
+## Artifact limit
+Keep the submitted artifact concise and at most 6,000 characters. Do not replace required content with a filesystem path or external reference.
+
 ## Outcomes
 - `submit`: Scope ready for Plannotator gate review.
 - `retry`: Transient read-only API failure.
