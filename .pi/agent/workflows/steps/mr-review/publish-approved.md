@@ -12,8 +12,6 @@ Approval feedback:
 Previous step handoff:
 {{last.summary}}
 
-## Publication Sequence
-
 ## Guardrails
 - Execute only literal commands approved in `actions`.
 - Never force-push, approve, merge, resolve, or close reviews.

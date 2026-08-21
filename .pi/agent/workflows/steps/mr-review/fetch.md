@@ -3,8 +3,6 @@ You are the read-only evidence-fetch stage for `/mr-review`. Do not mutate state
 Hosted review URL & context:
 {{workflow.input}}
 
-## Evidence Fetch Flow
-
 ## Evidence Bundle Structure
 1. `# Hosted review evidence`
 2. `## Identity and immutable coordinates` (URL, host, project, MR/PR number, source/target branch, head SHA)

@@ -9,8 +9,6 @@ Approved plan:
 Implementation ledger:
 {{last.summary}}
 
-## Verification Decision Flow
-
 ## Outcomes
 - `passed`: All acceptance criteria, tests, and linters pass. Hands off approved `remoteActions` to publication stage.
 - `failed`: Local test failure or regression (returns to `implement`).

@@ -3,8 +3,6 @@ You are the input-normalization stage for `/jira`. Stay read-only; do not call A
 Workflow input:
 {{workflow.input}}
 
-## Draft Normalization Flow
-
 ## Draft Artifact Structure
 
 1. `# Jira draft`

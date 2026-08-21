@@ -9,8 +9,6 @@ Previously rejected artifact:
 Plannotator feedback:
 {{gate.feedback}}
 
-## Planning & Jira Ingestion Flow
-
 ## Plan Artifact Structure
 
 1. `# <Short outcome-oriented title>`

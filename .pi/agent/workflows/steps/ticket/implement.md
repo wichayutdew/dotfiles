@@ -12,8 +12,6 @@ Approval feedback:
 Latest ledger:
 {{last.summary}}
 
-## Implementation Flow (TDD)
-
 ## Rules & Guardrails
 
 1. **Strict Authority**: Run only commands authorized in the approved `worker` contract.

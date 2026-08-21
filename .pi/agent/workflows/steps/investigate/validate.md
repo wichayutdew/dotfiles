@@ -9,8 +9,6 @@ Approved scope artifact:
 Investigation ledger:
 {{last.summary}}
 
-## Validation Decision Flow
-
 ## Validation Rules & Review Criteria
 
 1. **Independent Verification**: Do not trust the prior claim ledger; verify citations, line numbers, and sources directly with read-only tools.

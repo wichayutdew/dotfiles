@@ -12,8 +12,6 @@ Previously rejected artifact:
 Plannotator feedback:
 {{gate.feedback}}
 
-## Planning & Triage Flow
-
 ## Plan Artifact Structure
 
 1. `# <Outcome-oriented title>`

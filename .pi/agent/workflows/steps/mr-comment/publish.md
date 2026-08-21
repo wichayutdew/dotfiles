@@ -9,8 +9,6 @@ Approved plan:
 Verification ledger:
 {{last.summary}}
 
-## Publication Sequence
-
 ## Guardrails
 - Run only approved `remoteActions` (`git push`, `glab api`, `gh api`).
 - Never force-push, resolve threads, approve, or merge MRs.

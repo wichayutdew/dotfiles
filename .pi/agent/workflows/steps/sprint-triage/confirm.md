@@ -7,8 +7,6 @@ Approved plan:
 Publication ledger:
 {{last.summary}}
 
-## Confirmation Flow
-
 ## Outcomes
 - `ready`: GitLab MR, Confluence append, and branch verified independently.
 - `retry`: Transient read-only API failure.

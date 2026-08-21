@@ -12,8 +12,6 @@ Approval feedback:
 Latest ledger:
 {{last.summary}}
 
-## Implementation Flow (TDD)
-
 ## Rules & Guardrails
 
 1. **Workspace Integrity**: Operate strictly in `repositories[0].cwd`. Never switch branches, create workspaces, or touch unrelated files.

@@ -12,8 +12,6 @@ Previously rejected artifact:
 Plannotator feedback:
 {{gate.feedback}}
 
-## Review & Proposal Flow
-
 ## Review Artifact Structure
 
 1. `# Review: <Short verdict>`

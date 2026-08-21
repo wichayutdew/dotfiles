@@ -12,8 +12,6 @@ Approval feedback:
 Implementation ledger:
 {{last.summary}}
 
-## Verification Flow
-
 ## Rules & Verification Criteria
 
 1. **Independent Verification**: Re-run all standalone commands under `repositories[0].reviewer[]` (`full-tests`, `lint`, `format`).

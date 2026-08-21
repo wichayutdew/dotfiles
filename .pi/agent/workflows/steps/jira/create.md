@@ -12,8 +12,6 @@ Approval feedback:
 Previous creation ledger:
 {{last.summary}}
 
-## Jira Creation Sequence
-
 ## Guardrails & Output Contract
 
 1. **Idempotence**: Check the creation ledger before every write; skip any issue or link already created and confirmed.

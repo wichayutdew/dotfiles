@@ -6,8 +6,6 @@ Review input:
 Fetched review evidence:
 {{last.summary}}
 
-## Checkout & Adoption Decision Tree
-
 ## Guardrails
 - **Preservation**: Never stash, reset, clean, or delete files.
 - **Outcomes**:

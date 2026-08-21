@@ -9,8 +9,6 @@ Approved scope artifact:
 Plannotator feedback:
 {{reviewed.feedback}}
 
-## Investigation & Report Flow
-
 ## Report Template (`~/repositories/investigation-findings/<slug>.md`)
 
 ```markdown

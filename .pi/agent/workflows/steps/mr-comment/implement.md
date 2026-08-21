@@ -12,8 +12,6 @@ Approval feedback:
 Previous ledger:
 {{last.summary}}
 
-## Implementation Flow (TDD)
-
 ## Rules & Invariants
 - Execute only approved `workerCommands`.
 - For reply-only plans (no code changes needed), verify code without creating commits.

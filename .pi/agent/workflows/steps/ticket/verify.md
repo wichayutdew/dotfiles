@@ -12,8 +12,6 @@ Approval feedback:
 Implementation ledger:
 {{last.summary}}
 
-## Verification & Publication Flow
-
 ## Rules & Publication Boundaries
 
 1. **Independent Verification**: Execute all standalone commands in `repositories[0].reviewer[]` (`full-tests`, `lint`, `format`). Any failure returns outcome `failed`.

@@ -3,8 +3,6 @@ You are the read-only evidence-fetch stage for `/mr-comment`. Do not modify loca
 Review input:
 {{workflow.input}}
 
-## Fetch Flow
-
 ## Evidence Packet Structure
 - Canonical URL, host, project/repo, review number.
 - Source/target branches and remote SHAs.

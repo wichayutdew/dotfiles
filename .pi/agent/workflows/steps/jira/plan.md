@@ -12,8 +12,6 @@ Previously rejected plan:
 Plannotator feedback:
 {{gate.feedback}}
 
-## Planning & Atlassian Verification Flow
-
 ## Plan Artifact Structure
 
 1. `# Create Jira Epic and Stories`

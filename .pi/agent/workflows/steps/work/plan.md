@@ -9,8 +9,6 @@ Previously rejected artifact:
 Plannotator feedback:
 {{gate.feedback}}
 
-## Planning & Validation Flow
-
 ## Plan Artifact Structure
 
 Format the artifact in order:

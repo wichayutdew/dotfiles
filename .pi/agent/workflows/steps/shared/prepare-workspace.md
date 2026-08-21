@@ -6,8 +6,6 @@ Workflow request:
 Stable workflow run ID:
 {{run.id}}
 
-## Preparation Logic
-
 ## Rules & Invariants
 
 1. **Idempotence**: Extract marker from `{{run.id}}`. Reuse existing run-owned worktree/branch if present; never create a duplicate.

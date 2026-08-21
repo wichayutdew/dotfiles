@@ -9,8 +9,6 @@ Previously rejected scope:
 Plannotator feedback:
 {{gate.feedback}}
 
-## Retrieval & Scoping Flow
-
 ## Scope Artifact Structure
 
 1. `# <Investigation title>`

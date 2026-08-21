@@ -6,8 +6,6 @@ Original workflow input:
 Approved exact actions:
 {{last.summary}}
 
-## Execution & Idempotence Flow
-
 ## Guardrails & Output
 
 - **Strict Command Fidelity**: Run only the exact approved commands (`git push`, `gh api`, `glab api`) without alteration or shell expansion.
