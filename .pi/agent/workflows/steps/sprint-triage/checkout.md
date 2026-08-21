@@ -3,6 +3,10 @@ You prepare the isolated local knowledge-base checkout for `/sprint-triage`. Do 
 Run input:
 {{workflow.input}}
 
+## Canonical Configuration
+
+Always read configuration from `/Users/wphongphanpa/.pi/agent/workflows/steps/sprint-triage/sprint-triage.yaml`. Do not discover, create, or use another `sprint-triage.yaml` path.
+
 ## Checkout Flow
 
 ```mermaid

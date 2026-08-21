@@ -4,6 +4,8 @@ Run input:
 {{workflow.input}}
 Draft ledger:
 {{last.summary}}
+Canonical configuration path:
+`/Users/wphongphanpa/.pi/agent/workflows/steps/sprint-triage/sprint-triage.yaml`
 Previously rejected artifact:
 {{gate.artifact}}
 Plannotator feedback:
@@ -20,7 +22,7 @@ flowchart TD
 ```
 
 ## Publication Target Contract
-- Re-read local `sprint-triage.yaml`; the draft ledger is not the source of publication targets.
+- Re-read `/Users/wphongphanpa/.pi/agent/workflows/steps/sprint-triage/sprint-triage.yaml`; the draft ledger is not the source of publication targets.
 - Use Atlassian MCP `getConfluencePage` with `confluence.pageId` and HTML content before drafting publication. Record page version and current-body hash in the artifact. With `confluence.appendMode: end`, the approved Confluence body is the exact current HTML body followed by the approved decision-tree HTML. Block only when the page cannot be read or append mode is unsupported.
 - Use `gitlab.targetBranch` as the MR target branch.
 - When the configured knowledge-base repository has no convention or tracked files, create the AI-readable convention: one Markdown file per sprint at `<contentDirectory>/<start-date>_to_<end-date>.md`, plus `<indexFile>` linking each report in reverse chronological order. Each repository ticket record contains only Slack URL, inquiry summary, action taken to mitigate the issue, knowledge gained from this support, and unknown gap. Skipped records contain URL, skip reason, and collection timestamp only.
