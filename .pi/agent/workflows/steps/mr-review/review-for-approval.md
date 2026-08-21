@@ -27,7 +27,8 @@ Plannotator feedback:
     {
       "toolName": "bash",
       "input": {
-        "command": "glab api projects/<id>/merge_requests/<iid>/discussions ..."
+        "command": "glab api projects/<id>/merge_requests/<iid>/discussions ...",
+        "mcpFallback": "Use only when GitLab MCP has no equivalent tool."
       },
       "effect": {
         "kind": "inline-comment",

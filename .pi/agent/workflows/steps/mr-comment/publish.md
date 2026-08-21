@@ -10,7 +10,7 @@ Verification ledger:
 {{last.summary}}
 
 ## Guardrails
-- Run only approved `remoteActions` (`git push`, `glab api`, `gh api`).
+- Use GitLab MCP for approved GitLab reads and mutations when an equivalent tool exists. Run `git push`, `glab api`, or `gh api` only when the approved action has no equivalent MCP tool.
 - Never force-push, resolve threads, approve, or merge MRs.
 - Outcomes:
   - `published`: All remote actions executed and confirmed.

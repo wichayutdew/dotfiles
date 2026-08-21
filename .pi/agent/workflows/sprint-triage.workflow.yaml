@@ -34,7 +34,7 @@ steps:
     agent: scout
     permissions:
       tools: [read, ls, bash, mcp]
-      mcp: [grafana, slack]
+      mcp: [grafana, opsbot, slack]
       extensions: [/]
       skills: [using-superpowers, caveman, grafana-logs]
       bash:
@@ -123,7 +123,7 @@ steps:
       file: steps/sprint-triage/verify.md
     agent: reviewer
     permissions:
-      tools: [read, ls, bash, edit, write]
+      tools: [read, ls, bash]
       mcp: []
       extensions: [/]
       skills: [using-superpowers, caveman, verification-before-completion]
@@ -156,7 +156,7 @@ steps:
       file: steps/sprint-triage/confirm.md
     agent: reviewer
     permissions:
-      tools: [read, ls, bash, edit, write, mcp]
+      tools: [read, ls, bash, mcp]
       mcp: [atlassian, gitlab]
       extensions: [/]
       skills: [using-superpowers, caveman, verification-before-completion]

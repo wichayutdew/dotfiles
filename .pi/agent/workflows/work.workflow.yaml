@@ -72,7 +72,7 @@ steps:
       tools: [read, ls, bash, edit, write, mcp]
       mcp: [context7]
       extensions: [/]
-      skills: [using-superpowers, caveman, test-driven-development, ponytail, systematic-debugging]
+      skills: [using-superpowers, caveman, test-driven-development, systematic-debugging]
       bash:
         mode: unrestricted
     transitions:

@@ -83,6 +83,11 @@
       "url": "${QUERY_WRITER_MCP}",
       "headers": {},
       "directTools": true
+    },
+    "opsbot": {
+      "url": "https://mcp-gateway.agodadev.io/opsbot/mcp",
+      "headers": {},
+      "directTools": true
     }
   }
 }

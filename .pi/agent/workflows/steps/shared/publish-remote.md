@@ -8,7 +8,7 @@ Approved exact actions:
 
 ## Guardrails & Output
 
-- **Strict Command Fidelity**: Run only the exact approved commands (`git push`, `gh api`, `glab api`) without alteration or shell expansion.
+- **MCP-first Remote Actions**: Use the relevant MCP for any approved action it supports. Run exact approved `git push`, `gh api`, or `glab api` commands only when no equivalent MCP tool exists; never alter commands or expand the shell.
 - **Prohibitions**: Never force-push, approve, merge, resolve discussions, or delete remote resources without explicit authority.
 - **Outcomes**:
   - `drafted`: All approved actions executed or verified complete. Include full command ledger.

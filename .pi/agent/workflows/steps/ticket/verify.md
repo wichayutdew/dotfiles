@@ -15,7 +15,7 @@ Implementation ledger:
 ## Rules & Publication Boundaries
 
 1. **Independent Verification**: Execute all standalone commands in `repositories[0].reviewer[]` (`full-tests`, `lint`, `format`). Any failure returns outcome `failed`.
-2. **Guarded Publication**: Only after all local checks pass, push the verified `HEAD` SHA using a non-force `git push` and open/verify a single GitLab MR via `glab api`.
+2. **Guarded Publication**: Only after all local checks pass, push the verified `HEAD` SHA using a non-force `git push`, then create/verify one GitLab MR through GitLab MCP. Use `glab api` only when the approved action has no equivalent GitLab MCP tool.
 3. **Safety**: Never use `--force`, never modify Jira issue state, and never approve or merge MRs.
 4. **Outcomes**:
    - `passed`: All checks passed, verified commit published, and GitLab MR created/verified.
