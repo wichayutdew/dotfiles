@@ -23,11 +23,11 @@ flowchart TD
 
 ## Publication Target Contract
 - Re-read `/Users/wphongphanpa/.pi/agent/workflows/steps/sprint-triage/sprint-triage.yaml`; the draft ledger is not the source of publication targets.
-- Use Atlassian MCP `getConfluencePage` with `confluence.pageId` and HTML content before drafting publication. Record page version and current-body hash in the artifact. With `confluence.appendMode: end`, the approved Confluence body is the exact current HTML body followed by the approved decision-tree HTML. Block only when the page cannot be read or append mode is unsupported.
+- Use Atlassian MCP `getConfluencePage` with `confluence.pageId` and HTML content before drafting publication. Treat its returned body as exact UTF-8 HTML bytes: hash that exact string with SHA-256 and record the source HTML, page version, and hash in the artifact. Never normalize `<p></p>`, whitespace, or empty elements to another representation. With `confluence.appendMode: end`, the approved Confluence body is the exact source HTML followed by the approved decision-tree HTML. Record the exact resulting full HTML. Block only when the page cannot be read or append mode is unsupported.
 - Use `gitlab.targetBranch` as the MR target branch.
 - When the configured knowledge-base repository has no convention or tracked files, create the AI-readable convention: one Markdown file per sprint at `<contentDirectory>/<start-date>_to_<end-date>.md`, plus `<indexFile>` linking each report in reverse chronological order. Each repository ticket record contains only Slack URL, inquiry summary, action taken to mitigate the issue, knowledge gained from this support, and unknown gap. Skipped records contain URL, skip reason, and collection timestamp only.
 - The Confluence append contains only inquiry topic and steps to take an action to resolve the inquiry. Include useful verified guide/runbook/ticket links in those steps when explicitly mentioned in source evidence and they guide triage, mitigation, escalation, or content enhancement. Omit one-off/non-repeatable tickets from Confluence.
-- The complete path, index update, source page version/body hash, and exact resulting Confluence body must appear in the submitted artifact.
+- The complete path, index update, source page version/source HTML/SHA-256 body hash, and exact resulting full HTML must appear in the submitted artifact.
 
 ## Plan Structure
 1. `# Publish reviewed sprint triage knowledge`

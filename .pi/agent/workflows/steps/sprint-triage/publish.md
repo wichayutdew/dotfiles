@@ -21,7 +21,7 @@ flowchart TD
 ```
 
 ## Guardrails
-- Before Confluence mutation, read the current page in HTML and compare its version/body hash with the approved artifact. If they differ, block rather than overwrite concurrent edits.
-- With `appendMode: end`, replace the page only with the complete approved resulting HTML body: exact current content followed by the approved decision-tree HTML. Never send a partial body.
-- After updating, read back the page and verify both the prior body and new guide are present exactly once.
+- Before Confluence mutation, read the current page in HTML and compare its version, exact source HTML, and SHA-256 hash with the approved artifact. Compute the hash from exact UTF-8 HTML returned by Atlassian MCP. Never normalize `<p></p>`, whitespace, or empty elements before comparison. If any identity value differs, block rather than overwrite concurrent edits.
+- With `appendMode: end`, replace the page only with the complete approved resulting full HTML: exact approved source HTML followed by the approved decision-tree HTML. Never send a partial body.
+- After updating, read back the page and verify the approved source HTML and new guide are present exactly once and the complete resulting full HTML matches exactly.
 - Execute only the approved push, single MR creation, and complete Confluence body update. If an effect already exists, verify it and avoid duplication. Outcome `ready` on completion; `blocked` on ambiguity.
