@@ -33,10 +33,12 @@ steps:
       file: steps/sprint-triage/collect.md
     agent: scout
     permissions:
-      tools: [read, ls, mcp]
+      tools: [read, ls, bash, mcp]
       mcp: [grafana, slack]
       extensions: [/]
       skills: [coding-standards, caveman]
+      bash:
+        mode: unrestricted
     transitions:
       ready: draft
       retry: collect

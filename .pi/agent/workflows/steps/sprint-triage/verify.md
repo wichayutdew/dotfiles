@@ -20,6 +20,12 @@ flowchart TD
     PreconditionsPass -->|Yes| Ready[Outcome: ready\nVerification Summary]
 ```
 
+## Collection Verification
+- Verify configured channel resolution and defaulted status/unclosed values are represented in collection evidence.
+- Verify each unique ticket link is accounted for exactly once: either a drafted factual summary or a skipped-ticket record.
+- Verify skipped-ticket entries contain only URL, reason, and collection timestamp and have no raw Slack content.
+- Verify the draft contains successful summaries and exposes the skipped-ticket notification section when records exist.
+
 ## Outcomes
 - `ready`: All local and remote preconditions verified.
-- `blocked`: Unapproved file modification, missing redactions, or invalid markers.
+- `blocked`: Unapproved file modification, missing redactions, invalid markers, or incomplete ticket coverage.

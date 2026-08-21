@@ -3,6 +3,11 @@
 version: 1
 grafana:
   supportProfile: REPLACE_WITH_SUPPORT_PROFILE
+  channel: REPLACE_WITH_OPSBOT_CHANNEL_NAME
+  # Optional. Defaults to done.
+  ticketStatus: done
+  # Optional. Defaults to true, so unclosed tickets are always included.
+  includeAllUnclosed: true
   dashboardUid: REPLACE_WITH_RESOLVED_DASHBOARD_UID
   panelTitle: REPLACE_WITH_UNIQUE_PANEL_TITLE
   timeZone: REPLACE_WITH_IANA_TIME_ZONE

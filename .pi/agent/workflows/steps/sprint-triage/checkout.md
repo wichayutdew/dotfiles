@@ -20,5 +20,7 @@ flowchart TD
 
 ## Guardrails
 - Input format must be exactly `<YYYY-MM-DD> <YYYY-MM-DD>`.
-- Require valid `sprint-triage.yaml` config (Grafana profile/dashboard, Confluence page, KB paths).
+- Require valid `sprint-triage.yaml` configuration: Grafana profile/dashboard, non-empty `grafana.channel`, Confluence page, and KB paths.
+- Treat omitted `grafana.ticketStatus` as `done` and omitted `grafana.includeAllUnclosed` as `true`.
+- Reject non-string channel/status values and non-boolean `includeAllUnclosed` values as malformed configuration.
 - Outcome `ready` returns bound `workspace: {cwd: "<path>"}`.
