@@ -59,7 +59,10 @@
     "grafana": {
       "url": "${GRAFANA_MCP}",
       "auth": false,
-      "directTools": true
+      "directTools": true,
+			"headers": {
+        "X-Grafana-Org-Id": "1"
+      }
     },
     "slack": {
       "url": "${SLACK_MCP}",
