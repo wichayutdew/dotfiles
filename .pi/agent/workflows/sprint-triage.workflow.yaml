@@ -1,7 +1,7 @@
 version: 1
 id: sprint-triage
 command: sprint-triage
-description: Collect sprint support evidence, approve triage guidance, and publish it safely
+description: Collect Grafana-selected support ticket threads, summarize verified outcomes, and publish them safely
 start: checkout
 maxStepVisits: 16
 summaryMaxChars: 30000
@@ -44,7 +44,7 @@ steps:
       retry: collect
       blocked: $pause
   draft:
-    title: Draft redacted triage knowledge and a decision tree
+    title: Draft redacted ticket-and-thread knowledge summaries
     prompt:
       file: steps/sprint-triage/draft.md
     agent: worker
