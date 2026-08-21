@@ -21,8 +21,7 @@ flowchart TD
 ```
 
 ## Collection Verification
-- Read `SPRINT_TRIAGE_COLLECTION_LEDGER.md` and verify its SHA-256 matches the value in the approved artifact.
-- Verify the ledger records configured and rendered channel resolution, support profile, ticket status, and include-all-unclosed values; dataset request variables; returned row count; and every unique ticket URL in API order.
+- Verify the approved artifact's collection evidence includes the collection-ledger SHA-256, configured and rendered channel resolution, support profile, ticket status, include-all-unclosed values, dataset request variables, returned row count, and every unique ticket URL in API order. Do not require `SPRINT_TRIAGE_COLLECTION_LEDGER.md` in the bound knowledge-base worktree; it remains in the generic planning location.
 - Verify each unique ticket link is accounted for exactly once: either a drafted factual summary or a skipped-ticket record.
 - Verify skipped-ticket entries contain only URL, reason, and collection timestamp and have no raw Slack content.
 - Verify the draft contains successful summaries and exposes the skipped-ticket notification section when records exist.

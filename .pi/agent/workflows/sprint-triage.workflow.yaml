@@ -2,7 +2,7 @@ version: 1
 id: sprint-triage
 command: sprint-triage
 description: Collect Grafana-selected support ticket threads, summarize verified outcomes, and publish them safely
-start: checkout
+start: collect
 maxStepVisits: 16
 summaryMaxChars: 30000
 steps:
@@ -24,7 +24,7 @@ steps:
       bash:
         mode: unrestricted
     transitions:
-      ready: collect
+      ready: implement
       retry: checkout
       blocked: $pause
   collect:
@@ -78,7 +78,7 @@ steps:
       rejectedOutcome: changes-requested
       timeoutMs: 30000
     transitions:
-      approved: implement
+      approved: checkout
       changes-requested: plan
       retry: plan
       blocked: $pause
