@@ -22,16 +22,28 @@ flowchart TD
 
 ## Required Draft Artifact
 
-Create a ticket-by-ticket, redaction-safe draft. Each ticket summary must contain:
+Create two redaction-safe artifacts from each accessible ticket.
 
-1. **Source:** OpsBot ticket identifier, dashboard/panel provenance, interval, and Slack permalink.
-2. **Reported issue:** What the requester asked or observed, using only the thread evidence.
-3. **Investigation and action taken:** Ordered actions, responses, links, owners, and technical facts explicitly present in the thread.
-4. **Outcome:** The stated resolution, workaround, pending state, or `no verified final outcome`.
-5. **Reusable knowledge:** A narrowly worded takeaway only when the thread demonstrates a repeatable resolution; otherwise state that the ticket is case-specific.
-6. **Evidence gaps:** Explicit `UNKNOWN` items; a reaction/status emoji alone is not a resolution.
+### Knowledge-base repository record
 
-The Confluence draft may start with a short evidence-coverage note, then list only these ticket summaries. When `skippedTickets` is non-empty, append `## Skipped ticket threads` with each ticket URL, skip reason, and collection timestamp; do not infer content, topic, or resolution for those tickets. Do not assert volume, category totals, duration, SLA, root cause, owner, or resolution rate unless the authoritative OpsBot ticket rows and linked Slack threads explicitly prove it. Do not create generic triage guidance, escalation rules, decision trees, or recommendations unrelated to a selected ticket.
+Each ticket record must contain exactly these evidence fields:
+
+1. **Slack URL**
+2. **Inquiry summary** — what the requester asked or observed, grounded in the thread.
+3. **Action taken to mitigate the issue** — ordered actions and verified outcome; use `no verified mitigation` when absent.
+4. **Knowledge gained from this support** — a reusable factual takeaway, or `case-specific; no reusable knowledge`.
+5. **Unknown gap** — explicit `UNKNOWN` items; a reaction/status emoji alone is not a resolution.
+
+### Confluence decision tree / step-by-step guide
+
+The Confluence append under the configured marker contains only:
+
+1. **Inquiry topic**
+2. **Steps to take an action to resolve the inquiry**
+
+Do not include Slack URLs, ticket identifiers, owners, timestamps, evidence gaps, metrics, raw thread content, or one-off ticket narratives in Confluence. Group only substantively equivalent inquiries into one topic; when no repeatable resolution exists, omit that ticket from Confluence and retain its repository record.
+
+When `skippedTickets` is non-empty, keep their URL, reason, and timestamp in the repository report only. Do not infer their topic, resolution, or knowledge.
 
 ## Outcomes
 - `ready`: A complete, ticket-by-ticket draft with every ticket either summarized from its collected Slack thread or reported in `Skipped ticket threads`.
