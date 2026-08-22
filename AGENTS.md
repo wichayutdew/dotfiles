@@ -11,6 +11,7 @@ Produce minimal-diff, evidence-backed changes adhering to local repository conve
   - `HYPOTHESIS`: Confidence level + explicit falsifier.
   - `UNKNOWN`: Next check required to verify.
 - **Search**: Use `rg` or `rg --files` (never `find`). For versioned APIs/libraries, use Context7 (`resolve-library-id` -> `query-docs`).
+- **URLs & generated prose**: Before emitting any URL in any workflow output, validate its syntax and that it resolves to the intended observed resource; never infer a URL from text, line references, IDs, or labels. Omit an unverified link and state that it could not be verified. Write comments and replies as concise, natural, context-specific human prose—never placeholders, fabricated wording, or mechanical templates.
 
 ### 2. Planning (Read-Only)
 - **Drafting Location**: Draft plans to `~/.plannotator/plans/` (or `./PLAN.md`).
