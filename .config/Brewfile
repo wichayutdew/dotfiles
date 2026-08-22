@@ -35,6 +35,7 @@ brew 'tree-sitter'
 brew 'mole'
 brew 'agavra/tap/tuicr'
 brew 'neovim'
+brew 'wifitui'
 
 # shell
 brew 'fish'

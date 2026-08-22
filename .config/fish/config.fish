@@ -37,6 +37,7 @@ alias cfg 'nvim ~/.config/fish/config.fish'
 alias so 'source ~/.config/fish/config.fish'
 alias cl 'clear'
 alias ce 'idea .'
+alias wf 'wifitui'
 
 # ---- SHORT_HAND_ALIASES ----
 alias v 'nvim'
