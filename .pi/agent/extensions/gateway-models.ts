@@ -41,6 +41,14 @@ const qwenModelConfig = {
   contextWindow: 262144,
   maxTokens: 128000,
   reasoning: true,
+  // Live gateway validation: accepts low, medium, and xhigh; rejects minimal
+  // and high. Pi otherwise maps xhigh/max to high, so map xhigh explicitly.
+  thinkingLevelMap: {
+    minimal: null,
+    high: null,
+    xhigh: "xhigh",
+    max: null,
+  },
   // Self-hosted on Agoda infra (vLLM); confirmed $0 cost via
   // x-litellm-response-cost-original: 0.0 on live calls.
   cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
@@ -50,6 +58,14 @@ const grokModelConfig = {
   input: ["text"],
   contextWindow: 500000,
   maxTokens: 128000,
+  reasoning: true,
+  // xAI documents low/medium/high/xhigh reasoning effort; it cannot be off.
+  thinkingLevelMap: {
+    off: null,
+    minimal: null,
+    xhigh: "xhigh",
+    max: null,
+  },
   cost: {
     input: 2,
     output: 6,

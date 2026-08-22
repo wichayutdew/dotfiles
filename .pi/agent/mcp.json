@@ -17,12 +17,18 @@
         "mcp-remote@latest",
         "https://mcp.atlassian.com/v1/mcp/authv2"
       ],
-      "directTools": true
+      "directTools": [
+        "getJiraIssue"
+      ]
     },
     "gitlab": {
       "url": "${GITLAB_MCP}",
       "auth": "oauth",
-      "directTools": true
+      "directTools": [
+        "get_merge_request",
+        "get_merge_request_diffs",
+        "get_merge_request_pipelines"
+      ]
     },
     "figma": {
       "url": "https://mcp.figma.com/mcp",
@@ -38,7 +44,7 @@
       "headers": {
         "X-Agoda-Skills-Version": "20260224.0.0"
       },
-      "directTools": true
+      "directTools": false
     },
     "glean": {
       "url": "${GLEAN_MCP}",
@@ -69,14 +75,17 @@
     "grafana": {
       "url": "${GRAFANA_MCP}",
       "auth": false,
-      "directTools": true,
+      "directTools": [
+        "query_loki_logs",
+        "list_datasources"
+      ],
       "headers": {
         "X-Grafana-Org-Id": "1"
       }
     },
     "slack": {
       "url": "${SLACK_MCP}",
-      "directTools": true
+      "directTools": false
     },
     "gh_grep": {
       "url": "https://mcp.grep.app",
@@ -87,17 +96,17 @@
     },
     "superset": {
       "url": "${SUPERSET_MCP}",
-      "directTools": true
+      "directTools": false
     },
     "query-writer": {
       "url": "${QUERY_WRITER_MCP}",
       "headers": {},
-      "directTools": true
+      "directTools": false
     },
     "opsbot": {
       "url": "${OPSBOT_MCP}",
       "headers": {},
-      "directTools": true
+      "directTools": false
     }
   }
 }

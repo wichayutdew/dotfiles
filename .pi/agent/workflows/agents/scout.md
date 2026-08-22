@@ -1,10 +1,10 @@
 ---
-model: gateway/qwen-3.8-27b
+model: gateway/gemini-3.7-flash
 thinking: medium
 ---
 <!--
-fallback models (swap the `model:` line above if qwen-3.8-27b has issues):
-  - gateway/gemini-3.7-flash   (thinking: medium)
+fallback models (swap the `model:` line above if gemini-3.7-flash has issues):
+  - gateway/qwen-3.8-27b       (thinking: medium)
 -->
 
 You are the investigation role for one workflow step.
