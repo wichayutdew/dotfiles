@@ -62,7 +62,10 @@ const lunaModelConfig = {
   tiers: [
     {
       inputTokensAbove: 272000,
-      input: 2, output: 9, cacheRead: 0.2, cacheWrite: 2.5,
+      input: 2,
+      output: 9,
+      cacheRead: 0.2,
+      cacheWrite: 2.5,
     },
   ],
 } as const;
@@ -73,7 +76,10 @@ const terraModelConfig = {
   tiers: [
     {
       inputTokensAbove: 272000,
-      input: 5, output: 22.5, cacheRead: 0.5, cacheWrite: 6.25,
+      input: 5,
+      output: 22.5,
+      cacheRead: 0.5,
+      cacheWrite: 6.25,
     },
   ],
 } as const;
@@ -84,7 +90,10 @@ const solModelConfig = {
   tiers: [
     {
       inputTokensAbove: 272000,
-      input: 10, output: 45, cacheRead: 1, cacheWrite: 12.5,
+      input: 10,
+      output: 45,
+      cacheRead: 1,
+      cacheWrite: 12.5,
     },
   ],
 } as const;
@@ -95,7 +104,7 @@ export default function registerGatewayModels(pi: ExtensionAPI) {
     return;
   }
 
-  pi.registerProvider("anthropic-gateway", {
+  pi.registerProvider("gateway", {
     baseUrl: gatewayUrl,
     api: "openai-completions",
     apiKey: "$GENAI_API_KEY",
@@ -110,14 +119,6 @@ export default function registerGatewayModels(pi: ExtensionAPI) {
         name: "claude-opus-5",
         ...opusModelConfig,
       },
-    ],
-  });
-
-  pi.registerProvider("openai-gateway", {
-    baseUrl: gatewayUrl,
-    api: "openai-completions",
-    apiKey: "$GENAI_API_KEY",
-    models: [
       {
         id: "gpt-5.6-luna",
         name: "gpt-5.6-luna",
@@ -136,38 +137,29 @@ export default function registerGatewayModels(pi: ExtensionAPI) {
         api: "openai-responses",
         ...solModelConfig,
       },
-    ],
-  });
-
-  pi.registerProvider("google-gateway", {
-    baseUrl: gatewayUrl,
-    api: "openai-responses",
-    apiKey: "$GENAI_API_KEY",
-    models: [
       {
         id: "gemini-3.7-flash",
         name: "gemini-3.7-flash",
         ...geminiFlashModelConfig,
       },
-    ],
-  });
-
-  pi.registerProvider("xai-gateway", {
-    baseUrl: gatewayUrl,
-    api: "openai-responses",
-    apiKey: "$GENAI_API_KEY",
-    models: [
       {
         id: "grok-4.6",
         name: "grok-4.6",
         ...grokModelConfig,
+      },
+      {
+        id: "kimi-k2.7-code",
+        name: "kimi-k2.7-code",
+        ...sharedModelConfig,
       },
     ],
   });
 
   pi.on("before_provider_request", (event, ctx) => {
     if (
-      !["openai-gateway", "google-gateway", "xai-gateway"].includes(ctx.model?.provider ?? "") ||
+      !["openai-gateway", "google-gateway", "xai-gateway"].includes(
+        ctx.model?.provider ?? "",
+      ) ||
       ctx.model.api !== "openai-responses" ||
       typeof event.payload !== "object" ||
       event.payload === null ||
