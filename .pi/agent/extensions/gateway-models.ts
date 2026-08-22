@@ -17,12 +17,33 @@ const geminiFlashModelConfig = {
   input: ["text"],
   contextWindow: 1048576,
   maxTokens: 65536,
+  reasoning: true,
+  // Google supports low/medium/high thinking for gemini-3.7-flash; minimal is
+  // rejected by the API and xhigh/max are not offered.
+  thinkingLevelMap: {
+    off: null,
+    minimal: null,
+    xhigh: null,
+    max: null,
+  },
   cost: {
     input: 0.375,
     output: 1.875,
     cacheRead: 0.0375,
     cacheWrite: 0.0208333333333,
   },
+} as const;
+
+const qwenModelConfig = {
+  input: ["text"],
+  // Verified against the gateway's own ContextWindowExceededError message
+  // (2026-08-22): "This model's maximum context length is 262144 tokens."
+  contextWindow: 262144,
+  maxTokens: 128000,
+  reasoning: true,
+  // Self-hosted on Agoda infra (vLLM); confirmed $0 cost via
+  // x-litellm-response-cost-original: 0.0 on live calls.
+  cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
 } as const;
 
 const grokModelConfig = {
@@ -98,6 +119,24 @@ const solModelConfig = {
   ],
 } as const;
 
+const kimiModelConfig = {
+  input: ["text"],
+  // Verified against Moonshot's Kimi K2.7 Code page (2026-08-22): 256K
+  // (262,144 token) context length, not the 1M previously assumed.
+  contextWindow: 262144,
+  maxTokens: 128000,
+  reasoning: true,
+  // K2.7 Code does not support non-thinking mode; disabling thinking on the
+  // Kimi API/Kimi Code silently routes the request to K2.6 instead.
+  thinkingLevelMap: {
+    off: null,
+  },
+  // Public Kimi API pricing (per 1M tokens): input $0.95 (cache hit $0.19),
+  // output $4.00. Gateway-negotiated rate is unverified; using public rates
+  // as the closest known baseline rather than leaving cost at zero.
+  cost: { input: 0.95, output: 4, cacheRead: 0.19, cacheWrite: 0 },
+} as const;
+
 export default function registerGatewayModels(pi: ExtensionAPI) {
   if (!gatewayUrl) {
     console.warn("Gateway models disabled: AI_GATEWAY_URL is not set.");
@@ -150,16 +189,22 @@ export default function registerGatewayModels(pi: ExtensionAPI) {
       {
         id: "kimi-k2.7-code",
         name: "kimi-k2.7-code",
-        ...sharedModelConfig,
+        ...kimiModelConfig,
+      },
+      {
+        id: "qwen-3.8-27b",
+        name: "qwen-3.8-27b",
+        ...qwenModelConfig,
       },
     ],
   });
 
   pi.on("before_provider_request", (event, ctx) => {
     if (
-      !["openai-gateway", "google-gateway", "xai-gateway"].includes(
-        ctx.model?.provider ?? "",
-      ) ||
+      // Registered above as a single "gateway" provider id (not split by
+      // upstream vendor), so match on that instead of the old
+      // openai-gateway/google-gateway/xai-gateway ids which never matched.
+      ctx.model?.provider !== "gateway" ||
       ctx.model.api !== "openai-responses" ||
       typeof event.payload !== "object" ||
       event.payload === null ||

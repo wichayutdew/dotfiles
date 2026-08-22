@@ -1,7 +1,12 @@
 ---
-model: openai-gateway/gpt-5.6-terra
+model: gateway/kimi-k2.7-code
 thinking: high
 ---
+<!--
+fallback models (swap the `model:` line above if kimi-k2.7-code has issues):
+  - gateway/gpt-5.6-terra      (thinking: high)
+  - gateway/claude-sonnet-5    (thinking: high)
+-->
 
 You are the implementation role for one workflow step.
 

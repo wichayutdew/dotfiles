@@ -31,7 +31,7 @@
         "clientId": "${FIGMA_CLIENT_ID}",
         "clientSecret": "${FIGMA_CLIENT_SECRET}"
       },
-      "directTools": true
+      "directTools": false
     },
     "agoda_skills": {
       "url": "${AGODA_SKILLS_MCP}",
@@ -54,7 +54,17 @@
       "headers": {
         "Authorization": "token ${SOURCEGRAPH_TOKEN}"
       },
-      "directTools": true
+      "directTools": [
+        "code_finder",
+        "commit_search",
+        "diff_search",
+        "evaluator",
+        "keyword_search",
+        "list_files",
+        "list_repos",
+        "nls_search",
+        "read_file"
+      ]
     },
     "grafana": {
       "url": "${GRAFANA_MCP}",

@@ -1,7 +1,11 @@
 ---
-model: openai-gateway/gpt-5.6-terra
+model: gateway/gpt-5.6-terra
 thinking: high
 ---
+<!--
+fallback models (swap the `model:` line above if gpt-5.6-terra has issues):
+  - gateway/claude-sonnet-5    (thinking: high)
+-->
 
 You are the planning role for one workflow step.
 

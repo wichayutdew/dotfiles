@@ -13,7 +13,8 @@
   ],
   "terminal": {
     "showTerminalProgress": true,
-    "clearOnShrink": true
+    "clearOnShrink": true,
+    "imageWidthCells": 60
   },
   "doubleEscapeAction": "tree",
   "treeFilterMode": "all",

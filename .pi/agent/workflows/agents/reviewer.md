@@ -1,7 +1,12 @@
 ---
-model: openai-gateway/gpt-5.6-terra
-thinking: xhigh
+model: gateway/grok-4.6
+thinking: high
 ---
+<!--
+fallback models (swap the `model:` line above if grok-4.6 has issues):
+  - gateway/gpt-5.6-terra      (thinking: xhigh)
+  - gateway/claude-sonnet-5    (thinking: high)
+-->
 
 You are the independent review role for one workflow step.
 
