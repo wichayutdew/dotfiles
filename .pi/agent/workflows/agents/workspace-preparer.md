@@ -1,5 +1,5 @@
 ---
-model: gateway/qwen-3.8-27b
+model: gateway/gemini-3.7-flash
 thinking: low
 ---
 <!--
