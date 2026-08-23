@@ -46,14 +46,23 @@ Plannotator feedback:
     "targetBranch": "<origin default branch>",
     "title": "fix(scope): [PROJ-1234] resolve issue",
     "descriptionTemplate": {
-      "path": ".gitlab/merge_request_templates/Default.md",
-      "sha256": "<sha256 of template at target branch>",
+      "source": "repository-file|gitlab-server-default|none",
+      "path": ".gitlab/merge_request_templates/Default.md or null",
+      "sha256": "<sha256 of template at target branch> or null",
       "fallback": "omit body; do not invent a replacement description"
     }
   },
   "jiraTicket": "PROJ-1234"
 }
 ```
+
+## Description template source
+
+Use the `descriptionTemplate.source` discriminator to record how the review body is obtained. It must be one of `repository-file`, `gitlab-server-default`, or `none`.
+
+- `repository-file` — a committed template file at `path`, verified by `sha256` against the target branch revision.
+- `gitlab-server-default` — allowed only when the origin is GitLab and no repository file template is selected. Set `path` and `sha256` to `null` before creation because the server-resolved body is not yet observable.
+- "none" — no template is used; set `path` and `sha256` to `null` and omit the review body.
 
 ## Title and traceability contract
 - The review title must follow the Conventional Commits grammar: `type(scope)!?: brief description`.

@@ -55,6 +55,9 @@ steps:
           - "## Risks"
           - "## Execution appendix (machine-readable)"
           - "## Publication contract"
+          - "repository-file"
+          - "gitlab-server-default"
+          - "\"none\""
         forbiddenSubstrings:
           - "The complete gate artifact is the exact Markdown saved at"
         onValidationFailure: retry

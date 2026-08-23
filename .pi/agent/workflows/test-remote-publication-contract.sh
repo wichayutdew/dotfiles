@@ -52,6 +52,10 @@ ruby -ryaml -e '
     assert plan_prompt.include?("\"targetBranch\""), "#{id}: plan publication JSON must include targetBranch"
     assert plan_prompt.include?("\"descriptionTemplate\""), "#{id}: plan publication JSON must include descriptionTemplate"
     assert plan_prompt.include?("\"sha256\""), "#{id}: plan publication JSON must include template sha256"
+    assert plan_prompt.include?("\"source\""), "#{id}: plan publication JSON must include descriptionTemplate source"
+    assert plan_prompt.include?("repository-file"), "#{id}: plan publication must support repository-file description source"
+    assert plan_prompt.include?("gitlab-server-default"), "#{id}: plan publication must support gitlab-server-default description source"
+    assert plan_prompt.include?("\"none\""), "#{id}: plan publication must support explicit none description source"
 
     # semantic title grammar: type(scope)!?: brief description
     assert plan_prompt.downcase.include?("conventional commits") || plan_prompt.include?("feat(scope)"), "#{id}: plan prompt must define semantic title grammar"
@@ -80,6 +84,13 @@ ruby -ryaml -e '
   assert publish_prompt.downcase.include?("template-first") || publish_prompt.downcase.include?("template derived"), "publish-remote.md: must be template-first"
   assert publish_prompt.downcase.include?("idempotent"), "publish-remote.md: must be idempotent"
   assert publish_prompt.downcase.include?("existing"), "publish-remote.md: must check for existing review"
+  assert publish_prompt.include?("repository-file"), "publish-remote.md: must branch repository-file source"
+  assert publish_prompt.include?("gitlab-server-default"), "publish-remote.md: must branch gitlab-server-default source"
+  assert publish_prompt.include?("\"none\""), "publish-remote.md: must branch explicit none source"
+  assert publish_prompt.downcase.include?("omit the description") || publish_prompt.downcase.include?("description argument omitted"), "publish-remote.md: must omit description argument for gitlab-server-default"
+  assert publish_prompt.include?("retrieve") && publish_prompt.downcase.include?("returned description"), "publish-remote.md: must retrieve returned MR description"
+  assert publish_prompt.downcase.include?("sha-256") && publish_prompt.downcase.include?("exact"), "publish-remote.md: must hash exact returned description bytes"
+  assert publish_prompt.downcase.include?("pre-existing") && publish_prompt.downcase.include?("block"), "publish-remote.md: must block unverified pre-existing MRs"
 
   # title validation must occur before any existing-review lookup, push, or MR creation
   title_section = publish_prompt[/## .*title.*/im, 0]
