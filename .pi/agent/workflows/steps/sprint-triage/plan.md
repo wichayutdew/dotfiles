@@ -31,7 +31,7 @@ Plannotator feedback:
 5. `## Submitted evidence capture` (ledger SHA-256, query values, row count, URL accounting, Confluence retrieval time, version, exact raw Markdown, SHA-256, marker count)
 6. `## Evidence and coverage` (completeness and limitations)
 7. `## Approved local content` (staged-file SHA-256 and final report/ledger/index paths; index complete content; staged KB content is not duplicated)
-8. `## Approved GitLab action` (push ref, MR title, MR description)
+8. `## Approved GitLab action` (push ref, MR title, MR description). The MR title must follow Conventional Commits: `type(scope)!?: brief description`, where `type` is one of `feat`, `fix`, `perf`, `refactor`, `docs`, `test`, `build`, `ci`, or `chore`. Because sprint-triage aggregates many tickets with no single canonical representative, do not select a representative ticket and do not append a `[KEY]` to the title; the title must be a brief, descriptive semantic title only.
 9. `## Approved Confluence action` (page ID, append marker, exact append Markdown, exact proposed write Markdown, and semantic append contract)
 
 ## Artifact limit

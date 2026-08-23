@@ -4,8 +4,31 @@ This directory defines autonomous workflow specifications in `agent/workflows/` 
 
 ---
 
+## Review title format
+
+All PR/MR titles created by these workflows follow the [Conventional Commits](https://www.conventionalcommits.org/) grammar:
+
+```
+type(scope)!?: brief description
+```
+
+- `type` must be one of: `feat`, `fix`, `perf`, `refactor`, `docs`, `test`, `build`, `ci`, `chore`.
+- `scope` is optional.
+- `!` for breaking changes is optional.
+- The subject after the colon must be a brief, imperative description of the change.
+
+Workflow-specific rules:
+
+- **`/work`** — no verified Jira source exists. Use a semantic descriptive title only; do not append a ticket key. Example: `feat(api): add rate limiting to registration endpoint`.
+- **`/ticket`** — requires the verified Jira key. Record the key in the plan artifact and repeat it verbatim in brackets: `fix(scope): [PROJ-1234] resolve missing header`. The bracketed key must exactly match the approved `jiraTicket` value.
+- **`/sprint-triage`** — aggregates many support tickets with no single canonical representative. Use a semantic descriptive title only; do not select a representative ticket or append a `[KEY]`. Example: `docs(triage): publish 2026-08-10 to 2026-08-21 support findings`.
+
+Malformed titles or mismatched Jira evidence block publication before any remote mutation.
+
+---
+
 ## 1. `/work` — Local Work
-Prepares a dedicated workspace, drafts a plan for Plannotator review, implements changes with TDD, and independently verifies.
+Prepares a dedicated workspace, drafts a plan for Plannotator review, implements changes with TDD, independently verifies, and publishes the verified branch as a template-based PR/MR.
 
 ```mermaid
 flowchart TD
@@ -24,15 +47,19 @@ flowchart TD
     Imp -->|retry| Imp
     Imp -->|blocked| Pause
 
-    Ver -->|passed| Done([$done])
+    Ver -->|passed| Pub[publish]
     Ver -->|failed| Imp
     Ver -->|retry / blocked| Ver
+
+    Pub -->|published| Done([$done])
+    Pub -->|retry| Pub
+    Pub -->|blocked| Pause
 ```
 
 ---
 
 ## 2. `/ticket` — Jira Ticket Work
-Prepares an isolated worktree, reads Jira acceptance criteria, drafts a plan for Plannotator review, implements with TDD, and independently verifies.
+Prepares an isolated worktree, reads Jira acceptance criteria, drafts a plan for Plannotator review, implements with TDD, independently verifies, and publishes the verified branch as a template-based PR/MR.
 
 ```mermaid
 flowchart TD
@@ -51,9 +78,13 @@ flowchart TD
     Imp -->|retry| Imp
     Imp -->|blocked| Pause
 
-    Ver -->|passed| Done([$done])
+    Ver -->|passed| Pub[publish]
     Ver -->|failed| Imp
     Ver -->|retry / blocked| Ver
+
+    Pub -->|published| Done([$done])
+    Pub -->|retry| Pub
+    Pub -->|blocked| Pause
 ```
 
 ---

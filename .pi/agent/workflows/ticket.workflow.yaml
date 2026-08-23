@@ -34,7 +34,7 @@ steps:
     agent: planner
     permissions:
       tools: [read, ls, bash, mcp]
-      mcp: [atlassian, context7, sourcegraph, glean, gitlab]
+      mcp: [atlassian, context7, sourcegraph, glean, gitlab, github/get_file_contents]
       extensions: [/]
       skills: [using-superpowers, caveman, ponytail]
       bash:
@@ -86,14 +86,30 @@ steps:
       file: steps/ticket/verify.md
     agent: reviewer
     permissions:
-      tools: [read, ls, bash, mcp]
-      mcp: [gitlab]
+      tools: [read, ls, bash]
+      mcp: []
       extensions: [/]
       skills: [using-superpowers, caveman, verification-before-completion, caveman-review, ponytail-review]
       bash:
         mode: unrestricted
     transitions:
-      passed: $done
+      passed: publish
       failed: implement
       retry: verify
       blocked: verify
+  publish:
+    title: Publish verified branch and open review
+    prompt:
+      file: steps/shared/publish-remote.md
+    agent: worker
+    permissions:
+      tools: [read, ls, bash, mcp]
+      mcp: [gitlab, github/pull_request_read, github/create_pull_request]
+      extensions: [/]
+      skills: [using-superpowers, caveman, verification-before-completion]
+      bash:
+        mode: unrestricted
+    transitions:
+      published: $done
+      retry: publish
+      blocked: $pause
