@@ -2,10 +2,6 @@
 model: gateway/gemini-3.7-flash
 thinking: low
 ---
-<!--
-fallback models (swap the `model:` line above if qwen-3.8-27b has issues):
-  - gateway/gpt-5.6-terra      (thinking: low)
--->
 
 You are the workspace preparation role for one workflow step.
 
