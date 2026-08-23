@@ -13,7 +13,7 @@ steps:
     agent: scout
     permissions:
       tools: [read, ls, bash, mcp]
-      mcp: [gitlab, context7]
+      mcp: [gitlab, github/pull_request_read, context7]
       extensions: [/]
       skills: [using-superpowers, caveman]
       bash:
@@ -28,7 +28,7 @@ steps:
     agent: reviewer
     permissions:
       tools: [read, ls, bash, mcp]
-      mcp: [gitlab, sourcegraph, context7]
+      mcp: [gitlab, github/pull_request_read, sourcegraph, context7]
       extensions: [/]
       skills: [using-superpowers, caveman, caveman-review, ponytail-review]
       bash:
@@ -63,7 +63,7 @@ steps:
     agent: worker
     permissions:
       tools: [read, ls, bash, mcp]
-      mcp: [gitlab]
+      mcp: [gitlab, github/pull_request_review_write, github/add_comment_to_pending_review]
       extensions: [/]
       skills: [using-superpowers, caveman]
       bash:
@@ -78,7 +78,7 @@ steps:
     agent: reviewer
     permissions:
       tools: [read, ls, bash, mcp]
-      mcp: [gitlab]
+      mcp: [gitlab, github/pull_request_read]
       extensions: [/]
       skills: [using-superpowers, caveman, verification-before-completion]
       bash:

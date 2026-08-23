@@ -22,4 +22,23 @@ ruby -ryaml -e '
     abort "#{file}: artifact validation does not retry" unless contract.fetch("onValidationFailure") == "retry"
     headings.each { |heading| abort "#{file}: missing #{heading}" unless contract.fetch("requiredSubstrings").include?(heading) }
   end
+
+  mr_review = YAML.load_file(File.join(ARGV.fetch(0), "mr-review.workflow.yaml"))
+  expected_github_tools = {
+    "fetch" => ["github/pull_request_read"],
+    "review" => ["github/pull_request_read"],
+    "publish" => ["github/pull_request_review_write", "github/add_comment_to_pending_review"],
+    "verify" => ["github/pull_request_read"],
+  }
+  expected_github_tools.each do |step_name, tools|
+    allowed = mr_review.fetch("steps").fetch(step_name).fetch("permissions").fetch("mcp")
+    abort "mr-review #{step_name}: server-wide GitHub permission" if allowed.include?("github")
+    tools.each { |tool| abort "mr-review #{step_name}: missing #{tool}" unless allowed.include?(tool) }
+  end
+
+  %w[fetch review-for-approval publish-approved verify-published].each do |name|
+    prompt = File.read(File.join(ARGV.fetch(0), "steps", "mr-review", "#{name}.md"))
+    abort "mr-review #{name}: missing gh api fallback" unless prompt.include?("gh api")
+    abort "mr-review #{name}: missing glab api fallback" unless prompt.include?("glab api")
+  end
 ' "$root"
