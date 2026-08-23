@@ -94,6 +94,12 @@
         "searchGitHub"
       ]
     },
+    "github": {
+      "url": "https://api.githubcopilot.com/mcp/",
+      "auth": "bearer",
+      "bearerToken": "!/opt/homebrew/bin/gh auth token",
+      "protocolVersion": "auto"
+    },
     "superset": {
       "url": "${SUPERSET_MCP}",
       "directTools": false
