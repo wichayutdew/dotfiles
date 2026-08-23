@@ -69,3 +69,5 @@ Branch by `descriptionTemplate.source`. The source must be one of `repository-fi
 - `published`: The branch is pushed and one PR/MR exists with the approved contract.
 - `retry`: Transient pre-mutation error (network, auth, or read-only failure) with no side effects.
 - `blocked`: Origin/provider mismatch, template SHA-256 mismatch, existing review conflict, or remote rejection. Leave the local commit intact and report decisive evidence.
+
+For `gitlab-server-default`, if the MR is created successfully but retrieving or hashing the returned description fails, treat this as `blocked` with the observed MR identity. Do not open another MR and do not invent a replacement description.
