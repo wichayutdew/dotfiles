@@ -17,6 +17,18 @@ Implementation ledger:
    - GitLab (`gitlab.com` or self-hosted GitLab): prefer GitLab MCP; fall back to `glab mr` only when MCP cannot perform the mutation.
 3. **Approved contract**: Read the `publication` object from the approved artifact. It must contain `provider`, `repository`, `sourceBranch`, `targetBranch`, `title`, and `descriptionTemplate` (`path`, `sha256`, or explicit `null`). Block if any value was inferred rather than observed or if it disagrees with `origin`.
 
+## Validate the title (before any remote action)
+
+Validate the exact approved `title` before checking for an existing review, pushing, or creating a PR/MR.
+
+1. The title must match the Conventional Commits grammar: `type(scope)!?: brief description`.
+   - `type` must be one of: `feat`, `fix`, `perf`, `refactor`, `docs`, `test`, `build`, `ci`, `chore`.
+   - `scope` is optional. A trailing `!` for breaking changes is optional.
+   - The subject (after the colon and space) must be non-empty and briefly descriptive.
+2. For `/ticket`, read the approved `jiraTicket` value. It must be a non-empty, observed Jira key. The title must contain exactly one bracketed copy of that key: `type(scope)!?: [KEY] brief description`. Block if `jiraTicket` is missing, malformed, empty, or if the bracketed key differs from `jiraTicket` in any way.
+3. For `/work`, `jiraTicket` must be `null`. Reject any title that contains a bracketed `[KEY]` or otherwise invents traceability. The title must be a semantic descriptive title without a Jira suffix.
+4. On any title/key mismatch, exit `blocked` immediately with decisive evidence. Do not inspect existing reviews, push, or create a PR/MR.
+
 ## Template-first description
 
 1. If `descriptionTemplate.path` is `null`, create the review with an empty/omitted body. **Do not invent a replacement description.**

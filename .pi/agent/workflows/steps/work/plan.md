@@ -51,9 +51,16 @@ Format the artifact in order:
       "sha256": "<sha256 of template at target branch>",
       "fallback": "omit body; do not invent a replacement description"
     }
-  }
+  },
+  "jiraTicket": null
 }
 ```
+
+## Title and traceability contract
+- The review title must follow the Conventional Commits grammar: `type(scope)!?: brief description`.
+- Permitted types: `feat`, `fix`, `perf`, `refactor`, `docs`, `test`, `build`, `ci`, `chore`.
+- The subject must be a brief, imperative description of the change.
+- `/work` has no verified Jira source. Set `publication.jiraTicket` to `null` and do **not** invent or append a `[KEY]` to the title.
 
 ## Artifact limit
 Keep the submitted artifact concise and at most 8,000 characters. Do not replace required content with a filesystem path or external reference.

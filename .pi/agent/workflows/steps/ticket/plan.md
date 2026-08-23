@@ -44,15 +44,23 @@ Plannotator feedback:
     "repository": "owner/repo",
     "sourceBranch": "<dedicated branch>",
     "targetBranch": "<origin default branch>",
-    "title": "Resolve Jira-1234 issue",
+    "title": "fix(scope): [PROJ-1234] resolve issue",
     "descriptionTemplate": {
       "path": ".gitlab/merge_request_templates/Default.md",
       "sha256": "<sha256 of template at target branch>",
       "fallback": "omit body; do not invent a replacement description"
     }
-  }
+  },
+  "jiraTicket": "PROJ-1234"
 }
 ```
+
+## Title and traceability contract
+- The review title must follow the Conventional Commits grammar: `type(scope)!?: brief description`.
+- Permitted types: `feat`, `fix`, `perf`, `refactor`, `docs`, `test`, `build`, `ci`, `chore`.
+- The subject must be a brief, imperative description of the change.
+- `/ticket` requires a verified Jira key. Record the observed key in `jiraTicket` and repeat it verbatim inside brackets in the title: `type(scope)!?: [KEY] brief description`.
+- The bracketed key in the title must exactly match `jiraTicket`. Do not invent, normalize, or infer a ticket number.
 
 ## Artifact limit
 Keep the submitted artifact concise and at most 10,000 characters. Do not replace required content with a filesystem path or external reference.

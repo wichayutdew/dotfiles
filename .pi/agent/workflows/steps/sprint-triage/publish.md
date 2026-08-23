@@ -9,7 +9,12 @@ Verification summary:
 
 ## Publication Rules
 
-1. **GitLab Push & MR:**
+1. **Validate the title (before any remote mutation):**
+   - Read the approved MR title from `## Approved GitLab action`.
+   - Validate that it matches the Conventional Commits grammar: `type(scope)!?: brief description`, where `type` is one of `feat`, `fix`, `perf`, `refactor`, `docs`, `test`, `build`, `ci`, or `chore`, scope and `!` are optional, and the subject is a brief, non-empty description.
+   - Reject any title that appends a bracketed `[KEY]` or selects a representative ticket. Sprint-triage has no single canonical Jira ticket; traceability comes from the Confluence append and the staged report, not the MR title.
+   - If the title is empty, non-semantic, or invents a ticket key, exit `blocked` immediately. Do not push the branch or create the MR.
+2. **GitLab Push & MR:**
    - Push the committed local branch to GitLab without force.
    - Create the single approved MR via GitLab MCP with approved title/description against `gitlab.targetBranch`.
 2. **Confluence Append:**

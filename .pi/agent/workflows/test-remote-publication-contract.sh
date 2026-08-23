@@ -52,6 +52,21 @@ ruby -ryaml -e '
     assert plan_prompt.include?("\"targetBranch\""), "#{id}: plan publication JSON must include targetBranch"
     assert plan_prompt.include?("\"descriptionTemplate\""), "#{id}: plan publication JSON must include descriptionTemplate"
     assert plan_prompt.include?("\"sha256\""), "#{id}: plan publication JSON must include template sha256"
+
+    # semantic title grammar: type(scope)!?: brief description
+    assert plan_prompt.downcase.include?("conventional commits") || plan_prompt.include?("feat(scope)"), "#{id}: plan prompt must define semantic title grammar"
+    %w[feat fix perf refactor docs test build ci chore].each do |type|
+      assert plan_prompt.include?("`#{type}`"), "#{id}: plan prompt must list #{type} as permitted type"
+    end
+    assert plan_prompt.include?("type(scope)!?: brief description"), "#{id}: plan prompt must show semantic title pattern"
+
+    if id == "ticket"
+      assert plan_prompt.include?("jiraTicket"), "ticket: plan prompt must require jiraTicket evidence"
+      assert plan_prompt.include?("[KEY]"), "ticket: plan prompt must require bracketed Jira key in title"
+    else
+      assert plan_prompt.include?("jiraTicket"), "work: plan prompt must set jiraTicket to null"
+      assert plan_prompt.include?("null"), "work: plan prompt must not invent a Jira key"
+    end
   end
 
   publish_prompt = read_prompt.call("steps/shared/publish-remote.md")
@@ -65,6 +80,44 @@ ruby -ryaml -e '
   assert publish_prompt.downcase.include?("template-first") || publish_prompt.downcase.include?("template derived"), "publish-remote.md: must be template-first"
   assert publish_prompt.downcase.include?("idempotent"), "publish-remote.md: must be idempotent"
   assert publish_prompt.downcase.include?("existing"), "publish-remote.md: must check for existing review"
+
+  # title validation must occur before any existing-review lookup, push, or MR creation
+  title_section = publish_prompt[/## .*title.*/im, 0]
+  assert title_section, "publish-remote.md: must have a title validation section"
+  assert publish_prompt.downcase.include?("validate the title"), "publish-remote.md: must validate the approved title"
+  assert publish_prompt.include?("Conventional Commit"), "publish-remote.md: must require Conventional Commit style"
+  assert publish_prompt.include?("type(scope)!?: brief description"), "publish-remote.md: must enforce semantic title pattern"
+
+  # verify ordering: title validation section appears before idempotent push/MR sections
+  title_idx = publish_prompt =~ /## .*title.*/i
+  idempotent_idx = publish_prompt =~ /## Idempotent publication/i
+  existing_idx = publish_prompt.downcase =~ /existing.*review|check for an existing/
+  push_idx = publish_prompt =~ /git push --set-upstream origin/
+  mr_idx = publish_prompt =~ /create or verify exactly one PR\/MR/i
+  assert title_idx && idempotent_idx && title_idx < idempotent_idx, "publish-remote.md: title validation must precede idempotent publication section"
+  assert title_idx && existing_idx && title_idx < existing_idx, "publish-remote.md: title validation must precede existing-review check"
+  assert title_idx && push_idx && title_idx < push_idx, "publish-remote.md: title validation must precede push"
+  assert title_idx && mr_idx && title_idx < mr_idx, "publish-remote.md: title validation must precede MR/PR creation"
+
+  # ticket-specific Jira key validation
+  assert publish_prompt.include?("[KEY]"), "publish-remote.md: must reference bracketed Jira key for ticket"
+  assert publish_prompt.include?("jiraTicket"), "publish-remote.md: must validate approved jiraTicket for ticket"
+
+  # sprint-triage plan and publish must enforce a semantic MR title
+  triage_plan = read_prompt.call("steps/sprint-triage/plan.md")
+  assert triage_plan.include?("type(scope)!?: brief description"), "sprint-triage plan: must require semantic MR title"
+  assert triage_plan.downcase.include?("do not select a representative ticket"), "sprint-triage plan: must not invent a Jira key"
+
+  triage_publish = read_prompt.call("steps/sprint-triage/publish.md")
+  assert triage_publish.include?("type(scope)!?: brief description"), "sprint-triage publish: must enforce semantic MR title"
+  assert triage_publish.downcase.include?("validate the title"), "sprint-triage publish: must validate MR title"
+  triage_title_idx = triage_publish =~ /validate the title/i
+  triage_push_idx = triage_publish.index(/Push the committed local branch/i, triage_title_idx)
+  triage_mr_idx = triage_publish.index(/Create the single approved MR/i, triage_title_idx)
+  assert triage_title_idx && triage_push_idx, "sprint-triage publish: must locate push after title validation"
+  assert triage_title_idx && triage_mr_idx, "sprint-triage publish: must locate MR creation after title validation"
+  assert triage_title_idx < triage_push_idx, "sprint-triage publish: title validation must precede push"
+  assert triage_title_idx < triage_mr_idx, "sprint-triage publish: title validation must precede MR creation"
 
   Dir.glob(File.join(root, "*.workflow.yaml")).each do |path|
     YAML.load_file(path)
