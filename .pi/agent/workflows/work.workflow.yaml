@@ -34,7 +34,7 @@ steps:
     agent: planner
     permissions:
       tools: [read, ls, bash, mcp]
-      mcp: [context7, sourcegraph, glean, gh_grep]
+      mcp: [context7, sourcegraph, glean, gh_grep, github/get_file_contents, gitlab]
       extensions: [/]
       skills: [using-superpowers, caveman, ponytail]
       bash:
@@ -104,7 +104,7 @@ steps:
     agent: worker
     permissions:
       tools: [read, ls, bash, mcp]
-      mcp: [gitlab]
+      mcp: [gitlab, github/pull_request_read, github/create_pull_request]
       extensions: [/]
       skills: [using-superpowers, caveman, verification-before-completion]
       bash:

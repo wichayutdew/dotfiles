@@ -33,6 +33,9 @@ ruby -ryaml -e '
     assert publish.dig("permissions", "bash", "mode") == "unrestricted", "#{id}: publish needs unrestricted bash for gh/glab"
     mcp = publish.dig("permissions", "mcp") || []
     assert mcp.include?("gitlab"), "#{id}: publish needs gitlab mcp for GitLab origins"
+    assert mcp.include?("github/pull_request_read"), "#{id}: publish needs github/pull_request_read for GitHub origins"
+    assert mcp.include?("github/create_pull_request"), "#{id}: publish needs github/create_pull_request for GitHub origins"
+    assert !mcp.include?("github"), "#{id}: publish must not grant server-wide GitHub permission"
 
     verify_prompt = read_prompt.call(verify.dig("prompt", "file"))
     assert !verify_prompt.downcase.include?("git push"), "#{id}: verify prompt must not push"
@@ -44,6 +47,11 @@ ruby -ryaml -e '
     contract = plan_step.fetch("gate").fetch("artifactContract")
     assert contract.fetch("requiredSubstrings").include?("## Publication contract"), "#{id}: plan artifact contract requires publication section"
 
+    plan_mcp = plan_step.dig("permissions", "mcp") || []
+    assert plan_mcp.include?("github/get_file_contents"), "#{id}: plan needs GitHub file read capability"
+    assert plan_mcp.include?("gitlab"), "#{id}: plan needs GitLab read capability"
+    assert !plan_mcp.include?("github"), "#{id}: plan must not grant server-wide GitHub permission"
+
     plan_prompt = read_prompt.call(plan_step.dig("prompt", "file"))
     assert plan_prompt.include?("## Publication contract"), "#{id}: plan prompt must include publication contract section"
     assert plan_prompt.include?("\"provider\""), "#{id}: plan publication JSON must include provider"
@@ -53,6 +61,8 @@ ruby -ryaml -e '
     assert plan_prompt.include?("\"descriptionTemplate\""), "#{id}: plan publication JSON must include descriptionTemplate"
     assert plan_prompt.include?("\"sha256\""), "#{id}: plan publication JSON must include template sha256"
     assert plan_prompt.include?("\"source\""), "#{id}: plan publication JSON must include descriptionTemplate source"
+    assert plan_prompt.include?("observed `origin`"), "#{id}: plan must record provider, repository, and target branch from observed origin"
+    assert plan_prompt.include?("default target branch"), "#{id}: plan must record default target branch from observed origin"
     assert plan_prompt.include?("repository-file"), "#{id}: plan publication must support repository-file description source"
     assert plan_prompt.include?("gitlab-server-default"), "#{id}: plan publication must support gitlab-server-default description source"
     assert plan_prompt.include?("\"none\""), "#{id}: plan publication must support explicit none description source"
@@ -75,6 +85,10 @@ ruby -ryaml -e '
 
   publish_prompt = read_prompt.call("steps/shared/publish-remote.md")
   assert publish_prompt.downcase.include?("origin-derived"), "publish-remote.md: must derive provider from origin"
+  assert publish_prompt.include?("GitHub MCP"), "publish-remote.md: must use GitHub MCP for GitHub origins"
+  assert publish_prompt.include?("GitLab MCP"), "publish-remote.md: must use GitLab MCP for GitLab origins"
+  assert publish_prompt.downcase.include?("unsupported") && publish_prompt.downcase.include?("ambiguous"), "publish-remote.md: must block unsupported or ambiguous hosts"
+  assert publish_prompt.include?("only when the required MCP operation is unavailable"), "publish-remote.md: CLI fallback only when MCP lacks operation"
   assert publish_prompt.include?("non-force"), "publish-remote.md: must forbid force-push"
   assert publish_prompt.include?("git push --set-upstream origin"), "publish-remote.md: must use non-force upstream push"
   assert publish_prompt.include?("gh pr"), "publish-remote.md: must support gh pr for GitHub"

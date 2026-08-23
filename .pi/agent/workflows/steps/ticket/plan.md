@@ -56,6 +56,16 @@ Plannotator feedback:
 }
 ```
 
+## Origin-derived publication values
+
+All values in the `publication` object must be observed from the local `origin`, not inferred or normalized across hosts.
+
+1. Run `git remote get-url origin` to identify the host.
+2. Set `provider` to `github` only when the origin host is GitHub; set it to `gitlab` only when the origin host is GitLab. Block any other or ambiguous host.
+3. Record the `repository` exactly as it appears for the observed `origin` (`owner/repo` for GitHub, full path for GitLab).
+4. Record the default target branch from the observed `origin` (e.g., the repository's default branch on that host). Do not assume `master` or `main`.
+5. Choose `descriptionTemplate.source` from the observed `origin` and the rules below; `gitlab-server-default` is allowed only for a GitLab origin.
+
 ## Description template source
 
 Use the `descriptionTemplate.source` discriminator to record how the review body is obtained. It must be one of `repository-file`, `gitlab-server-default`, or `none`.

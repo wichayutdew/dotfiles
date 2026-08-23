@@ -12,10 +12,15 @@ Implementation ledger:
 ## Pre-conditions
 
 1. **Committed HEAD**: The branch has a committed HEAD matching the approved `repositories[0].branch` and `baseHead`/commit title from the plan artifact.
-2. **Origin-derived authority**: Derive provider and repository identity from `git remote get-url origin`.
-   - GitHub (`github.com` or `git@github.com`): use `gh pr`.
-   - GitLab (`gitlab.com` or self-hosted GitLab): prefer GitLab MCP; fall back to `glab mr` only when MCP cannot perform the mutation.
-3. **Approved contract**: Read the `publication` object from the approved artifact. It must contain `provider`, `repository`, `sourceBranch`, `targetBranch`, `title`, and `descriptionTemplate` (`source`, `path`, `sha256`, or explicit `null`). Block if any value was inferred rather than observed or if it disagrees with `origin`.
+2. **Origin-derived authority**: Inspect `git remote get-url origin` and select exactly one provider from the observed host.
+   - Positively identify GitHub when the origin host is `github.com` (HTTPS or SSH).
+   - Positively identify GitLab when the origin host is `gitlab.com` or a configured self-hosted GitLab host.
+   - For any unsupported, ambiguous, or unrecognized host, exit `blocked` immediately with decisive evidence. Do not fall through to the other host's CLI.
+3. **Host-matched MCP operations**: Use only the selected provider's MCP read/create operations.
+   - GitHub: use GitHub MCP `pull_request_read` and `create_pull_request`.
+   - GitLab: use GitLab MCP.
+   Permit only the matching CLI fallback (`gh pr` for GitHub, `glab mr` for GitLab), and only when the required MCP operation is unavailable.
+4. **Approved contract**: Read the `publication` object from the approved artifact. It must contain `provider`, `repository`, `sourceBranch`, `targetBranch`, `title`, and `descriptionTemplate` (`source`, `path`, `sha256`, or explicit `null`). Block if any value was inferred rather than observed or if it disagrees with `origin`.
 
 ## Validate the title (before any remote action)
 
@@ -50,7 +55,9 @@ Branch by `descriptionTemplate.source`. The source must be one of `repository-fi
 
 ## Idempotent publication
 
-1. Check for an existing open review from `sourceBranch` to `targetBranch`.
+1. Check for an existing open review from `sourceBranch` to `targetBranch` using the origin-selected provider.
+   - GitHub: use GitHub MCP `pull_request_read` (fall back to `gh pr view` only if the MCP operation is unavailable).
+   - GitLab: use GitLab MCP (fall back to `glab mr view` only if the MCP operation is unavailable).
    - For `repository-file` or `none`: if one exists and its title/body/template-hash match the approved contract, report `published` without mutation.
    - For `gitlab-server-default`: a pre-existing MR without a previously recorded resolved-description hash in the ledger is a conflict; **block** and do not adopt it. If a hash was recorded, retrieve the existing MR's current description, SHA-256 its exact bytes, and report `published` only when the hash matches the recorded value; otherwise block.
 2. Push the committed branch with a non-force upstream push:
@@ -58,7 +65,10 @@ Branch by `descriptionTemplate.source`. The source must be one of `repository-fi
    git push --set-upstream origin <sourceBranch>
    ```
    Never use `--force`.
-3. Create or verify exactly one PR/MR with the approved title and resolved body:
+3. Create or verify exactly one PR/MR with the approved title and resolved body using the origin-selected provider:
+   - GitHub: use GitHub MCP `create_pull_request`; fall back to `gh pr create` only when the required MCP operation is unavailable.
+   - GitLab: use GitLab MCP; fall back to `glab mr create` only when the required MCP operation is unavailable.
+   Apply the resolved body according to `descriptionTemplate.source`:
    - For `repository-file`, use the verified template-derived body.
    - For `gitlab-server-default`, create the MR with the description argument omitted, then retrieve the returned description and SHA-256 its exact bytes before recording the MR identity/hash and reporting `published`.
    - For `none`, omit the body.
