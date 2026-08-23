@@ -2,6 +2,3 @@
 bun = "latest"
 java = "zulu-21"
 node = "25"
-pnpm = "latest"
-ruby = "3.4.9"
-rust = "latest"
