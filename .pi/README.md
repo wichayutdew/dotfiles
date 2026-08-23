@@ -5,7 +5,7 @@ This directory defines autonomous workflow specifications in `agent/workflows/` 
 ---
 
 ## 1. `/work` — Local Work
-Prepares a dedicated workspace, drafts a plan for Plannotator review, implements changes with TDD, and independently verifies.
+Prepares a dedicated workspace, drafts a plan for Plannotator review, implements changes with TDD, independently verifies, and publishes the verified branch as a template-based PR/MR.
 
 ```mermaid
 flowchart TD
@@ -24,15 +24,19 @@ flowchart TD
     Imp -->|retry| Imp
     Imp -->|blocked| Pause
 
-    Ver -->|passed| Done([$done])
+    Ver -->|passed| Pub[publish]
     Ver -->|failed| Imp
     Ver -->|retry / blocked| Ver
+
+    Pub -->|published| Done([$done])
+    Pub -->|retry| Pub
+    Pub -->|blocked| Pause
 ```
 
 ---
 
 ## 2. `/ticket` — Jira Ticket Work
-Prepares an isolated worktree, reads Jira acceptance criteria, drafts a plan for Plannotator review, implements with TDD, and independently verifies.
+Prepares an isolated worktree, reads Jira acceptance criteria, drafts a plan for Plannotator review, implements with TDD, independently verifies, and publishes the verified branch as a template-based PR/MR.
 
 ```mermaid
 flowchart TD
@@ -51,9 +55,13 @@ flowchart TD
     Imp -->|retry| Imp
     Imp -->|blocked| Pause
 
-    Ver -->|passed| Done([$done])
+    Ver -->|passed| Pub[publish]
     Ver -->|failed| Imp
     Ver -->|retry / blocked| Ver
+
+    Pub -->|published| Done([$done])
+    Pub -->|retry| Pub
+    Pub -->|blocked| Pause
 ```
 
 ---

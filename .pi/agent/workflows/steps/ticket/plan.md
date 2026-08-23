@@ -18,7 +18,7 @@ Plannotator feedback:
 5. `## Validation` — Reviewer checks and expected proofs.
 6. `## Risks` — Material risks and mitigations.
 7. `## Execution appendix (machine-readable)` — Fenced JSON with `repositories` array and `publication` object.
-8. `## Publication contract` — Authorization to push branch and open GitLab MR.
+8. `## Publication contract` — Authorization to push the branch and open one origin-derived PR/MR.
 
 ```json
 {
@@ -40,12 +40,16 @@ Plannotator feedback:
     }
   ],
   "publication": {
-    "provider": "gitlab",
-    "project": "group/repo",
+    "provider": "github|gitlab",
+    "repository": "owner/repo",
     "sourceBranch": "<dedicated branch>",
-    "targetBranch": "main",
+    "targetBranch": "<origin default branch>",
     "title": "Resolve Jira-1234 issue",
-    "description": "Closes Jira-1234"
+    "descriptionTemplate": {
+      "path": ".gitlab/merge_request_templates/Default.md",
+      "sha256": "<sha256 of template at target branch>",
+      "fallback": "omit body; do not invent a replacement description"
+    }
   }
 }
 ```

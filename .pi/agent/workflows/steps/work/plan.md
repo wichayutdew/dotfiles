@@ -18,7 +18,8 @@ Format the artifact in order:
 4. `## Proposed approach` — Numbered actions with target, change, reason, and criterion.
 5. `## Validation` — Verification checks and expected proofs.
 6. `## Risks` — Material risks with mitigation/rollback signals.
-7. `## Execution appendix (machine-readable)` — Fenced JSON with `repositories` array (`cwd`, `baseHead`, `branch`, `commitTitle`, `acceptanceCriteria`, `worker`, `reviewer`).
+7. `## Execution appendix (machine-readable)` — Fenced JSON with `repositories` array (`cwd`, `baseHead`, `branch`, `commitTitle`, `acceptanceCriteria`, `worker`, `reviewer`) and a `publication` object.
+8. `## Publication contract` — Authorization and evidence for the remote PR/MR.
 
 ```json
 {
@@ -38,7 +39,19 @@ Format the artifact in order:
         {"id": "lint", "command": "...", "purpose": "run linter"}
       ]
     }
-  ]
+  ],
+  "publication": {
+    "provider": "github|gitlab",
+    "repository": "owner/repo",
+    "sourceBranch": "<dedicated branch>",
+    "targetBranch": "<origin default branch>",
+    "title": "type(scope): subject",
+    "descriptionTemplate": {
+      "path": ".github/pull_request_template.md",
+      "sha256": "<sha256 of template at target branch>",
+      "fallback": "omit body; do not invent a replacement description"
+    }
+  }
 }
 ```
 

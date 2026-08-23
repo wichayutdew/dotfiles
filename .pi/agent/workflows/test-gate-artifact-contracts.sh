@@ -6,7 +6,7 @@ root=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 ruby -ryaml -e '
   expected = {
     "investigate.workflow.yaml" => [6000, ["## Brief description", "## Goals", "## Boundaries", "## Evidence & sources", "## Report destination", "## Open evidence gaps"]],
-    "work.workflow.yaml" => [8000, ["## Review summary", "## Review focus", "## Proposed approach", "## Validation", "## Risks", "## Execution appendix (machine-readable)"]],
+    "work.workflow.yaml" => [8000, ["## Review summary", "## Review focus", "## Proposed approach", "## Validation", "## Risks", "## Execution appendix (machine-readable)", "## Publication contract"]],
     "ticket.workflow.yaml" => [10000, ["## Review summary", "## Review focus", "## Proposed approach", "## Validation", "## Risks", "## Execution appendix (machine-readable)", "## Publication contract"]],
     "jira.workflow.yaml" => [16000, ["# Create Jira Epic and Stories", "## Jira field contract", "## Epic", "## Ordered Stories", "## Creation sequence", "## Safety limits"]],
     "mr-comment.workflow.yaml" => [10000, ["## Review summary", "## Comment decisions", "## Implementation plan", "## Validation", "## Replies and remote actions", "## Risks", "## Execution appendix (machine-readable)"]],

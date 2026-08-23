@@ -86,14 +86,30 @@ steps:
       file: steps/ticket/verify.md
     agent: reviewer
     permissions:
-      tools: [read, ls, bash, mcp]
-      mcp: [gitlab]
+      tools: [read, ls, bash]
+      mcp: []
       extensions: [/]
       skills: [using-superpowers, caveman, verification-before-completion, caveman-review, ponytail-review]
       bash:
         mode: unrestricted
     transitions:
-      passed: $done
+      passed: publish
       failed: implement
       retry: verify
       blocked: verify
+  publish:
+    title: Publish verified branch and open review
+    prompt:
+      file: steps/shared/publish-remote.md
+    agent: worker
+    permissions:
+      tools: [read, ls, bash, mcp]
+      mcp: [gitlab]
+      extensions: [/]
+      skills: [using-superpowers, caveman, verification-before-completion]
+      bash:
+        mode: unrestricted
+    transitions:
+      published: $done
+      retry: publish
+      blocked: $pause
