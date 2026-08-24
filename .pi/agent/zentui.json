@@ -150,14 +150,14 @@
           "compactFormat": "$cwd$wrap(in $session_name)$wrap(on $git_branch) $git_status$wrap$context$wrap_sep$tokens",
           "compactMaxLines": 2,
           "separator": "chevron",
-          "contextStyle": "text+gauge",
+          "contextStyle": "text",
           "contextThresholds": {
             "warning": 70,
             "error": 90
           },
           "pathDisplay": {
-            "mode": "full",
-            "depth": 5
+            "mode": "basename",
+            "depth": 4
           },
           "segments": {
             "cwd": true,
