@@ -18,8 +18,8 @@ Implementation ledger:
    - For any unsupported, ambiguous, or unrecognized host, exit `blocked` immediately with decisive evidence. Do not fall through to the other host's CLI.
 3. **Host-matched MCP operations**: Use only the selected provider's MCP read/create/update operations.
    - GitHub: use GitHub MCP `pull_request_read`, `create_pull_request`, and `update_pull_request`.
-   - GitLab: use GitLab MCP. Its configured MCP has no merge-request update operation, so use `glab mr update` only to update an already-open review.
-   Permit only the matching CLI fallback (`gh pr` for GitHub, `glab mr` for GitLab), and only when the required MCP operation is unavailable.
+   - GitLab: use GitLab MCP for every available read/create/update operation.
+   Permit only the matching CLI fallback (`gh pr` for GitHub, `glab mr` for GitLab), and only when the required MCP operation is unavailable or fails.
 4. **Approved contract**: Read the `publication` object from the approved artifact. It must contain `provider`, `repository`, `sourceBranch`, `targetBranch`, `title`, and `descriptionTemplate` (`source`, `path`, `sha256`, or explicit `null`). Block if any value was inferred rather than observed or if it disagrees with `origin`.
 
 ## Validate the title (before any remote action)
@@ -46,8 +46,10 @@ Branch by `descriptionTemplate.source`. The source must be one of `repository-fi
 - `gitlab-server-default`:
   1. Allowed only when the origin is GitLab and no repository file template is selected. `path` and `sha256` must be `null` before creation.
   2. Create the MR with the `description` argument omitted entirely (not an empty string) so GitLab applies its project-level default.
-  3. Immediately retrieve the returned MR description, compute the SHA-256 of its exact returned bytes, and record the MR identity and resolved hash in the implementation ledger.
-  4. Do not invent, replace, or pre-fill description text.
+  3. Immediately retrieve the returned MR description. If the returned description is empty, exit `blocked` with the observed MR identity; do not report `published` or create another MR.
+  4. Treat the non-empty returned description as the server-default template. Preserve its headings, ordering, and static text. Fill only fields directly supported by the approved plan or verified ledger; leave unsupported placeholders intact rather than guessing.
+  5. Update the same MR description through GitLab MCP. Use `glab mr update` only if the GitLab MCP update operation is unavailable or fails. Retrieve the final returned MR description, compute the SHA-256 of its exact bytes, and record the MR identity and resolved hash in the implementation ledger.
+  6. Do not invent, replace, or pre-fill text outside the returned server-default template.
 
 - `none`:
   1. `path` and `sha256` must be `null`.
@@ -65,14 +67,14 @@ Branch by `descriptionTemplate.source`. The source must be one of `repository-fi
    Never use `--force`.
 3. If an open review exists, update its title to the approved title when it differs. Update its description only when `descriptionTemplate.source` is `repository-file` and the verified template-derived body differs. Do not replace an existing description for `none` or `gitlab-server-default`.
    - GitHub: use GitHub MCP `update_pull_request`.
-   - GitLab: use `glab mr update` because the configured GitLab MCP has no merge-request update operation.
+   - GitLab: use GitLab MCP update; use `glab mr update` only if the MCP update operation is unavailable or fails.
    Do not create a second PR/MR. Do not approve, merge, or close the existing review. Report `published` with its identity after the required push and updates succeed.
 4. If no open review exists, create exactly one PR/MR with the approved title and resolved body using the origin-selected provider:
    - GitHub: use GitHub MCP `create_pull_request`; fall back to `gh pr create` only when the required MCP operation is unavailable.
    - GitLab: use GitLab MCP; fall back to `glab mr create` only when the required MCP operation is unavailable.
    Apply the resolved body according to `descriptionTemplate.source`:
    - For `repository-file`, use the verified template-derived body.
-   - For `gitlab-server-default`, create the MR with the description argument omitted, then retrieve the returned description and SHA-256 its exact bytes before recording the MR identity/hash and reporting `published`.
+   - For `gitlab-server-default`, create the MR with the description argument omitted, retrieve the returned server-default description, block if it is empty, fill it only from verified approved-plan/ledger data, update the same MR through GitLab MCP (falling back to `glab mr update` only if the MCP update operation is unavailable or fails), then retrieve and SHA-256 the exact final returned description before recording the MR identity/hash and reporting `published`.
    - For `none`, omit the body.
    Do not approve, merge, or close reviews.
 
@@ -82,4 +84,4 @@ Branch by `descriptionTemplate.source`. The source must be one of `repository-fi
 - `retry`: Transient pre-mutation error (network, auth, or read-only failure) with no side effects.
 - `blocked`: Origin/provider mismatch, template SHA-256 mismatch, existing review conflict, or remote rejection. Leave the local commit intact and report decisive evidence.
 
-For `gitlab-server-default`, if the MR is created successfully but retrieving or hashing the returned description fails, treat this as `blocked` with the observed MR identity. Do not open another MR and do not invent a replacement description.
+For `gitlab-server-default`, if the MR is created successfully but retrieving, templating, updating, or hashing the returned description fails, treat this as `blocked` with the observed MR identity. Do not open another MR and do not invent a replacement description.
