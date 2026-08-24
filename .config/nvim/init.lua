@@ -48,6 +48,25 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 	end,
 })
 
+-- Build telescope-fzf-native.nvim when installed/updated via vim.pack
+vim.api.nvim_create_autocmd("PackChanged", {
+	callback = function(ev)
+		if ev.data.spec.name ~= "telescope-fzf-native.nvim" then
+			return
+		end
+		if ev.data.kind ~= "install" and ev.data.kind ~= "update" then
+			return
+		end
+		local obj = vim.system({ "make" }, { cwd = ev.data.path }):wait()
+		if obj.code ~= 0 then
+			vim.notify(
+				"failed to build telescope-fzf-native.nvim: " .. (obj.stderr or ""),
+				vim.log.levels.ERROR
+			)
+		end
+	end,
+})
+
 --------------------- PACKAGE MANAGER ---------------------
 vim.pack.add({
 	--------------------- PRE-REQUISUTES ---------------------
@@ -67,6 +86,7 @@ vim.pack.add({
 	{ src = "https://github.com/theHamsta/nvim-dap-virtual-text" },
 	--------------------- TELESCOPE(FZF) ---------------------
 	{ src = "https://github.com/nvim-telescope/telescope.nvim" },
+	{ src = "https://github.com/nvim-telescope/telescope-fzf-native.nvim" },
 	{ src = "https://github.com/nvim-telescope/telescope-dap.nvim" },
 	--------------------- MINI ---------------------
 	{ src = "https://github.com/nvim-mini/mini.icons" }, -- add icons
