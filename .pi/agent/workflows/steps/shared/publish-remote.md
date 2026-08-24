@@ -16,9 +16,9 @@ Implementation ledger:
    - Positively identify GitHub when the origin host is `github.com` (HTTPS or SSH).
    - Positively identify GitLab when the origin host is `gitlab.com` or a configured self-hosted GitLab host.
    - For any unsupported, ambiguous, or unrecognized host, exit `blocked` immediately with decisive evidence. Do not fall through to the other host's CLI.
-3. **Host-matched MCP operations**: Use only the selected provider's MCP read/create operations.
-   - GitHub: use GitHub MCP `pull_request_read` and `create_pull_request`.
-   - GitLab: use GitLab MCP.
+3. **Host-matched MCP operations**: Use only the selected provider's MCP read/create/update operations.
+   - GitHub: use GitHub MCP `pull_request_read`, `create_pull_request`, and `update_pull_request`.
+   - GitLab: use GitLab MCP. Its configured MCP has no merge-request update operation, so use `glab mr update` only to update an already-open review.
    Permit only the matching CLI fallback (`gh pr` for GitHub, `glab mr` for GitLab), and only when the required MCP operation is unavailable.
 4. **Approved contract**: Read the `publication` object from the approved artifact. It must contain `provider`, `repository`, `sourceBranch`, `targetBranch`, `title`, and `descriptionTemplate` (`source`, `path`, `sha256`, or explicit `null`). Block if any value was inferred rather than observed or if it disagrees with `origin`.
 
@@ -58,14 +58,16 @@ Branch by `descriptionTemplate.source`. The source must be one of `repository-fi
 1. Check for an existing open review from `sourceBranch` to `targetBranch` using the origin-selected provider.
    - GitHub: use GitHub MCP `pull_request_read` (fall back to `gh pr view` only if the MCP operation is unavailable).
    - GitLab: use GitLab MCP (fall back to `glab mr view` only if the MCP operation is unavailable).
-   - For `repository-file` or `none`: if one exists and its title/body/template-hash match the approved contract, report `published` without mutation.
-   - For `gitlab-server-default`: a pre-existing MR without a previously recorded resolved-description hash in the ledger is a conflict; **block** and do not adopt it. If a hash was recorded, retrieve the existing MR's current description, SHA-256 its exact bytes, and report `published` only when the hash matches the recorded value; otherwise block.
 2. Push the committed branch with a non-force upstream push:
    ```bash
    git push --set-upstream origin <sourceBranch>
    ```
    Never use `--force`.
-3. Create or verify exactly one PR/MR with the approved title and resolved body using the origin-selected provider:
+3. If an open review exists, update its title to the approved title when it differs. Update its description only when `descriptionTemplate.source` is `repository-file` and the verified template-derived body differs. Do not replace an existing description for `none` or `gitlab-server-default`.
+   - GitHub: use GitHub MCP `update_pull_request`.
+   - GitLab: use `glab mr update` because the configured GitLab MCP has no merge-request update operation.
+   Do not create a second PR/MR. Do not approve, merge, or close the existing review. Report `published` with its identity after the required push and updates succeed.
+4. If no open review exists, create exactly one PR/MR with the approved title and resolved body using the origin-selected provider:
    - GitHub: use GitHub MCP `create_pull_request`; fall back to `gh pr create` only when the required MCP operation is unavailable.
    - GitLab: use GitLab MCP; fall back to `glab mr create` only when the required MCP operation is unavailable.
    Apply the resolved body according to `descriptionTemplate.source`:
@@ -76,7 +78,7 @@ Branch by `descriptionTemplate.source`. The source must be one of `repository-fi
 
 ## Outcomes
 
-- `published`: The branch is pushed and one PR/MR exists with the approved contract.
+- `published`: The branch is pushed and either an existing open PR/MR was updated as permitted above or one new PR/MR was created with the approved contract.
 - `retry`: Transient pre-mutation error (network, auth, or read-only failure) with no side effects.
 - `blocked`: Origin/provider mismatch, template SHA-256 mismatch, existing review conflict, or remote rejection. Leave the local commit intact and report decisive evidence.
 

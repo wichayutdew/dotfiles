@@ -35,6 +35,7 @@ ruby -ryaml -e '
     assert mcp.include?("gitlab"), "#{id}: publish needs gitlab mcp for GitLab origins"
     assert mcp.include?("github/pull_request_read"), "#{id}: publish needs github/pull_request_read for GitHub origins"
     assert mcp.include?("github/create_pull_request"), "#{id}: publish needs github/create_pull_request for GitHub origins"
+    assert mcp.include?("github/update_pull_request"), "#{id}: publish needs github/update_pull_request for existing GitHub reviews"
     assert !mcp.include?("github"), "#{id}: publish must not grant server-wide GitHub permission"
 
     verify_prompt = read_prompt.call(verify.dig("prompt", "file"))
@@ -104,7 +105,9 @@ ruby -ryaml -e '
   assert publish_prompt.downcase.include?("omit the description") || publish_prompt.downcase.include?("description argument omitted"), "publish-remote.md: must omit description argument for gitlab-server-default"
   assert publish_prompt.include?("retrieve") && publish_prompt.downcase.include?("returned description"), "publish-remote.md: must retrieve returned MR description"
   assert publish_prompt.downcase.include?("sha-256") && publish_prompt.downcase.include?("exact"), "publish-remote.md: must hash exact returned description bytes"
-  assert publish_prompt.downcase.include?("pre-existing") && publish_prompt.downcase.include?("block"), "publish-remote.md: must block unverified pre-existing MRs"
+  assert publish_prompt.include?("update its title to the approved title"), "publish-remote.md: must update an existing review title to the approved title"
+  assert publish_prompt.include?("only when `descriptionTemplate.source` is `repository-file`"), "publish-remote.md: must only update an existing review description from a repository template"
+  assert publish_prompt.include?("Do not replace an existing description for `none` or `gitlab-server-default`."), "publish-remote.md: must preserve existing descriptions for none and server defaults"
 
   # title validation must occur before any existing-review lookup, push, or MR creation
   title_section = publish_prompt[/## .*title.*/im, 0]
@@ -118,11 +121,11 @@ ruby -ryaml -e '
   idempotent_idx = publish_prompt =~ /## Idempotent publication/i
   existing_idx = publish_prompt.downcase =~ /existing.*review|check for an existing/
   push_idx = publish_prompt =~ /git push --set-upstream origin/
-  mr_idx = publish_prompt =~ /create or verify exactly one PR\/MR/i
+  create_idx = publish_prompt =~ /If no open review exists, create exactly one PR\/MR/i
   assert title_idx && idempotent_idx && title_idx < idempotent_idx, "publish-remote.md: title validation must precede idempotent publication section"
   assert title_idx && existing_idx && title_idx < existing_idx, "publish-remote.md: title validation must precede existing-review check"
   assert title_idx && push_idx && title_idx < push_idx, "publish-remote.md: title validation must precede push"
-  assert title_idx && mr_idx && title_idx < mr_idx, "publish-remote.md: title validation must precede MR/PR creation"
+  assert title_idx && create_idx && title_idx < create_idx, "publish-remote.md: title validation must precede MR/PR creation"
 
   # ticket-specific Jira key validation
   assert publish_prompt.include?("[KEY]"), "publish-remote.md: must reference bracketed Jira key for ticket"
