@@ -19,29 +19,31 @@ type(scope)!?: brief description
 
 Workflow-specific rules:
 
-- **`/work`** — no verified Jira source exists. Use a semantic descriptive title only; do not append a ticket key. Example: `feat(api): add rate limiting to registration endpoint`.
-- **`/ticket`** — requires the verified Jira key. Record the key in the plan artifact and repeat it verbatim in brackets: `fix(scope): [PROJ-1234] resolve missing header`. The bracketed key must exactly match the approved `jiraTicket` value.
+- **`/work`** — accepts either a free-form requirement or one Jira key. Free-form work uses a semantic descriptive title with no ticket key. Jira-backed work verifies the key during intake and repeats it verbatim in brackets: `fix(scope): [PROJ-1234] resolve missing header`. The bracketed key must exactly match the approved `jiraTicket` value.
 - **`/sprint-triage`** — aggregates many support tickets with no single canonical representative. Use a semantic descriptive title only; do not select a representative ticket or append a `[KEY]`. Example: `docs(triage): publish 2026-08-10 to 2026-08-21 support findings`.
 
 Malformed titles or mismatched Jira evidence block publication before any remote mutation.
 
 ---
 
-## 1. `/work` — Local Work
-Prepares a dedicated workspace, drafts a plan for Plannotator review, implements changes with TDD, independently verifies, and publishes the verified branch as a template-based PR/MR.
+## 1. `/work` — Requirement or Jira Work
+Normalizes a free-form requirement or verifies one Jira key, then drafts a Plannotator plan **before** creating the approved deterministic worktree branch. It implements with TDD, independently verifies, and publishes one PR/MR. Existing PR/MR titles remain unchanged; repeated publication changes only workflow-owned description markers.
 
 ```mermaid
 flowchart TD
-    Start([Start: /work]) --> Prep[prepare-workspace]
-    Prep -->|ready| Plan[plan + Plannotator]
-    Prep -->|retry| Prep
-    Prep -->|blocked| Pause[$pause]
+    Start([Start: /work]) --> Intake[intake]
+    Intake -->|ready| Plan[plan + Plannotator]
+    Intake -->|retry| Intake
+    Intake -->|blocked| Pause[$pause]
 
-    Plan -->|approved| Imp[implement]
-    Plan -->|changes-requested| Plan
-    Plan -->|workspace-refresh| Prep
-    Plan -->|retry| Plan
+    Plan -->|approved| Prep[prepare-workspace]
+    Plan -->|changes-requested / retry| Plan
     Plan -->|blocked| Pause
+
+    Prep -->|ready| Imp[implement]
+    Prep -->|workspace-refresh| Plan
+    Prep -->|retry| Prep
+    Prep -->|blocked| Pause
 
     Imp -->|ready| Ver[verify]
     Imp -->|retry| Imp
@@ -56,40 +58,11 @@ flowchart TD
     Pub -->|blocked| Pause
 ```
 
----
-
-## 2. `/ticket` — Jira Ticket Work
-Prepares an isolated worktree, reads Jira acceptance criteria, drafts a plan for Plannotator review, implements with TDD, independently verifies, and publishes the verified branch as a template-based PR/MR.
-
-```mermaid
-flowchart TD
-    Start([Start: /ticket]) --> Prep[prepare-workspace]
-    Prep -->|ready| Plan[plan + Plannotator]
-    Prep -->|retry| Prep
-    Prep -->|blocked| Pause[$pause]
-
-    Plan -->|approved| Imp[implement]
-    Plan -->|changes-requested| Plan
-    Plan -->|workspace-refresh| Prep
-    Plan -->|retry| Plan
-    Plan -->|blocked| Pause
-
-    Imp -->|ready| Ver[verify]
-    Imp -->|retry| Imp
-    Imp -->|blocked| Pause
-
-    Ver -->|passed| Pub[publish]
-    Ver -->|failed| Imp
-    Ver -->|retry / blocked| Ver
-
-    Pub -->|published| Done([$done])
-    Pub -->|retry| Pub
-    Pub -->|blocked| Pause
-```
+The plan gate requires: Goal/Acceptance Criteria, Non Goal, Implementation Steps and Tests, Validation, Risks/Decisions Needed, Publications Contract/Metadata, and Execution appendix (machine-readable). Branches are `type/JIRA-123` for verified Jira work or `type/semantic-summary` otherwise; no random suffixes are allowed.
 
 ---
 
-## 3. `/jira` — Epic & Story Creation
+## 2. `/jira` — Epic & Story Creation
 Normalizes input, verifies Jira issue types and field metadata, approves an Epic/Story creation plan in Plannotator, and creates the hierarchy.
 
 ```mermaid
@@ -111,7 +84,7 @@ flowchart TD
 
 ---
 
-## 4. `/investigate` — Evidence & Findings
+## 3. `/investigate` — Evidence & Findings
 Retrieves scope/Jira context, gates scope through Plannotator, investigates facts/root causes, and validates findings before writing report.
 
 ```mermaid
@@ -133,7 +106,7 @@ flowchart TD
 
 ---
 
-## 5. `/mr-review` — Hosted Code Review
+## 4. `/mr-review` — Hosted Code Review
 Fetches MR/PR context and discussions, drafts an evidence-based review with proposed inline comments for Plannotator review, publishes comments, and verifies published state.
 
 ```mermaid
@@ -156,7 +129,7 @@ flowchart TD
 
 ---
 
-## 6. `/mr-comment` — Review Comment Fixes
+## 5. `/mr-comment` — Review Comment Fixes
 Fetches unresolved review discussions, checks out the branch, plans code fixes and discussion replies for Plannotator approval, implements fixes, verifies, and publishes commits + replies.
 
 ```mermaid
@@ -191,7 +164,7 @@ flowchart TD
 
 ---
 
-## 7. `/sprint-triage` — Support Ticket Triage & Knowledge Base
+## 6. `/sprint-triage` — Support Ticket Triage & Knowledge Base
 Collects OpsBot/Slack ticket threads and drafts redacted records in step handoffs, stores complete ledger and draft content in the Plannotator plan artifact, then checks out & binds KB repo only after approval to write report + ledger + index, verify, and publish to GitLab & Confluence.
 
 ```mermaid

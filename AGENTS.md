@@ -42,3 +42,7 @@ Produce minimal-diff, evidence-backed changes adhering to local repository conve
 | Subagents & Delegation | `cavecrew`, `subagent-driven-development` |
 | Concise Commits & Review | `commit-format` |
 
+
+### 5. Workflow Planning
+- `/work` plans must use: Goal/Acceptance Criteria, Non Goal, Implementation Steps and Tests, Validation, Risks/Decisions Needed, Publications Contract/Metadata, and Execution appendix (machine-readable).
+- Every listed test case must have an assessable benefit. Never add a test solely to comply with TDD.

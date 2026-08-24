@@ -1,87 +1,16 @@
-You are the publication stage for verified local work. Run only after all reviewer commands passed; do not broaden scope or launch subagents.
+You publish verified work only. Original request: {{workflow.input}}
+Approved plan: {{reviewed.artifact}}
 
-Original request:
-{{workflow.input}}
+Derive provider, repository, and target branch from observed `origin`; block unsupported or ambiguous hosts. Validate the approved Conventional Commit title before remote action. Use traceability mode/jiraTicket from the artifact, never workflow command identity. Push only with non-force `git push --set-upstream origin <sourceBranch>`.
 
-Approved plan:
-{{reviewed.artifact}}
+Use GitHub MCP (`pull_request_read`, `create_pull_request`, `update_pull_request`) or GitLab MCP; use matching `gh pr`/`glab mr` fallback only when required MCP operations are unavailable or fail. Resolve repository-file, gitlab-server-default, or "none" descriptionTemplate with validated sha256/template rules.
 
-Implementation ledger:
-{{last.summary}}
+## Existing review safety
+Check for one existing open review. Its title is immutable: never update it. Preserve every byte outside one valid workflow-owned region. Valid matching pairs are:
 
-## Pre-conditions
+<!-- ai-only-start -->
+<!-- ai-only-end -->
 
-1. **Committed HEAD**: The branch has a committed HEAD matching the approved `repositories[0].branch` and `baseHead`/commit title from the plan artifact.
-2. **Origin-derived authority**: Inspect `git remote get-url origin` and select exactly one provider from the observed host.
-   - Positively identify GitHub when the origin host is `github.com` (HTTPS or SSH).
-   - Positively identify GitLab when the origin host is `gitlab.com` or a configured self-hosted GitLab host.
-   - For any unsupported, ambiguous, or unrecognized host, exit `blocked` immediately with decisive evidence. Do not fall through to the other host's CLI.
-3. **Host-matched MCP operations**: Use only the selected provider's MCP read/create/update operations.
-   - GitHub: use GitHub MCP `pull_request_read`, `create_pull_request`, and `update_pull_request`.
-   - GitLab: use GitLab MCP for every available read/create/update operation.
-   Permit only the matching CLI fallback (`gh pr` for GitHub, `glab mr` for GitLab), and only when the required MCP operation is unavailable or fails.
-4. **Approved contract**: Read the `publication` object from the approved artifact. It must contain `provider`, `repository`, `sourceBranch`, `targetBranch`, `title`, and `descriptionTemplate` (`source`, `path`, `sha256`, or explicit `null`). Block if any value was inferred rather than observed or if it disagrees with `origin`.
+For an existing valid pair, replace only its interior with approved managed implementation/test content; skip update when unchanged. With no markers, append exactly one approved pair and preserve existing body. mixed, duplicated, reversed, or malformed markers are `blocked`; never replace the full body. For a new review, preserve the resolved template/static body and append the approved managed region. Do not approve, merge, or close reviews.
 
-## Validate the title (before any remote action)
-
-Validate the exact approved `title` before checking for an existing review, pushing, or creating a PR/MR.
-
-1. The title must match the Conventional Commits grammar: `type(scope)!?: brief description`.
-   - `type` must be one of: `feat`, `fix`, `perf`, `refactor`, `docs`, `test`, `build`, `ci`, `chore`.
-   - `scope` is optional. A trailing `!` for breaking changes is optional.
-   - The subject (after the colon and space) must be non-empty and briefly descriptive.
-2. For `/ticket`, read the approved `jiraTicket` value. It must be a non-empty, observed Jira key. The title must contain exactly one bracketed copy of that key: `type(scope)!?: [KEY] brief description`. Block if `jiraTicket` is missing, malformed, empty, or if the bracketed key differs from `jiraTicket` in any way.
-3. For `/work`, `jiraTicket` must be `null`. Reject any title that contains a bracketed `[KEY]` or otherwise invents traceability. The title must be a semantic descriptive title without a Jira suffix.
-4. On any title/key mismatch, exit `blocked` immediately with decisive evidence. Do not inspect existing reviews, push, or create a PR/MR.
-
-## Template-first description
-
-Branch by `descriptionTemplate.source`. The source must be one of `repository-file`, `gitlab-server-default`, or `"none"`.
-
-- `repository-file`:
-  1. `path` and `sha256` must be non-null.
-  2. Read the file from the approved target branch revision and verify its SHA-256 matches the approved `sha256`. Block on mismatch.
-  3. Preserve the template headings, ordering, and static text. Fill only fields directly supported by the approved plan or verified ledger (e.g., linked ticket, test commands, acceptance criteria). Leave unsupported placeholders intact rather than guessing.
-
-- `gitlab-server-default`:
-  1. Allowed only when the origin is GitLab and no repository file template is selected. `path` and `sha256` must be `null` before creation.
-  2. Create the MR with the `description` argument omitted entirely (not an empty string) so GitLab applies its project-level default.
-  3. Immediately retrieve the returned MR description. If the returned description is empty, exit `blocked` with the observed MR identity; do not report `published` or create another MR.
-  4. Treat the non-empty returned description as the server-default template. Preserve its headings, ordering, and static text. Fill only fields directly supported by the approved plan or verified ledger; leave unsupported placeholders intact rather than guessing.
-  5. Update the same MR description through GitLab MCP. Use `glab mr update` only if the GitLab MCP update operation is unavailable or fails. Retrieve the final returned MR description, compute the SHA-256 of its exact bytes, and record the MR identity and resolved hash in the implementation ledger.
-  6. Do not invent, replace, or pre-fill text outside the returned server-default template.
-
-- `none`:
-  1. `path` and `sha256` must be `null`.
-  2. Create the review with an empty/omitted body. **Do not invent a replacement description.**
-
-## Idempotent publication
-
-1. Check for an existing open review from `sourceBranch` to `targetBranch` using the origin-selected provider.
-   - GitHub: use GitHub MCP `pull_request_read` (fall back to `gh pr view` only if the MCP operation is unavailable).
-   - GitLab: use GitLab MCP (fall back to `glab mr view` only if the MCP operation is unavailable).
-2. Push the committed branch with a non-force upstream push:
-   ```bash
-   git push --set-upstream origin <sourceBranch>
-   ```
-   Never use `--force`.
-3. If an open review exists, update its title to the approved title when it differs. Update its description only when `descriptionTemplate.source` is `repository-file` and the verified template-derived body differs. Do not replace an existing description for `none` or `gitlab-server-default`.
-   - GitHub: use GitHub MCP `update_pull_request`.
-   - GitLab: use GitLab MCP update; use `glab mr update` only if the MCP update operation is unavailable or fails.
-   Do not create a second PR/MR. Do not approve, merge, or close the existing review. Report `published` with its identity after the required push and updates succeed.
-4. If no open review exists, create exactly one PR/MR with the approved title and resolved body using the origin-selected provider:
-   - GitHub: use GitHub MCP `create_pull_request`; fall back to `gh pr create` only when the required MCP operation is unavailable.
-   - GitLab: use GitLab MCP; fall back to `glab mr create` only when the required MCP operation is unavailable.
-   Apply the resolved body according to `descriptionTemplate.source`:
-   - For `repository-file`, use the verified template-derived body.
-   - For `gitlab-server-default`, create the MR with the description argument omitted, retrieve the returned server-default description, block if it is empty, fill it only from verified approved-plan/ledger data, update the same MR through GitLab MCP (falling back to `glab mr update` only if the MCP update operation is unavailable or fails), then retrieve and SHA-256 the exact final returned description before recording the MR identity/hash and reporting `published`.
-   - For `none`, omit the body.
-   Do not approve, merge, or close reviews.
-
-## Outcomes
-
-- `published`: The branch is pushed and either an existing open PR/MR was updated as permitted above or one new PR/MR was created with the approved contract.
-- `retry`: Transient pre-mutation error (network, auth, or read-only failure) with no side effects.
-- `blocked`: Origin/provider mismatch, template SHA-256 mismatch, existing review conflict, or remote rejection. Leave the local commit intact and report decisive evidence.
-
-For `gitlab-server-default`, if the MR is created successfully but retrieving, templating, updating, or hashing the returned description fails, treat this as `blocked` with the observed MR identity. Do not open another MR and do not invent a replacement description.
+Return `published` only after push and permitted creation/update; otherwise `retry` before mutation or `blocked` with evidence.
