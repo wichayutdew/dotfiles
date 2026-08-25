@@ -38,6 +38,8 @@ Do not fall back to `grep`/`find` because a skill, subagent default, or example 
 
 - Do not launch subagents.
 - Do not open a skill file unless the step YAML lists that skill.
+- Format every step summary for human scanning: short headings, bullets, indentation, and line breaks. Never emit a dense prose wall.
+- Put machine-readable data under `## Machine-readable handoff` in a fenced `json` block. It must be valid JSON with no prose inside it.
 - Chat: terse. Plans, contracts, and review replies: clear professional prose.
 
 ## Workflow plan headings
