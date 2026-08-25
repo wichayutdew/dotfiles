@@ -10,29 +10,52 @@ Re-read `~/.pi/agent/workflows/steps/sprint-triage/sprint-triage.yaml`. Fetch th
 Submit:
 
 # Knowledge-base (LLM)
-One record per summarized ticket:
+Use one compact record per summarized ticket. Do not use field headings below the ticket heading.
 
-# Slack URL
-# Inquiry Summary
-# Action taken to mitigate the issue
-# Knowledge gained from this support
-# Unknown gap
+## Ticket <number>: <short title>
+- Slack URL: <permalink>
+- Inquiry summary: <request, context, and impact>
+- Action taken: <investigation, mitigation, and observed outcome>
+- Knowledge gained: <reusable system or process knowledge>
+- Unknown gap: <unverified fact, why it matters, and a concrete falsifier>
 
 # Ledger
-# the date period of all supports
-# support channels
-# number of tickets summarized
-# number of tickets skipped due to any issue
+- Date period of all supports: <start and end, including timezone>
+- Support channels: <channel names and IDs>
+- Number of tickets summarized: <count>
+- Number of tickets skipped due to any issue: <count and reasons, if nonzero>
 
 # Human guide (Confluence)
-Grouped useful knowledge only:
+Group only reusable guidance. Use the same compact bullet format; do not repeat ticket narratives.
 
-# Brief description
-# Step to take an action to support inquirer
-# Links/Urls to the useful guide that is related to this certain inquiry
+## Guide <number>: <short topic>
+- Brief description: <when this guide applies>
+- Steps to take: <ordered, actionable support steps>
+- Related guides: <verified links/URLs, or `None identified`>
 
 ## Publication contract
-Final KB report, ledger, and index paths; complete index content; approved MR title and description from a verified host template. If no template is verified, use this approved fallback: create with no description adjustment, read back the description, then update only the managed region. Missing template is never `blocked` and requires no user confirmation; the approval gate authorizes this fallback. Include Confluence source version/hash and exact append Markdown.
+
+## Knowledge Base
+- Title: <KB report title>
+- Description: <one-sentence scope and audience>
+- Report path: <final report path>
+- Ledger path: <final ledger path>
+- Index path: <final index path>
+- Exact index Markdown:
+```md
+<complete index content>
+```
+- MR title: <approved title>
+- MR description: <description from a verified host template>
+
+If no MR template is verified, create the MR with no description adjustment, read back its description, then update only the managed region. Missing template is never `blocked` and requires no user confirmation; the approval gate authorizes this fallback.
+
+## Confluence
+- Confluence page: <source page title, URL, and version/hash>
+- Exact append Markdown:
+```md
+<complete approved human-guide append content>
+```
 
 `submit` when both products are complete.
 `blocked`: missing evidence or unsafe redaction.
