@@ -42,12 +42,12 @@ Calculate the staged report's SHA-256 after writing it. The staging file is revi
 - Number of tickets skipped due to any issue: <count and reasons, if nonzero>
 
 # Human guide (Confluence)
-Group only reusable guidance. Use the same compact bullet format; do not repeat ticket narratives.
+Group only reusable guidance. Use the same compact bullet format; do not repeat ticket narratives. For every guide, inspect the collected threads and fetched Confluence context for durable operational references. Include only verified links, such as the configured Grafana dashboard, the Confluence guide page, a GitLab permalink for a relevant job or schedule, a tracked work item, or another directly relevant operational resource.
 
 ## Guide <number>: <short topic>
 - Brief description: <when this guide applies>
 - Steps to take: <ordered, actionable support steps>
-- Related guides: <verified links/URLs, or `None identified`>
+- Useful links: <verified label and URL list, or `None identified`>
 
 ## Publication contract
 
@@ -72,6 +72,8 @@ If no MR template is verified, create the MR with no description adjustment, rea
 ```md
 <complete approved human-guide append content>
 ```
+
+The complete approval artifact ends after `## Publication contract` and its Knowledge Base and Confluence subsections.
 
 `submit` when both products are complete.
 `blocked`: missing evidence or unsafe redaction.
