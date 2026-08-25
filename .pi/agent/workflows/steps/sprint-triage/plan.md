@@ -9,7 +9,8 @@ Re-read `~/.pi/agent/workflows/steps/sprint-triage/sprint-triage.yaml`. Fetch th
 
 Submit:
 
-# Knowledge-base (LLM)
+Create the complete KB report before submitting. Derive `<period>` as `YYYY-MM-DD_to_YYYY-MM-DD` from the collected Asia/Bangkok interval, then write this exact report to `/tmp/sprint-triage/<period>/ticket-summaries.md`. The report must contain the complete `# Knowledge-base (LLM)` ticket records and its `# Ledger`.
+
 Use one compact record per summarized ticket. Do not use field headings below the ticket heading.
 
 ## Ticket <number>: <short title>
@@ -18,6 +19,21 @@ Use one compact record per summarized ticket. Do not use field headings below th
 - Action taken: <investigation, mitigation, and observed outcome>
 - Knowledge gained: <reusable system or process knowledge>
 - Unknown gap: <unverified fact, why it matters, and a concrete falsifier>
+
+# Ledger
+- Date period of all supports: <start and end, including timezone>
+- Support channels: <channel names and IDs>
+- Number of tickets summarized: <count>
+- Number of tickets skipped due to any issue: <count and reasons, if nonzero>
+
+Calculate the staged report's SHA-256 after writing it. The staging file is reviewer-visible evidence: do not rewrite it after computing the hash. If it is missing, unreadable, or exceeds safe redaction limits, return `blocked`.
+
+# Knowledge-base (LLM)
+- Staged KB report:
+- Path: `/tmp/sprint-triage/<period>/ticket-summaries.md`
+- Integrity SHA-256: `<hash>` (integrity check; review the staged file's content, not this value)
+- Ticket count: <count>
+- Reviewer instruction: Review the complete per-ticket records at `Path` before approving this plan.
 
 # Ledger
 - Date period of all supports: <start and end, including timezone>

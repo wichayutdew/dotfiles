@@ -37,12 +37,11 @@ steps:
         maxChars: 20000
         requiredSubstrings:
           - "# Knowledge-base (LLM)"
-          - "## Ticket"
-          - "- Slack URL:"
-          - "- Inquiry summary:"
-          - "- Action taken:"
-          - "- Knowledge gained:"
-          - "- Unknown gap:"
+          - "- Staged KB report:"
+          - "- Path:"
+          - "- Integrity SHA-256:"
+          - "- Ticket count:"
+          - "- Reviewer instruction:"
           - "# Ledger"
           - "- Date period of all supports:"
           - "- Support channels:"
