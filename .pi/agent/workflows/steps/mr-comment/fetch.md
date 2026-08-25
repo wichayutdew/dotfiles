@@ -1,16 +1,9 @@
-You are the read-only evidence-fetch stage for `/mr-comment`. Do not modify local/remote state or launch subagents.
+Fetch one GitHub PR or GitLab MR. Read-only. Prefer MCP over CLI.
 
-Review input:
-{{workflow.input}}
+Input: `{{workflow.input}}`
 
-## Evidence Packet Structure
-- Canonical URL, host, project/repo, review number.
-- Source/target branches and remote SHAs.
-- Matching local remote name and local Git status.
-- Changed file list and diff context.
-- Unresolved discussion comments with IDs, authors, anchors (path/line), and text.
+Record: canonical URL, host, repo, number, source/target branches, remote SHAs, local remote, git status, changed files, unresolved comments with ids, authors, anchors, and text.
 
-## Outcomes
-- `ready`: Evidence gathered successfully.
-- `retry`: Transient network/read failure.
-- `blocked`: Authentication failure, invalid URL, or missing permissions.
+`ready`: complete evidence.
+`retry`: transient read failure.
+`blocked`: bad URL, auth, or missing MCP/CLI capability.

@@ -1,76 +1,32 @@
 version: 1
 id: sprint-triage
 command: sprint-triage
-description: "Collect Grafana-selected support ticket threads, summarize verified outcomes, and publish them safely. Example: /sprint-triage 2026-08-10 2026-08-21"
+description: "Date range → tickets → dual summaries → worktree → commit → MR and Confluence."
 start: collect
 maxStepVisits: 16
 summaryMaxChars: 50000
 steps:
-  checkout:
-    title: Validate targets and create a bound knowledge-base checkout
-    prompt:
-      file: steps/sprint-triage/checkout.md
-    agent: worker
-    workspace:
-      bindOn:
-        - ready
-      allowedRoots:
-        - ~/repositories/worktrees
-    permissions:
-      tools: [read, ls, bash, edit, write]
-      mcp: []
-      extensions: [/]
-      skills: [using-superpowers, using-git-worktrees, caveman]
-      bash:
-        mode: unrestricted
-    transitions:
-      ready: implement
-      retry: checkout
-      blocked: $pause
   collect:
-    title: Collect complete support-ticket and Slack-thread evidence
-    prompt:
-      file: steps/sprint-triage/collect.md
+    title: Collect tickets and Slack threads
+    prompt: {file: steps/sprint-triage/collect.md}
     agent: scout
     permissions:
       tools: [read, ls, bash, mcp]
       mcp: [grafana, opsbot, slack]
-      extensions: [/]
-      skills: [using-superpowers, caveman, grafana-logs]
-      bash:
-        mode: unrestricted
-    transitions:
-      ready: draft
-      retry: collect
-      blocked: $pause
-  draft:
-    title: Draft redacted ticket-and-thread knowledge summaries
-    prompt:
-      file: steps/sprint-triage/draft.md
-    agent: worker
+      extensions: []
+      skills: [grafana-logs]
+      bash: {mode: unrestricted}
+    transitions: {ready: plan, retry: collect, blocked: $pause}
+  plan:
+    title: Approve KB and human-guide summaries
+    prompt: {file: steps/sprint-triage/plan.md}
+    agent: planner
     permissions:
       tools: [read, ls, bash, mcp]
       mcp: [atlassian]
-      extensions: [/]
-      skills: [using-superpowers, caveman]
-      bash:
-        mode: unrestricted
-    transitions:
-      ready: plan
-      retry: draft
-      blocked: $pause
-  plan:
-    title: Approve exact knowledge-base and Confluence publication
-    prompt:
-      file: steps/sprint-triage/plan.md
-    agent: planner
-    permissions:
-      tools: [read, ls, bash, edit, write, mcp]
-      mcp: [atlassian]
-      extensions: [/]
-      skills: [using-superpowers, caveman]
-      bash:
-        mode: unrestricted
+      extensions: []
+      skills: []
+      bash: {mode: unrestricted}
     gate:
       provider: plannotator
       submitOutcome: submit
@@ -80,89 +36,59 @@ steps:
       artifactContract:
         maxChars: 20000
         requiredSubstrings:
-          - "# Publish reviewed sprint triage knowledge"
-          - "## Collection Ledger"
-          - "## Draft Summaries"
-          - "## Submitted evidence capture"
-          - "## Evidence and coverage"
-          - "## Approved local content"
-          - "## Approved GitLab action"
-          - "## Approved Confluence action"
+          - "# Knowledge-base (LLM)"
+          - "# Ledger"
+          - "# the date period of all supports"
+          - "# support channels"
+          - "# number of tickets summarized"
+          - "# number of tickets skipped due to any issue"
+          - "# Human guide (Confluence)"
+          - "# Slack URL"
+          - "# Inquiry Summary"
+          - "# Action taken to mitigate the issue"
+          - "# Knowledge gained from this support"
+          - "# Unknown gap"
+          - "# Brief description"
+          - "# Step to take an action to support inquirer"
+          - "# Links/Urls to the useful guide that is related to this certain inquiry"
+          - "## Publication contract"
         forbiddenSubstrings:
           - "The complete gate artifact is the exact Markdown saved at"
         onValidationFailure: retry
-        equalOccurrenceGroups:
-          -
-            - "**Inquiry topic:**"
-            - "**Steps to take an action to resolve the inquiry:**"
-            - "**Useful guide links:**"
-    transitions:
-      approved: checkout
-      changes-requested: plan
-      retry: plan
-      blocked: $pause
+    transitions: {approved: checkout, changes-requested: plan, retry: plan, blocked: $pause}
+  checkout:
+    title: Create knowledge-base worktree
+    prompt: {file: steps/sprint-triage/checkout.md}
+    agent: scout
+    workspace:
+      bindOn: [ready]
+      allowedRoots: [~/repositories/worktrees]
+    permissions:
+      tools: [read, ls, bash]
+      mcp: []
+      extensions: []
+      skills: [using-git-worktrees]
+      bash: {mode: unrestricted}
+    transitions: {ready: implement, retry: checkout, blocked: $pause}
   implement:
-    title: Write and commit approved knowledge-base content
-    prompt:
-      file: steps/sprint-triage/implement.md
+    title: Commit approved KB files
+    prompt: {file: steps/sprint-triage/implement.md}
     agent: worker
     permissions:
       tools: [read, ls, bash, edit, write]
       mcp: []
-      extensions: [/]
-      skills: [using-superpowers, caveman]
-      bash:
-        mode: unrestricted
-    transitions:
-      ready: verify
-      retry: implement
-      blocked: $pause
-  verify:
-    title: Independently verify approved triage content and publication preconditions
-    prompt:
-      file: steps/sprint-triage/verify.md
-    agent: reviewer
-    permissions:
-      tools: [read, ls, bash]
-      mcp: []
-      extensions: [/]
-      skills: [using-superpowers, caveman, verification-before-completion]
-      bash:
-        mode: unrestricted
-    transitions:
-      ready: publish
-      failed: implement
-      retry: verify
-      blocked: $pause
+      extensions: []
+      skills: []
+      bash: {mode: unrestricted}
+    transitions: {ready: publish, retry: implement, blocked: $pause}
   publish:
-    title: Push one approved branch and publish one MR and page append
-    prompt:
-      file: steps/sprint-triage/publish.md
-    agent: worker
-    permissions:
-      tools: [read, ls, bash, edit, write, mcp]
-      mcp: [atlassian, gitlab]
-      extensions: [/]
-      skills: [using-superpowers, caveman, caveman-commit]
-      bash:
-        mode: unrestricted
-    transitions:
-      ready: confirm
-      retry: publish
-      blocked: $pause
-  confirm:
-    title: Confirm the published merge request and Confluence append
-    prompt:
-      file: steps/sprint-triage/confirm.md
-    agent: reviewer
+    title: Open MR and append Confluence
+    prompt: {file: steps/sprint-triage/publish.md}
+    agent: scout
     permissions:
       tools: [read, ls, bash, mcp]
       mcp: [atlassian, gitlab]
-      extensions: [/]
-      skills: [using-superpowers, caveman, verification-before-completion]
-      bash:
-        mode: unrestricted
-    transitions:
-      ready: $done
-      retry: confirm
-      blocked: $pause
+      extensions: []
+      skills: []
+      bash: {mode: unrestricted}
+    transitions: {ready: $done, retry: publish, blocked: $pause}
