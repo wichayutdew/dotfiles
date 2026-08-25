@@ -1,4 +1,4 @@
-version: 1
+eersion: 1
 id: sprint-triage
 command: sprint-triage
 description: "Collect Grafana-selected support ticket threads, summarize verified outcomes, and publish them safely. Example: /sprint-triage 2026-08-10 2026-08-21"

@@ -3,17 +3,11 @@
 
 # except these directories
 !/.config
-/.config/github-copilot
-/.config/raycast-x
-/.config/raycast
-/.config/jgit
-/.config/karabiner
 !/notes
 !/.1password
 !/.agents
 !AGENTS.md
 !/.pi
-
 # except these files
 !.asdfrc
 !.zshrc
@@ -23,19 +17,10 @@
 !README.md
 !Brewfile
 
-# opencode runtime / cache
-/.config/opencode/**/.cache/
-/.config/opencode/**/mcp-cache.json
-/.config/opencode/**/mcp-oauth
-
-# ignore RUST specific files
-.config/cargo/*
-!.config/cargo/config.toml
-!.config/cargo/.gitignore
-
-# ignore GitHub CLI authentication files
-.config/gh/hosts.yml
-
-# ignore fish environment file
-.config/fish/conf.d/environment.fish
-.config/fish/fish_variables
+# still ignore these
+/.config/raycast
+/.config/jgit
+/.config/karabiner
+/.config/gh/hosts.yml
+/.config/fish/conf.d/environment.fish
+/.config/fish/fish_variables

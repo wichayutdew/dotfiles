@@ -77,7 +77,7 @@ steps:
     transitions: {passed: publish, failed: implement, retry: verify, blocked: verify}
   publish:
     title: Publish verified branch and open review
-    prompt: {file: steps/shared/publish-remote.md}
+    prompt: {file: steps/work/publish-remote.md}
     agent: worker
     permissions:
       tools: [read, ls, bash, mcp]
