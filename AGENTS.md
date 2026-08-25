@@ -20,6 +20,7 @@ Do not fall back to `grep`/`find` because a skill, subagent default, or example 
 
 - Prefer GitHub/GitLab MCP over `gh`/`glab`. Use CLI only when the matching MCP cannot do the job, and record why.
 - New PR/MR bodies must follow the repository or host description template. Fill only template fields. Never invent a free-form description.
+- If no repository or host template is verified, create the PR/MR without changing its description. Read back the created description; treat it as the template, then update only the workflow-owned marker region.
 - Existing PR/MR: title is immutable. Change only the workflow-owned marker region, or append one if markers are absent. Never replace the whole body.
 
 ## Planning and gates
@@ -38,8 +39,8 @@ Do not fall back to `grep`/`find` because a skill, subagent default, or example 
 
 - Do not launch subagents.
 - Do not open a skill file unless the step YAML lists that skill.
-- Format every step summary for human scanning: short headings, bullets, indentation, and line breaks. Never emit a dense prose wall.
-- Put machine-readable data under `## Machine-readable handoff` in a fenced `json` block. It must be valid JSON with no prose inside it.
+- Format all human-facing output—including summaries, plans, reports, comments, and replies—for scanning: short headings, then one distinct fact, action, or metadata value per bullet or paragraph. Never pack unrelated values into one line or emit a dense prose wall.
+- When a schema needs several related fields, use a bullet list with one `field`: `value` per row. Put machine-readable data under `## Machine-readable handoff` in a fenced `json` block. It must be valid JSON with no prose inside it.
 - Chat: terse. Plans, contracts, and review replies: clear professional prose.
 
 ## Workflow plan headings

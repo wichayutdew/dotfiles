@@ -32,7 +32,7 @@ Grouped useful knowledge only:
 # Links/Urls to the useful guide that is related to this certain inquiry
 
 ## Publication contract
-Final KB report, ledger, and index paths; complete index content; approved MR title and description from the host template; Confluence source version/hash; exact append Markdown.
+Final KB report, ledger, and index paths; complete index content; approved MR title and description from a verified host template. If no template is verified, use this approved fallback: create with no description adjustment, read back the description, then update only the managed region. Missing template is never `blocked` and requires no user confirmation; the approval gate authorizes this fallback. Include Confluence source version/hash and exact append Markdown.
 
 `submit` when both products are complete.
 `blocked`: missing evidence or unsafe redaction.

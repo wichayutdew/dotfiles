@@ -19,7 +19,13 @@ Implement or not, and how. Back it with code evidence.
 ### Response message
 Human reply to post if this comment is handled.
 ### Metadata
-commentId, discussionId, reviewer, path, line, host.
+One value per bullet, never a packed sentence:
+- `commentId`: `<id>`
+- `discussionId`: `<id>`
+- `reviewer`: `<name>`
+- `path`: `<path>`
+- `line`: `<line>`
+- `host`: `<host>`.
 
 Then:
 

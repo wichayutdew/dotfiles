@@ -7,7 +7,7 @@ Derive host, repository, and target from observed `origin`. Validate the approve
 
 Use GitHub MCP (`pull_request_read`, `create_pull_request`, `update_pull_request`) or GitLab MCP. Use `gh`/`glab` only when MCP cannot do the job, and record why.
 
-New review: fill only the repository or host description template. Never invent a free-form body.
+New review: fill only a verified repository or host description template. Never invent a free-form body. If no template is verified, create it with no description adjustment; read back its description and treat that exact body as the template before updating the managed region.
 
 Existing open review: title is immutable. Change only the interior of one matching pair:
 
