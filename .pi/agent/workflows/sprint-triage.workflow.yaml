@@ -1,7 +1,7 @@
 version: 1
 id: sprint-triage
 command: sprint-triage
-description: "Date range → tickets → dual summaries → worktree → commit → MR and Confluence."
+description: "Grafana ticket manifest → threads → dual summaries → worktree → commit → MR and Confluence."
 start: collect
 maxStepVisits: 16
 summaryMaxChars: 50000
