@@ -12,7 +12,14 @@ steps:
     agent: scout
     permissions:
       tools: [read, ls, bash, mcp]
-      mcp: [grafana, opsbot, slack]
+      mcp:
+        - grafana/get_dashboard_by_uid
+        - grafana/get_dashboard_property
+        - grafana/get_dashboard_panel_queries
+        - opsbot/get_channel_config
+        - opsbot/get_slack_thread
+        - slack/slack_search_messages
+        - slack/slack_get_thread_replies
       extensions: []
       skills: [grafana-logs]
       bash: {mode: unrestricted}
