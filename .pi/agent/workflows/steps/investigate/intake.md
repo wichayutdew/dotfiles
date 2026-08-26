@@ -1,7 +1,9 @@
-Normalize the investigation input. Read-only.
+Retrieve the investigation source. Read-only.
 
 Input: `{{workflow.input}}`
 
-If exactly one Jira key is present, fetch it with Atlassian MCP. Block if malformed, inaccessible, or contradictory. Otherwise keep the user's question.
+If exactly one Jira key is present, fetch its complete record with Atlassian MCP. Block if malformed, inaccessible, or contradictory. Otherwise retain the complete input unchanged.
 
-Return `ready` with: `jiraTicket` or null, question, systems named, and raw evidence. Do not invent scope. Never mutate Jira.
+You are a ground-truth retriever for the planner. Return `ready` with source identity, the complete original input, the complete Jira record or null, and factual retrieval metadata. Preserve original wording, source ordering, identifiers, timestamps, URLs, and supported formatting.
+
+Do not summarize, shorten, reword, classify, extract named systems, construct scope, infer questions, or recommend investigation actions. Return `blocked` rather than silently truncating required evidence when it cannot fit within the workflow handoff limit. Never mutate Jira.

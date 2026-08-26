@@ -25,7 +25,7 @@ Do not fall back to `grep`/`find` because a skill, subagent default, or example 
 
 ## Planning and gates
 
-- Draft plans under `~/.plannotator/plans/` or `./PLAN.md`.
+- Always draft plans under `~/.plannotator/plans/`
 - Submit the complete Markdown text as the gate `artifact`. Never submit a path.
 - Do not edit product code before Plannotator approval.
 
@@ -42,10 +42,3 @@ Do not fall back to `grep`/`find` because a skill, subagent default, or example 
 - Format all human-facing output—including summaries, plans, reports, comments, and replies—for scanning: short headings, then one distinct fact, action, or metadata value per bullet or paragraph. Never pack unrelated values into one line or emit a dense prose wall.
 - When a schema needs several related fields, use a bullet list with one `field`: `value` per row. Put machine-readable data under `## Machine-readable handoff` in a fenced `json` block. It must be valid JSON with no prose inside it.
 - Chat: terse. Plans, contracts, and review replies: clear professional prose.
-
-## Workflow plan headings
-
-- `/work`: Goal/Acceptance Criteria, Non Goal, Implementation Steps and Tests, Validation, Risks/Decisions Needed, Publications Contract/Metadata, Execution appendix (machine-readable).
-- `/mr-comment`: Comments, each with Suggestion, Verdict, Response message, Metadata.
-- `/mr-review`: Reviews, each with Suggestion, Verdict.
-- `/investigate` scope: Report destination, Goal/Acceptance Criteria, Non Goal, Investigation Resources, Questions.
