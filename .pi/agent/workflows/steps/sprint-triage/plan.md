@@ -49,6 +49,8 @@ Group only reusable guidance. Use the same compact bullet format; do not repeat 
 - Steps to take: <ordered, actionable support steps>
 - Useful links: <verified label and URL list, or `None identified`>
 
+Create a self-contained Confluence HTML fragment for the publication contract. It must not contain Markdown syntax or Markdown code fences. Use `<h2>` for the sprint addendum heading; use one `<h3>` per guide; use `<p>` with `<strong>` for the guide description labels; use `<ol><li>` for ordered steps; and use `<ul><li><a href="…">…</a></li></ul>` for useful links. Use `<p>None identified</p>` when a guide has no useful links. Escape text and attributes as HTML, and include only verified absolute `https://` URLs.
+
 ## Publication contract
 
 ## Knowledge Base
@@ -68,9 +70,9 @@ If no MR template is verified, create the MR with no description adjustment, rea
 
 ## Confluence
 - Confluence page: <source page title, URL, and version/hash>
-- Exact append Markdown:
-```md
-<complete approved human-guide append content>
+- Exact append HTML:
+```html
+<complete approved human-guide HTML fragment>
 ```
 
 The complete approval artifact ends after `## Publication contract` and its Knowledge Base and Confluence subsections.

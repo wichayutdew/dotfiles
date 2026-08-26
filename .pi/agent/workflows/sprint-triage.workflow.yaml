@@ -60,7 +60,7 @@ steps:
           - "- Exact index Markdown:"
           - "## Confluence"
           - "- Confluence page:"
-          - "- Exact append Markdown:"
+          - "- Exact append HTML:"
         forbiddenSubstrings:
           - "The complete gate artifact is the exact Markdown saved at"
         onValidationFailure: retry
