@@ -16,8 +16,6 @@ opsbot:
 knowledgeBase:
   # Existing clean Git checkout. Workflow creates a linked worktree from it.
   localRepositoryPath: REPLACE_WITH_LOCAL_KNOWLEDGE_BASE_REPOSITORY_PATH
-  # Must be inside ~/repositories/worktrees.
-  workspaceRoot: REPLACE_WITH_WORKTREE_ROOT
   # AI-readable sprint reports and reverse-chronological index.
   contentDirectory: REPLACE_WITH_KNOWLEDGE_CONTENT_DIRECTORY
   indexFile: REPLACE_WITH_KNOWLEDGE_INDEX_FILE
