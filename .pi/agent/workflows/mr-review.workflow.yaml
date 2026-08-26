@@ -47,9 +47,11 @@ steps:
       artifactContract:
         maxChars: 8000
         requiredSubstrings:
-          - "## Reviews"
-          - "### Suggestion"
-          - "### Verdict"
+          - "## Review "
+          - "- **Path / line:**"
+          - "- **Detailed suggestion:**"
+          - "- **Verdict:**"
+          - "- **Comment:**"
           - "## Publication contract"
         forbiddenSubstrings:
           - "The complete gate artifact is the exact Markdown saved at"
