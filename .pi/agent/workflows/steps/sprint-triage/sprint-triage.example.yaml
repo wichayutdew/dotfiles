@@ -1,18 +1,17 @@
 # Copy to sprint-triage.yaml in this directory and replace every placeholder locally.
 # Do not commit the concrete file: it identifies private operational targets.
 version: 1
-grafana:
+opsbot:
+  # Slack channel ID sent as channel_id_list to the ticket-insight API.
+  channelId: REPLACE_WITH_OPSBOT_CHANNEL_ID
   supportProfile: REPLACE_WITH_SUPPORT_PROFILE
-  channel: REPLACE_WITH_OPSBOT_CHANNEL_NAME
-  # Optional. Defaults to done.
-  ticketStatus: done
-  # Grafana Ticket list field used to apply the requested date interval.
-  # Do not substitute ticket creation time.
-  ticketActivityTimeField: last_activity_time
+  # Explicit API status values, sent as ticket_status_list.
+  ticketStatuses: [pending, in_progress, done]
   # Optional. Defaults to true, so unclosed tickets are always included.
   includeAllUnclosed: true
-  dashboardUid: REPLACE_WITH_RESOLVED_DASHBOARD_UID
-  panelTitle: REPLACE_WITH_UNIQUE_PANEL_TITLE
+  # Optional. Defaults to all.
+  user: all
+  # Requested calendar dates are converted to UTC API boundaries in this zone.
   timeZone: REPLACE_WITH_IANA_TIME_ZONE
 knowledgeBase:
   # Existing clean Git checkout. Workflow creates a linked worktree from it.

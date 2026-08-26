@@ -108,11 +108,6 @@
       "url": "${QUERY_WRITER_MCP}",
       "headers": {},
       "directTools": false
-    },
-    "opsbot": {
-      "url": "${OPSBOT_MCP}",
-      "headers": {},
-      "directTools": false
     }
   }
 }

@@ -1,7 +1,7 @@
 version: 1
 id: sprint-triage
 command: sprint-triage
-description: "Grafana ticket rows → threads → dual summaries → worktree → commit → MR and Confluence."
+description: "OpsBot API ticket rows → Slack threads → dual summaries → worktree → commit → MR and Confluence."
 start: collect
 maxStepVisits: 16
 summaryMaxChars: 50000
@@ -13,15 +13,9 @@ steps:
     permissions:
       tools: [read, ls, bash, mcp]
       mcp:
-        - grafana/get_dashboard_by_uid
-        - grafana/get_dashboard_property
-        - grafana/get_dashboard_panel_queries
-        - opsbot/get_channel_config
-        - opsbot/get_slack_thread
-        - slack/slack_search_messages
-        - slack/slack_get_thread_replies
+        - slack/slack_slack_get_thread_replies
       extensions: []
-      skills: [grafana-logs]
+      skills: []
       bash: {mode: unrestricted}
     transitions: {ready: plan, retry: collect, blocked: $pause}
   plan:

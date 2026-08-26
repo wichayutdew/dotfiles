@@ -1,39 +1,61 @@
-Collect every configured support ticket and its Slack thread. Read-only.
+Collect every configured OpsBot ticket and its Slack thread. Read-only.
 
 Input: `{{workflow.input}}`
 
-Read `~/.pi/agent/workflows/steps/sprint-triage/sprint-triage.yaml`. All selection values, dashboard identity, and time semantics come only from this configuration. Do not hardcode a profile, person, request topic, dashboard UID, panel ID, field name, or ticket example in this prompt. Do not call OpsBot HTTP directly.
+Read `~/.pi/agent/workflows/steps/sprint-triage/sprint-triage.yaml`. All API parameters come only from its `opsbot` configuration. Do not hardcode a channel, profile, ticket status, person, request topic, ticket date field, or ticket example.
 
 ## Permitted MCP calls
 
 Use only the MCP calls allowed for this workflow step in `sprint-triage.workflow.yaml`. Do not discover, call, or infer additional MCP tools.
 
-## Source selection
+## Ticket collection
 
-1. Use the permitted Grafana dashboard reads to resolve the configured dashboard, its template variables, and the unique panel whose title equals `grafana.panelTitle`.
-2. Use the permitted Grafana panel-query read to validate the configured ticket source and its displayed row fields.
-3. Use the permitted OpsBot configuration read only to validate the configured triage provenance.
-4. Select tickets only from rows returned by the configured Grafana ticket source. Retain a row only when:
-   - its profile field equals `grafana.supportProfile`;
-   - its status field equals `grafana.ticketStatus`; and
-   - the row field named by `grafana.ticketActivityTimeField` falls within the requested inclusive interval in `grafana.timeZone`.
+1. Validate that `opsbot.channelId`, `opsbot.supportProfile`, `opsbot.ticketStatuses`, `opsbot.includeAllUnclosed`, `opsbot.user`, and `opsbot.timeZone` are present and valid.
+2. Require `workflow.input` to provide an inclusive start and end calendar date in `YYYY-MM-DD` format. Interpret those dates in `opsbot.timeZone`.
+3. Convert the start of the start date and the end of the end date to RFC3339 UTC instants. For example, an Asia/Bangkok interval of `2026-08-10` through `2026-08-21` becomes `2026-08-09T17:00:00.000Z` through `2026-08-21T16:59:59.999Z`.
+4. Convert `opsbot.includeAllUnclosed` to `1` or `0`. Join `opsbot.ticketStatuses` with commas.
+5. Call the OpsBot dataset API with `curl` only. Use this exact request shape, substituting only validated configuration values and calculated UTC values:
 
-Do not substitute ticket creation time, request topic, assignee, requester, or any other field for a configured selection field. Do not use a renderer, image, broad ticket search, or local reconstruction to determine ticket membership.
+```bash
+curl --silent --show-error --location --max-time 20 --get \
+  'https://opsbot.agodadev.io/api/ticket_insight/dataset' \
+  --data-urlencode "channel_id_list=${channelId},-" \
+  --data-urlencode "profile_id_list=${supportProfile}" \
+  --data-urlencode "include_all_unclosed=${includeAllUnclosed}" \
+  --data-urlencode "start_date=${startUtc}" \
+  --data-urlencode "end_date=${endUtc}" \
+  --data-urlencode "ticket_status_list=${ticketStatuses}" \
+  --data-urlencode "user=${user}"
+```
 
-If the permitted Grafana calls do not return the configured ticket rows, return `blocked` with the exact permitted call attempted and its factual response. Do not request a pasted panel export, create a synthetic manifest, use an image-rendering tool, or guess a substitute data source.
+6. Treat a nonzero `curl` exit code, non-2xx response, invalid JSON, or a response without a `rows` array as `retry` for a transient transport failure and `blocked` for a persistent or schema/configuration failure. Report the factual error without credentials.
+7. Treat returned `rows` as the authoritative ticket set. Do not locally filter by `last_activity_time`, creation time, request topic, assignee, requester, status, or any other ticket field.
+8. Deduplicate nonempty `ticket_link` values in returned row order. Record source-row count, duplicate-link count, selected-link count, every selected link, and the full source row for each selected link. A missing or malformed `ticket_link` is `blocked`; do not reconstruct ticket membership from another source.
 
-## Ticket-link and thread retrieval
+## Slack thread retrieval
 
-Deduplicate selected ticket links in source-row order. Record the source row count, retained row count, duplicate-link count, selected-link count, and every selected link. Return `blocked` when the source row set cannot be reconciled to a unique selected-link set, except for documented duplicate links.
+For each selected ticket link:
 
-If a selected source row has no accessible ticket link, use only the permitted Slack message search in the configured channel. Match the root message using the row's creation time, requester, and distinctive message text. Accept a generated link only after one unique match; otherwise return `blocked`.
+1. Parse the Slack channel ID from `/archives/<channel-id>/`.
+2. Parse the root message timestamp from `/p<seconds><microseconds>` by inserting a decimal point before the final six digits.
+3. Call `slack_slack_get_thread_replies` with the parsed `channelId`, `threadTs`, and its maximum permitted page size.
+4. Continue with the returned cursor until all pages have been read.
+5. Preserve every returned message in chronological source order, including timestamp, author, text, links, and supported formatting.
 
-For each selected ticket link, use only the permitted OpsBot thread read. When that read is unavailable, use only the permitted Slack thread-replies read for the same selected thread.
+Do not use OpsBot thread MCP, Grafana MCP, Slack HTTP, or Slack search as a fallback. A malformed permalink, missing thread root, or persistent Slack MCP retrieval failure is `blocked`.
 
-For each selected ticket, preserve the complete thread's source wording, identifiers, authors, timestamps, URLs, and supported formatting. For an unavailable selected thread, record only the factual retrieval failure or skip reason.
+## Handoff
 
-Handoff the configured selection metadata, source-row and deduplication counts, complete selected ticket records, and every retained Slack message in chronological source order. Do not summarize, title, classify, infer a resolution, explain a ticket, or reconcile results outside the configured selection. Return `blocked` rather than silently truncating required evidence when it cannot fit within the workflow handoff limit.
+Handoff:
+- validated OpsBot API configuration, requested local dates, and calculated UTC boundaries;
+- exact non-secret API parameter values;
+- source-row, duplicate-link, and selected-link counts;
+- complete selected ticket rows in API order;
+- every retained Slack thread message in chronological source order; and
+- factual retrieval failures or skip reasons.
 
-`ready`: complete unique configured-source ticket records plus verbatim threads.
-`retry`: transient failure from a permitted MCP call after resolving the configured source.
-`blocked`: bad dates, missing configuration, configured ticket rows unavailable through the permitted calls, unresolved or ambiguous selected ticket link, unreconciled selection counts, persistent thread retrieval failure, or required evidence exceeding the handoff limit.
+Do not summarize, title, classify, infer a resolution, explain a ticket, or reconcile results outside the API response and Slack-thread evidence. Return `blocked` rather than silently truncating required evidence when it cannot fit within the workflow handoff limit.
+
+`ready`: complete API ticket rows plus complete Slack MCP thread evidence.
+`retry`: transient API transport or Slack MCP failure.
+`blocked`: invalid configuration or dates, persistent API failure, invalid API response, missing/malformed ticket link, malformed Slack permalink, persistent Slack MCP failure, or required evidence exceeding the handoff limit.
