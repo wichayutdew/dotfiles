@@ -71,7 +71,7 @@ steps:
       extensions: []
       skills: [test-driven-development]
       bash: {mode: unrestricted}
-    transitions: {ready: verify, retry: implement, blocked: $pause}
+    transitions: {checkpoint: implement, ready: verify, retry: implement, blocked: $pause}
   verify:
     title: Check goal and acceptance criteria
     prompt: {file: steps/work/verify.md}

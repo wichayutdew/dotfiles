@@ -23,6 +23,7 @@ flowchart TD
     Prep -->|retry| Prep
     Prep -->|blocked| Pause
 
+    Imp -->|checkpoint| Imp
     Imp -->|ready| Ver[verify]
     Imp -->|retry| Imp
     Imp -->|blocked| Pause
@@ -36,7 +37,7 @@ flowchart TD
     Pub -->|blocked| Pause
 ```
 
-The plan gate requires: Goal/Acceptance Criteria, Non Goal, Implementation Steps and Tests, Validation, Risks/Decisions Needed, Publications Contract/Metadata, and Execution appendix (machine-readable). Branches are `type/JIRA-123` for verified Jira work or `type/semantic-summary` otherwise; no random suffixes are allowed.
+The plan gate requires: Goal/Acceptance Criteria, Non Goal, Implementation Steps and Tests, Validation, Risks/Decisions Needed, Publications Contract/Metadata, and Execution appendix (machine-readable). Branches are `type/JIRA-123` for verified Jira work or `type/semantic-summary` otherwise; no random suffixes are allowed. Implementation is checkpointed: each worker pass commits and tests one coherent approved slice, returns `checkpoint` with the exact remaining slices, and loops until all approved implementation work is complete.
 
 ---
 
