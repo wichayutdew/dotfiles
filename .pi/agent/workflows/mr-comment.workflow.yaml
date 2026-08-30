@@ -17,7 +17,7 @@ steps:
       extensions: []
       skills: []
       bash: {mode: unrestricted}
-    transitions: {ready: checkout-source, retry: fetch, blocked: $pause}
+    transitions: {ready: checkout-source, retry: fetch, blocked: $pause, handoff: fetch}
   checkout-source:
     title: Check out the source branch
     prompt: {file: steps/mr-comment/checkout-source.md}
@@ -32,7 +32,7 @@ steps:
       extensions: []
       skills: [using-git-worktrees]
       bash: {mode: unrestricted}
-    transitions: {ready: plan, retry: checkout-source, blocked: $pause}
+    transitions: {ready: plan, retry: checkout-source, blocked: $pause, handoff: checkout-source}
   plan:
     title: Decide each review comment
     prompt: {file: steps/mr-comment/plan.md}
@@ -64,7 +64,7 @@ steps:
         forbiddenSubstrings:
           - "The complete gate artifact is the exact Markdown saved at"
         onValidationFailure: retry
-    transitions: {approved: implement, changes-requested: plan, retry: plan, blocked: $pause}
+    transitions: {approved: implement, changes-requested: plan, retry: plan, blocked: $pause, handoff: plan}
   implement:
     title: Apply approved comment fixes
     prompt: {file: steps/mr-comment/implement.md}
@@ -76,7 +76,7 @@ steps:
       extensions: []
       skills: [test-driven-development]
       bash: {mode: unrestricted}
-    transitions: {ready: verify, retry: implement, blocked: $pause}
+    transitions: {ready: verify, retry: implement, blocked: $pause, handoff: implement}
   verify:
     title: Check reviewer intent
     prompt: {file: steps/mr-comment/verify.md}
@@ -88,7 +88,7 @@ steps:
       extensions: []
       skills: [verification-before-completion]
       bash: {mode: unrestricted}
-    transitions: {passed: deliver, no-actions: $done, failed: implement, retry: verify, blocked: verify}
+    transitions: {passed: deliver, no-actions: $done, failed: implement, retry: verify, blocked: verify, handoff: verify}
   deliver:
     title: Push and reply
     prompt: {file: steps/mr-comment/publish.md}
@@ -100,4 +100,4 @@ steps:
       extensions: []
       skills: []
       bash: {mode: unrestricted}
-    transitions: {published: $done, no-actions: $done, retry: deliver, superseded: $pause, blocked: $pause}
+    transitions: {published: $done, no-actions: $done, retry: deliver, superseded: $pause, blocked: $pause, handoff: deliver}

@@ -1,6 +1,7 @@
 Plan the work from intake. Read-only. Do not create a branch or worktree.
 
-Intake: `{{last.summary}}`
+Authoritative work request: `{{workflow.input}}`
+Intake/recovery handoff: `{{last.summary}}`
 Rejected plan: `{{gate.artifact}}`
 Feedback: `{{gate.feedback}}`
 
