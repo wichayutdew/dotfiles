@@ -10,6 +10,7 @@ steps:
     title: Collect tickets and Slack threads
     prompt: {file: steps/sprint-triage/collect.md}
     agent: scout
+    maxToolCalls: 18
     permissions:
       tools: [read, ls, bash, mcp]
       mcp:
@@ -22,6 +23,7 @@ steps:
     title: Approve KB and human-guide summaries
     prompt: {file: steps/sprint-triage/plan.md}
     agent: planner
+    maxToolCalls: 14
     permissions:
       tools: [read, ls, bash, mcp]
       mcp: [atlassian]
@@ -69,6 +71,7 @@ steps:
     title: Create knowledge-base worktree
     prompt: {file: steps/sprint-triage/checkout.md}
     agent: scout
+    maxToolCalls: 10
     workspace:
       bindOn: [ready]
       allowedRoots: [~/repositories/worktrees]
@@ -83,6 +86,7 @@ steps:
     title: Commit approved KB files
     prompt: {file: steps/sprint-triage/implement.md}
     agent: worker
+    maxToolCalls: 24
     permissions:
       tools: [read, ls, bash, edit, write]
       mcp: []
@@ -94,6 +98,7 @@ steps:
     title: Open MR and append Confluence
     prompt: {file: steps/sprint-triage/publish.md}
     agent: scout
+    maxToolCalls: 8
     permissions:
       tools: [read, ls, bash, mcp]
       mcp: [atlassian, gitlab]

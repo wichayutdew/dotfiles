@@ -42,6 +42,7 @@ Do not fall back to `grep`/`find` because a skill, subagent default, or example 
 ## Workflow children
 
 - When executing a declarative workflow step, do not launch subagents.
+- When a delegated step reaches its tool-call limit, it must return a `structured_output` handoff rather than settle without a result. Use the step’s configured self-transitioning handoff outcome when available; otherwise use its existing retry or next-step outcome. The handoff summary must state completed work, current state, exact remaining work, and any blocker so the next agent can continue safely.
 - Do not open a skill file unless the step YAML lists that skill.
 - Format all human-facing output—including summaries, plans, reports, comments, and replies—for scanning: short headings, then one distinct fact, action, or metadata value per bullet or paragraph. Never pack unrelated values into one line or emit a dense prose wall.
 - When a schema needs several related fields, use a bullet list with one `field`: `value` per row. Put machine-readable data under `## Machine-readable handoff` in a fenced `json` block. It must be valid JSON with no prose inside it.
