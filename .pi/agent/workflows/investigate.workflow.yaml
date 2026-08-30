@@ -22,7 +22,7 @@ steps:
     title: Approve investigation scope
     prompt: {file: steps/investigate/plan.md}
     agent: planner
-    maxToolCalls: 40
+    maxToolCalls: 100
     permissions:
       tools: [read, ls, bash, mcp]
       mcp: [atlassian, context7, sourcegraph, glean, gh_grep, grafana, slack, superset, query-writer]
@@ -51,7 +51,7 @@ steps:
     title: Deep-research the approved scope
     prompt: {file: steps/investigate/research.md}
     agent: planner
-    maxToolCalls: 40
+    maxToolCalls: 80
     permissions:
       tools: [read, ls, bash, mcp]
       mcp: [atlassian, context7, sourcegraph, glean, gh_grep, grafana, slack, gitlab, superset, query-writer]
@@ -63,7 +63,7 @@ steps:
     title: Check the draft against the goal
     prompt: {file: steps/investigate/validate.md}
     agent: reviewer
-    maxToolCalls: 40
+    maxToolCalls: 80
     permissions:
       tools: [read, ls, bash, mcp]
       mcp: [atlassian, sourcegraph, glean, grafana, slack, gitlab, superset, query-writer]

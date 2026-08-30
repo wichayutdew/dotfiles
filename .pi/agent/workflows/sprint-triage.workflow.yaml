@@ -23,7 +23,7 @@ steps:
     title: Approve KB and human-guide summaries
     prompt: {file: steps/sprint-triage/plan.md}
     agent: planner
-    maxToolCalls: 40
+    maxToolCalls: 100
     permissions:
       tools: [read, ls, bash, mcp]
       mcp: [atlassian]
@@ -86,7 +86,7 @@ steps:
     title: Commit approved KB files
     prompt: {file: steps/sprint-triage/implement.md}
     agent: worker
-    maxToolCalls: 60
+    maxToolCalls: 150
     permissions:
       tools: [read, ls, bash, edit, write]
       mcp: []

@@ -22,7 +22,7 @@ steps:
     title: Find bugs, leaks, and design issues
     prompt: {file: steps/mr-review/findings.md}
     agent: reviewer
-    maxToolCalls: 40
+    maxToolCalls: 80
     permissions:
       tools: [read, ls, bash, mcp]
       mcp: [gitlab, github/pull_request_read, sourcegraph, context7]
@@ -34,7 +34,7 @@ steps:
     title: Approve review comments
     prompt: {file: steps/mr-review/plan.md}
     agent: planner
-    maxToolCalls: 40
+    maxToolCalls: 100
     permissions:
       tools: [read, ls, bash, mcp]
       mcp: [gitlab, github/pull_request_read, sourcegraph, context7]

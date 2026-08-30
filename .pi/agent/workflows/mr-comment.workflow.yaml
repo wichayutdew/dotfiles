@@ -37,7 +37,7 @@ steps:
     title: Decide each review comment
     prompt: {file: steps/mr-comment/plan.md}
     agent: planner
-    maxToolCalls: 40
+    maxToolCalls: 100
     permissions:
       tools: [read, ls, bash, mcp]
       mcp: [gitlab, github/pull_request_read, sourcegraph, context7]
@@ -69,7 +69,7 @@ steps:
     title: Apply approved comment fixes
     prompt: {file: steps/mr-comment/implement.md}
     agent: worker
-    maxToolCalls: 60
+    maxToolCalls: 150
     permissions:
       tools: [read, ls, bash, edit, write, mcp]
       mcp: [context7]
@@ -81,7 +81,7 @@ steps:
     title: Check reviewer intent
     prompt: {file: steps/mr-comment/verify.md}
     agent: reviewer
-    maxToolCalls: 40
+    maxToolCalls: 80
     permissions:
       tools: [read, ls, bash]
       mcp: []

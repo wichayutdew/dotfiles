@@ -22,7 +22,7 @@ steps:
     title: Plan work for Plannotator
     prompt: {file: steps/work/plan.md}
     agent: planner
-    maxToolCalls: 40
+    maxToolCalls: 100
     permissions:
       tools: [read, ls, bash, mcp]
       mcp: [atlassian, context7, sourcegraph, glean, gh_grep, github/get_file_contents, gitlab]
@@ -53,7 +53,7 @@ steps:
     title: Create worktree and branch
     prompt: {file: steps/shared/prepare-workspace.md}
     agent: scout
-    maxToolCalls: 10
+    maxToolCalls: 8
     workspace:
       bindOn: [ready]
       allowedRoots: [~/repositories/worktrees]
@@ -68,7 +68,7 @@ steps:
     title: Implement approved plan with TDD
     prompt: {file: steps/work/implement.md}
     agent: worker
-    maxToolCalls: 60
+    maxToolCalls: 150
     permissions:
       tools: [read, ls, bash, edit, write, mcp]
       mcp: [context7]
@@ -80,7 +80,7 @@ steps:
     title: Check goal and acceptance criteria
     prompt: {file: steps/work/verify.md}
     agent: reviewer
-    maxToolCalls: 40
+    maxToolCalls: 80
     permissions:
       tools: [read, ls, bash]
       mcp: []
