@@ -35,9 +35,13 @@ Do not fall back to `grep`/`find` because a skill, subagent default, or example 
 - TDD only when the test has an assessable benefit. Never add a test solely to satisfy TDD.
 - Never push, merge, or mutate external services without the current step's authority. Never print secrets.
 
+## Subagents
+
+- In normal chat, launch subagents when they materially improve independent research, review, or implementation work, subject to the active tool and repository rules.
+
 ## Workflow children
 
-- Do not launch subagents.
+- When executing a declarative workflow step, do not launch subagents.
 - Do not open a skill file unless the step YAML lists that skill.
 - Format all human-facing output—including summaries, plans, reports, comments, and replies—for scanning: short headings, then one distinct fact, action, or metadata value per bullet or paragraph. Never pack unrelated values into one line or emit a dense prose wall.
 - When a schema needs several related fields, use a bullet list with one `field`: `value` per row. Put machine-readable data under `## Machine-readable handoff` in a fenced `json` block. It must be valid JSON with no prose inside it.
