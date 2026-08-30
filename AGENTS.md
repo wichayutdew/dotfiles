@@ -42,7 +42,6 @@ Do not fall back to `grep`/`find` because a skill, subagent default, or example 
 ## Workflow children
 
 - When executing a declarative workflow step, do not launch subagents.
-- When a delegated step reaches its tool-call limit, it must return the extension-owned `handoff` `structured_output` result rather than settle without a result. Never use `retry`, `blocked`, or a next-step outcome as a substitute. The handoff summary must state completed work, current state, exact remaining work, and any blocker so the next agent can continue safely.
 - Use `blocked` when progress requires information, a decision, authority, credentials, or approval from the user. Never use `retry`, `handoff`, or a next-step outcome to ask the user a question.
 - Use `retry` only for a transient failure that can be retried without new user input.
 - Do not open a skill file unless the step YAML lists that skill.
