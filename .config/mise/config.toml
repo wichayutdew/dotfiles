@@ -1,5 +1,7 @@
 [tools]
 bun = "latest"
+dotnet = "latest"
 java = "zulu-21"
 node = "25"
 rust = "latest"
+sbt = "latest"
