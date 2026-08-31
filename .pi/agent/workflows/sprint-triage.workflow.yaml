@@ -10,7 +10,7 @@ steps:
     title: Collect tickets and Slack threads
     prompt: {file: steps/sprint-triage/collect.md}
     agent: scout
-    maxToolCalls: 20
+    maxToolCalls: 30
     permissions:
       tools: [read, ls, bash, mcp]
       mcp:
