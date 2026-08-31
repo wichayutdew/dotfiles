@@ -1,5 +1,7 @@
 Write and commit only the approved knowledge-base files.
 
+A parent recovery `handoff` is unconfirmed context, not proof that files were written or committed. Reconcile the approved plan, staged report, and repository state before returning a valid outcome; do not infer progress from it.
+
 Input: `{{workflow.input}}`
 Approved plan: `{{reviewed.artifact}}`
 Feedback: `{{reviewed.feedback}}`
