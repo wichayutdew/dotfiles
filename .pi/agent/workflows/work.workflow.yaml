@@ -3,14 +3,14 @@ id: work
 command: work
 description: "Jira or brief → plan → worktree → TDD → review → PR/MR."
 start: intake
-maxStepVisits: 20
+maxStepVisits: 10
 summaryMaxChars: 30000
 steps:
   intake:
     title: Pull Jira or normalize the brief
     prompt: {file: steps/work/intake.md}
     agent: scout
-    maxToolCalls: 8
+    maxToolCalls: 10
     permissions:
       tools: [read, ls, bash, mcp]
       mcp: [atlassian]
@@ -22,7 +22,7 @@ steps:
     title: Plan work for Plannotator
     prompt: {file: steps/work/plan.md}
     agent: planner
-    maxToolCalls: 100
+    maxToolCalls: 60
     permissions:
       tools: [read, ls, bash, mcp]
       mcp: [atlassian, context7, sourcegraph, glean, gh_grep, github/get_file_contents, gitlab]
@@ -53,7 +53,7 @@ steps:
     title: Create worktree and branch
     prompt: {file: steps/shared/prepare-workspace.md}
     agent: scout
-    maxToolCalls: 8
+    maxToolCalls: 10
     workspace:
       bindOn: [ready]
       allowedRoots: [~/repositories/worktrees]
@@ -80,7 +80,7 @@ steps:
     title: Check goal and acceptance criteria
     prompt: {file: steps/work/verify.md}
     agent: reviewer
-    maxToolCalls: 80
+    maxToolCalls: 60
     permissions:
       tools: [read, ls, bash]
       mcp: []
@@ -92,7 +92,7 @@ steps:
     title: Push and open or update PR/MR
     prompt: {file: steps/work/publish-remote.md}
     agent: scout
-    maxToolCalls: 8
+    maxToolCalls: 10
     permissions:
       tools: [read, ls, bash, mcp]
       mcp: [gitlab, github/pull_request_read, github/create_pull_request, github/update_pull_request]

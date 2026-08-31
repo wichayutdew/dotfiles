@@ -10,7 +10,7 @@ steps:
     title: Fetch PR/MR evidence
     prompt: {file: steps/mr-comment/fetch.md}
     agent: scout
-    maxToolCalls: 8
+    maxToolCalls: 10
     permissions:
       tools: [read, ls, bash, mcp]
       mcp: [gitlab, github/pull_request_read, context7]
@@ -37,7 +37,7 @@ steps:
     title: Decide each review comment
     prompt: {file: steps/mr-comment/plan.md}
     agent: planner
-    maxToolCalls: 100
+    maxToolCalls: 60
     permissions:
       tools: [read, ls, bash, mcp]
       mcp: [gitlab, github/pull_request_read, sourcegraph, context7]
@@ -69,7 +69,7 @@ steps:
     title: Apply approved comment fixes
     prompt: {file: steps/mr-comment/implement.md}
     agent: worker
-    maxToolCalls: 150
+    maxToolCalls: 60
     permissions:
       tools: [read, ls, bash, edit, write, mcp]
       mcp: [context7]
@@ -81,7 +81,7 @@ steps:
     title: Check reviewer intent
     prompt: {file: steps/mr-comment/verify.md}
     agent: reviewer
-    maxToolCalls: 80
+    maxToolCalls: 60
     permissions:
       tools: [read, ls, bash]
       mcp: []
@@ -93,7 +93,7 @@ steps:
     title: Push and reply
     prompt: {file: steps/mr-comment/publish.md}
     agent: scout
-    maxToolCalls: 8
+    maxToolCalls: 10
     permissions:
       tools: [read, ls, bash, mcp]
       mcp: [gitlab, github/pull_request_read, github/add_issue_comment, github/add_reply_to_pull_request_comment, github/add_comment_to_pending_review]

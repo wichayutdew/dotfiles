@@ -3,14 +3,14 @@ id: sprint-triage
 command: sprint-triage
 description: "OpsBot API ticket rows → Slack threads → dual summaries → worktree → commit → MR and Confluence."
 start: collect
-maxStepVisits: 16
+maxStepVisits: 10
 summaryMaxChars: 50000
 steps:
   collect:
     title: Collect tickets and Slack threads
     prompt: {file: steps/sprint-triage/collect.md}
     agent: scout
-    maxToolCalls: 18
+    maxToolCalls: 20
     permissions:
       tools: [read, ls, bash, mcp]
       mcp:
@@ -23,7 +23,7 @@ steps:
     title: Approve KB and human-guide summaries
     prompt: {file: steps/sprint-triage/plan.md}
     agent: planner
-    maxToolCalls: 100
+    maxToolCalls: 60
     permissions:
       tools: [read, ls, bash, mcp]
       mcp: [atlassian]
@@ -86,7 +86,7 @@ steps:
     title: Commit approved KB files
     prompt: {file: steps/sprint-triage/implement.md}
     agent: worker
-    maxToolCalls: 150
+    maxToolCalls: 60
     permissions:
       tools: [read, ls, bash, edit, write]
       mcp: []
@@ -98,7 +98,7 @@ steps:
     title: Open MR and append Confluence
     prompt: {file: steps/sprint-triage/publish.md}
     agent: scout
-    maxToolCalls: 8
+    maxToolCalls: 10
     permissions:
       tools: [read, ls, bash, mcp]
       mcp: [atlassian, gitlab]
