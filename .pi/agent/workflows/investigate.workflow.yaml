@@ -3,7 +3,7 @@ id: investigate
 command: investigate
 description: "Jira or question → scope → research → review → write report."
 start: intake
-maxStepVisits: 10
+maxStepVisits: 20
 summaryMaxChars: 30000
 steps:
   intake:
@@ -51,7 +51,7 @@ steps:
     title: Deep-research the approved scope
     prompt: {file: steps/investigate/research.md}
     agent: planner
-    maxToolCalls: 60
+    maxToolCalls: 300
     permissions:
       tools: [read, ls, bash, mcp]
       mcp: [atlassian, context7, sourcegraph, glean, gh_grep, grafana, slack, gitlab, superset, query-writer]
@@ -63,7 +63,7 @@ steps:
     title: Check the draft against the goal
     prompt: {file: steps/investigate/validate.md}
     agent: reviewer
-    maxToolCalls: 60
+    maxToolCalls: 300
     permissions:
       tools: [read, ls, bash, mcp]
       mcp: [atlassian, sourcegraph, glean, grafana, slack, gitlab, superset, query-writer]
