@@ -193,8 +193,8 @@ export default function registerGatewayModels(pi: ExtensionAPI) {
         ...solModelConfig,
       },
       {
-        id: "gemini-3.7-flash",
-        name: "gemini-3.7-flash",
+        id: "gemini-3.8-flash",
+        name: "gemini-3.8-flash",
         ...geminiFlashModelConfig,
       },
       {

@@ -1,5 +1,5 @@
 ---
-model: gateway/gemini-3.7-flash
+model: gateway/gemini-3.8-flash
 thinking: low
 ---
 
