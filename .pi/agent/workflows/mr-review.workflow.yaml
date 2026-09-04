@@ -48,7 +48,7 @@ steps:
       rejectedOutcome: changes-requested
       timeoutMs: 30000
       artifactContract:
-        maxChars: 8000
+        maxChars: 30000
         requiredSubstrings:
           - "## Review "
           - "- **Path / line:**"
