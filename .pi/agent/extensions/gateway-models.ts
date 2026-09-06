@@ -135,6 +135,20 @@ const solModelConfig = {
   ],
 } as const;
 
+const astraModelConfig = {
+  ...reasoningModelConfig,
+  cost: { input: 10, output: 50, cacheRead: 1, cacheWrite: 12.5 },
+  tiers: [
+    {
+      inputTokensAbove: 272000,
+      input: 20,
+      output: 75,
+      cacheRead: 2,
+      cacheWrite: 25,
+    },
+  ],
+} as const;
+
 const kimiModelConfig = {
   input: ["text"],
   // Verified against Moonshot's Kimi K2.7 Code page (2026-08-22): 256K
@@ -191,6 +205,12 @@ export default function registerGatewayModels(pi: ExtensionAPI) {
         name: "gpt-5.6-sol",
         api: "openai-responses",
         ...solModelConfig,
+      },
+      {
+        id: "gpt-6-astra",
+        name: "gpt-6-astra",
+        api: "openai-responses",
+        ...astraModelConfig,
       },
       {
         id: "gemini-3.8-flash",

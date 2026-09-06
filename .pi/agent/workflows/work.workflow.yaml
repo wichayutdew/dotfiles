@@ -36,7 +36,7 @@ steps:
       rejectedOutcome: changes-requested
       timeoutMs: 30000
       artifactContract:
-        maxChars: 10000
+        maxChars: 30000
         requiredSubstrings:
           - "## Goal/Acceptance Criteria"
           - "## Non Goal"
