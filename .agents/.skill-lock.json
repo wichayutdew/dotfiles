@@ -180,6 +180,15 @@
       "skillFolderHash": "2d9762b7aec395b9713fde57fb8965bc3bbd2c3f",
       "installedAt": "2026-08-21T18:45:39.208Z",
       "updatedAt": "2026-08-21T18:45:39.208Z"
+    },
+    "plannotator-tui": {
+      "source": "plannotator/herdr-annotate",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/plannotator/herdr-annotate.git",
+      "skillPath": "skills/plannotator-tui/SKILL.md",
+      "skillFolderHash": "8dc2b0ee52d7bbf7892b4e21b20ab0e1e8190d4e",
+      "installedAt": "2026-09-06T16:58:10.994Z",
+      "updatedAt": "2026-09-06T16:58:10.994Z"
     }
   },
   "dismissed": {
